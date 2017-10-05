@@ -1,0 +1,5001 @@
+<?xml version="1.0"?>
+<!-- DetStudio project descriptor -->
+<DetStation scheme="0">
+  <guid>967f9b6f-c5b2-4f64-8808-ea6ee8c35cfd</guid>
+  <!--AMiNi4DW2(G)-->
+  <DSversion>1.8.2.23</DSversion>
+  <StationDescriptor>
+    <Version>1.0.35</Version>
+    <Copyright>(c) 2008, AMiT, spol. s r.o.</Copyright>
+    <Comment>
+    </Comment>
+    <Author>Servis</Author>
+    <TridetLink>C:\Users\Marco\AppData\Local\Temp\DS_2M5~1\GEN\TRIDET.LIB</TridetLink>
+    <AdresaStanice>3</AdresaStanice>
+    <VersionAutoIncrement>True</VersionAutoIncrement>
+    <PostBuild>
+    </PostBuild>
+    <Sapp>False</Sapp>
+    <EepromClear>True</EepromClear>
+    <Notes><![CDATA[{\rtf1\ansi\ansicpg1250\deff0\nouicompat\deflang1029{\fonttbl{\f0\fnil\fcharset238 Segoe UI;}}
+{\*\generator Riched20 10.0.14393}\viewkind4\uc1 
+\pard\ri135\f0\fs29 Adresa stanice intranet   10.0.0.91 port 59 heslo 22\par
+                         internet   80.188.54.90 port 60 heslo 22\par
+}
+]]></Notes>
+  </StationDescriptor>
+  <ExternalStationManager>
+    <Stations />
+  </ExternalStationManager>
+  <Languages Actual="cs-CZ">
+    <Language ci="cs-CZ" />
+  </Languages>
+  <UserGroups>
+    <UserGroup Name="OBSLUHA" />
+    <UserGroup Name="TECHNOLOG" />
+    <UserGroup Name="PROGRAMATOR" />
+  </UserGroups>
+  <Users>
+    <User Name="Neznámý" Group="OBSLUHA" Password="1234" />
+    <User Name="1" Group="TECHNOLOG" Password="0041" />
+  </Users>
+  <Project Class="Amit.Psp4.UI.Psp4Ide">
+    <Data Class="Amit.Psp4.Shared.Psp4Project">
+      <LastRevised>-8586992407282752614</LastRevised>
+      <CodeBlockList>
+        <CodeBlock Name="libAI" Class="Amit.Psp4.Shared.CodeProcedure">
+          <Comment>Zpracování analogových vstupů</Comment>
+          <Body Class="Amit.Psp4.Shared.CodeBodyPse">
+            <Script><![CDATA[     	//Analogové vstupy
+	//*************************************************
+	//******************* KANÁL AI0 *******************
+	//*************************************************
+	
+	//******************* ANALOGOVÝ VSTUP AI0.0 *******************
+	//Na vstup je připojeno TEPLOTNÍ ČIDLO
+       If AI0_typ.0, :NONE
+	  //Pt1000
+	  If TC0_typ.0, :NONE
+	    //Měření napětí na čidle v rozsahu 0 .. 5 V
+	    AnIn #Ni10001_0, AI0_Pom[0,0], 5.000, 0.000, 5.000, 0.000, 5.000
+	    //Naměřenou hodnotu interpolujeme dle převodní tabulky čidla
+	    Interpol AI0_Pom[0,0], AI0_okamzita[0,0], Pt1000_Kriv
+	  //Ni1000
+	  Else :NONE
+           //5000ppm
+           If Ni0_typ.0, :NONE
+             Ni1000 #Ni10001_0, AI0_okamzita[0,0], 5000
+             //6180ppm
+           Else :NONE
+             Ni1000 #Ni10001_0, AI0_okamzita[0,0], 6180
+           EndIf 
+	  EndIf
+         //Na vstup je připojeno PROUDOVÉ NEBO NAPĚŤOVÉ ČIDLO
+       Else :NONE
+         AnIn #AI00_0, AI0_okamzita[0,0], AI0_params[0,0], AI0_params[0,1], AI0_params[0,2], AI0_params[0,3], AI0_params[0,4]
+       EndIf 
+	//Naměřenou hodnotu lze (v případě nutnosti) upravit pomocí korekčních kostant
+       Let fX = AI0_konst[0,0]*AI0_okamzita[0,0]+AI0_konst[0,1]
+	//Výslednou hodnotu filtrujeme
+       Filtr1R fX, AI0[0,0], AI0_konst[0,2]
+	
+	
+       //******************* ANALOGOVÝ VSTUP AI0.1 *******************
+	//Na vstup je připojeno TEPLOTNÍ ČIDLO
+       If AI0_typ.1, :NONE
+	  //Pt1000
+	  If TC0_typ.1, :NONE
+	    //Měření napětí na čidle v rozsahu 0 .. 5 V
+	    AnIn #Ni10001_1, AI0_Pom[1,0], 5.000, 0.000, 5.000, 0.000, 5.000
+	    //Naměřenou hodnotu interpolujeme dle převodní tabulky čidla
+	    Interpol AI0_Pom[1,0], AI0_okamzita[1,0], Pt1000_Kriv
+	  //Ni1000
+	  Else :NONE
+           //5000ppm
+           If Ni0_typ.1, :NONE
+             Ni1000 #Ni10001_1, AI0_okamzita[1,0], 5000
+             //6180ppm
+           Else :NONE
+             Ni1000 #Ni10001_1, AI0_okamzita[1,0], 6180
+           EndIf 
+	  EndIf
+         //Na vstup je připojeno PROUDOVÉ NEBO NAPĚŤOVÉ ČIDLO
+       Else :NONE
+         AnIn #AI00_1, AI0_okamzita[1,0], AI0_params[1,0], AI0_params[1,1], AI0_params[1,2], AI0_params[1,3], AI0_params[1,4]
+       EndIf 
+	//Naměřenou hodnotu lze (v případě nutnosti) upravit pomocí korekčních kostant
+       Let fX = AI0_konst[1,0]*AI0_okamzita[1,0]+AI0_konst[1,1]
+	//Výslednou hodnotu filtrujeme
+       Filtr1R fX, AI0[1,0], AI0_konst[1,2]
+       
+	//******************* ANALOGOVÝ VSTUP AI0.2 *******************
+	//Na vstup je připojeno TEPLOTNÍ ČIDLO
+       If AI0_typ.2, :NONE
+	  //Pt1000
+	  If TC0_typ.2, :NONE
+	    //Měření napětí na čidle v rozsahu 0 .. 5 V
+	    AnIn #Ni10001_2, AI0_Pom[2,0], 5.000, 0.000, 5.000, 0.000, 5.000
+	    //Naměřenou hodnotu interpolujeme dle převodní tabulky čidla
+	    Interpol AI0_Pom[2,0], AI0_okamzita[2,0], Pt1000_Kriv
+	  //Ni1000
+	  Else :NONE
+           //5000ppm
+           If Ni0_typ.2, :NONE
+             Ni1000 #Ni10001_2, AI0_okamzita[2,0], 5000
+             //6180ppm
+           Else :NONE
+             Ni1000 #Ni10001_2, AI0_okamzita[2,0], 6180
+           EndIf 
+	  EndIf
+         //Na vstup je připojeno PROUDOVÉ NEBO NAPĚŤOVÉ ČIDLO
+       Else :NONE
+         AnIn #AI00_2, AI0_okamzita[2,0], AI0_params[2,0], AI0_params[2,1], AI0_params[2,2], AI0_params[2,3], AI0_params[2,4]
+       EndIf 
+	//Naměřenou hodnotu lze (v případě nutnosti) upravit pomocí korekčních kostant
+       Let fX = AI0_konst[2,0]*AI0_okamzita[2,0]+AI0_konst[2,1]
+	//Výslednou hodnotu filtrujeme
+       Filtr1R fX, AI0[2,0], AI0_konst[2,2]
+       
+	//******************* ANALOGOVÝ VSTUP AI0.3 *******************
+	//Na vstup je připojeno TEPLOTNÍ ČIDLO
+       If AI0_typ.3, :NONE
+	  //Pt1000
+	  If TC0_typ.3, :NONE
+	    //Měření napětí na čidle v rozsahu 0 .. 5 V
+	    AnIn #Ni10001_3, AI0_Pom[3,0], 5.000, 0.000, 5.000, 0.000, 5.000
+	    //Naměřenou hodnotu interpolujeme dle převodní tabulky čidla
+	    Interpol AI0_Pom[3,0], AI0_okamzita[3,0], Pt1000_Kriv
+	  //Ni1000
+	  Else :NONE
+           //5000ppm
+           If Ni0_typ.3, :NONE
+             Ni1000 #Ni10001_3, AI0_okamzita[3,0], 5000
+             //6180ppm
+           Else :NONE
+             Ni1000 #Ni10001_3, AI0_okamzita[3,0], 6180
+           EndIf 
+	  EndIf
+         //Na vstup je připojeno PROUDOVÉ NEBO NAPĚŤOVÉ ČIDLO
+       Else :NONE
+         AnIn #AI00_3, AI0_okamzita[3,0], AI0_params[3,0], AI0_params[3,1], AI0_params[3,2], AI0_params[3,3], AI0_params[3,4]
+       EndIf 
+	//Naměřenou hodnotu lze (v případě nutnosti) upravit pomocí korekčních kostant
+       Let fX = AI0_konst[3,0]*AI0_okamzita[3,0]+AI0_konst[3,1]
+	//Výslednou hodnotu filtrujeme
+       Filtr1R fX, AI0[3,0], AI0_konst[3,2]
+       
+	//******************* ANALOGOVÝ VSTUP AI0.4 *******************
+	//Na vstup je připojeno TEPLOTNÍ ČIDLO
+       If AI0_typ.4, :NONE
+	  //Pt1000
+	  If TC0_typ.4, :NONE
+	    //Měření napětí na čidle v rozsahu 0 .. 5 V
+	    AnIn #Ni10001_4, AI0_Pom[4,0], 5.000, 0.000, 5.000, 0.000, 5.000
+	    //Naměřenou hodnotu interpolujeme dle převodní tabulky čidla
+	    Interpol AI0_Pom[4,0], AI0_okamzita[4,0], Pt1000_Kriv
+	  //Ni1000
+	  Else :NONE
+           //5000ppm
+           If Ni0_typ.4, :NONE
+             Ni1000 #Ni10001_4, AI0_okamzita[4,0], 5000
+             //6180ppm
+           Else :NONE
+             Ni1000 #Ni10001_4, AI0_okamzita[4,0], 6180
+           EndIf 
+	  EndIf
+         //Na vstup je připojeno PROUDOVÉ NEBO NAPĚŤOVÉ ČIDLO
+       Else :NONE
+         AnIn #AI00_4, AI0_okamzita[4,0], AI0_params[4,0], AI0_params[4,1], AI0_params[4,2], AI0_params[4,3], AI0_params[4,4]
+       EndIf 
+	//Naměřenou hodnotu lze (v případě nutnosti) upravit pomocí korekčních kostant
+       Let fX = AI0_konst[4,0]*AI0_okamzita[4,0]+AI0_konst[4,1]
+	//Výslednou hodnotu filtrujeme
+       Filtr1R fX, AI0[4,0], AI0_konst[4,2]
+	
+	//******************* ANALOGOVÝ VSTUP AI0.5 *******************
+	//Na vstup je připojeno TEPLOTNÍ ČIDLO
+       If AI0_typ.5, :NONE
+	  //Pt1000
+	  If TC0_typ.5, :NONE
+	    //Měření napětí na čidle v rozsahu 0 .. 5 V
+	    AnIn #Ni10001_5, AI0_Pom[5,0], 5.000, 0.000, 5.000, 0.000, 5.000
+	    //Naměřenou hodnotu interpolujeme dle převodní tabulky čidla
+	    Interpol AI0_Pom[5,0], AI0_okamzita[5,0], Pt1000_Kriv
+	  //Ni1000
+	  Else :NONE
+           //5000ppm
+           If Ni0_typ.5, :NONE
+             Ni1000 #Ni10001_5, AI0_okamzita[5,0], 5000
+             //6180ppm
+           Else :NONE
+             Ni1000 #Ni10001_5, AI0_okamzita[5,0], 6180
+           EndIf 
+	  EndIf
+         //Na vstup je připojeno PROUDOVÉ NEBO NAPĚŤOVÉ ČIDLO
+       Else :NONE
+         AnIn #AI00_5, AI0_okamzita[5,0], AI0_params[5,0], AI0_params[5,1], AI0_params[5,2], AI0_params[5,3], AI0_params[5,4]
+       EndIf 
+	//Naměřenou hodnotu lze (v případě nutnosti) upravit pomocí korekčních kostant
+       Let fX = AI0_konst[5,0]*AI0_okamzita[5,0]+AI0_konst[5,1]
+	//Výslednou hodnotu filtrujeme
+       Filtr1R fX, AI0[5,0], AI0_konst[5,2]
+	
+	//******************* ANALOGOVÝ VSTUP AI0.6 *******************
+	//Na vstup je připojeno TEPLOTNÍ ČIDLO
+       If AI0_typ.6, :NONE
+	  //Pt1000
+	  If TC0_typ.6, :NONE
+	    //Měření napětí na čidle v rozsahu 0 .. 5 V
+	    AnIn #Ni10001_6, AI0_Pom[6,0], 5.000, 0.000, 5.000, 0.000, 5.000
+	    //Naměřenou hodnotu interpolujeme dle převodní tabulky čidla
+	    Interpol AI0_Pom[6,0], AI0_okamzita[6,0], Pt1000_Kriv
+	  //Ni1000
+	  Else :NONE
+           //5000ppm
+           If Ni0_typ.6, :NONE
+             Ni1000 #Ni10001_6, AI0_okamzita[6,0], 5000
+             //6180ppm
+           Else :NONE
+             Ni1000 #Ni10001_6, AI0_okamzita[6,0], 6180
+           EndIf 
+	  EndIf
+         //Na vstup je připojeno PROUDOVÉ NEBO NAPĚŤOVÉ ČIDLO
+       Else :NONE
+         AnIn #AI00_6, AI0_okamzita[6,0], AI0_params[6,0], AI0_params[6,1], AI0_params[6,2], AI0_params[6,3], AI0_params[6,4]
+       EndIf 
+	//Naměřenou hodnotu lze (v případě nutnosti) upravit pomocí korekčních kostant
+       Let fX = AI0_konst[6, 0]*AI0_okamzita[6, 0]+AI0_konst[6, 1]
+	//Výslednou hodnotu filtrujeme
+       Filtr1R fX, AI0[6,0], AI0_konst[6,2]
+	
+	//******************* ANALOGOVÝ VSTUP AI0.7 *******************
+	//Na vstup je připojeno TEPLOTNÍ ČIDLO
+       If AI0_typ.7, :NONE
+	  //Pt1000
+	  If TC0_typ.7, :NONE
+	    //Měření napětí na čidle v rozsahu 0 .. 5 V
+	    AnIn #Ni10001_7, AI0_Pom[7,0], 5.000, 0.000, 5.000, 0.000, 5.000
+	    //Naměřenou hodnotu interpolujeme dle převodní tabulky čidla
+	    Interpol AI0_Pom[7,0], AI0_okamzita[7,0], Pt1000_Kriv
+	  //Ni1000
+	  Else :NONE
+           //5000ppm
+           If Ni0_typ.7, :NONE
+             Ni1000 #Ni10001_7, AI0_okamzita[7,0], 5000
+             //6180ppm
+           Else :NONE
+             Ni1000 #Ni10001_7, AI0_okamzita[7,0], 6180
+           EndIf 
+	  EndIf
+         //Na vstup je připojeno PROUDOVÉ NEBO NAPĚŤOVÉ ČIDLO
+       Else :NONE
+         AnIn #AI00_7, AI0_okamzita[7,0], AI0_params[7,0], AI0_params[7,1], AI0_params[7,2], AI0_params[7,3], AI0_params[7,4]
+       EndIf 
+	//Naměřenou hodnotu lze (v případě nutnosti) upravit pomocí korekčních kostant
+       Let fX = AI0_konst[7, 0]*AI0_okamzita[7, 0]+AI0_konst[7, 1]
+	//Výslednou hodnotu filtrujeme
+       Filtr1R fX, AI0[7,0], AI0_konst[7,2]
+	
+	//Přepnutí kanálu AO0 na AUTOMATICKÝ nebo MANUÁLNÍ režim
+	For Ix, 0.000, 7.000, 1.000
+	  Let  AI0[Ix,0] = IF(AI0_XR.(Ix),AI0_R[Ix,0],AI0[Ix,0]); AI0_R[Ix,0] = AI0[Ix,0]
+	EndFor
+     
+
+	//Načtení NAPÁJECÍho NAPĚTÍ
+	//AnIn #PWR2_0, Ux_A[0,0], 55.000, 0.000, 55.000, 0.000, 55.000
+	//Přepnutí AUTOMATICKÝ nebo MANUÁLNÍ režim
+	//Let  Ux[0,0] = IF(Ux_XR.0,Ux_R[0,0],Ux_A[0,0]); Ux_R[0,0] = Ux[0,0]
+	
+	//Načtení NAPĚTÍ BATERIE 
+	//AnIn #PWR2_1, Ux_A[1,0], 5.000, 0.000, 5.000, 0.000, 5.000
+	//Přepnutí AUTOMATICKÝ nebo MANUÁLNÍ režim
+	//Let Ux[1,0] = IF(Ux_XR.1,Ux_R[1,0],Ux_A[1,0]); Ux_R[1,0] = Ux[1,0]]]></Script>
+          </Body>
+        </CodeBlock>
+        <CodeBlock Name="libDI" Class="Amit.Psp4.Shared.CodeProcedure">
+          <Comment>Zpracování digitálních vstupů</Comment>
+          <Body Class="Amit.Psp4.Shared.CodeBodyPse">
+            <Script><![CDATA[	//Digitální vstupy 
+	
+	//*************************************************
+	//******************* KANÁL DI0 *******************
+	//*************************************************
+	
+	//***************** Načtení DI0 v režimu stejnosměrné *****************
+	DigIn #0, DI0_DC, 0x0000
+	//******************* Načtení DI0 v režimu střídavé *******************
+	DigIn #1, DI0_AC, 0x0000
+	//Volba zda se bude vstup v aplikaci zpracovávat jako ss. nobo jako stř. 
+	Let DI0_A = (DI0_DC & ~DI0_Typ)|(DI0_AC & DI0_Typ)
+	//Přepnutí AUTOMATICKÝ nebo MANUÁLNÍ režim + volba negace
+	Let DI0 = (~DI0_XR & (DI0_A^ DI0_neg)) | (DI0_XR  & DI0_R)
+	//Beznárazové přepnuti do ručního režimu
+	Let DI0_R = DI0
+	
+	
+	//*************************************************
+	//******************* KANÁL DI1 *******************
+	//*************************************************
+	
+	//***************** Načtení DI1 v režimu stejnosměrné *****************
+	DigIn #2, DAI0_DC, 0x0000
+	//******************* Načtení DI1 v režimu střídavé *******************
+	DigIn #3, DAI0_AC, 0x0000
+	//Volba zda se bude vstup v aplikaci zpracovávat jako ss. nobo jako stř. 
+	Let DAI0_A = (DAI0_DC & ~DAI0_Typ)|(DAI0_AC & DAI0_Typ) 
+	//Přepnutí AUTOMATICKÝ nebo MANUÁLNÍ režim + volba negace
+	Let DAI0 = (~DAI0_XR & (DAI0_A ^ DAI0_Neg)) | (DAI0_XR  & DAI0_R)
+	//Beznárazové přepnuti do ručního režimu
+	Let DAI0_R = DAI0]]></Script>
+          </Body>
+        </CodeBlock>
+        <CodeBlock Name="libDO" Class="Amit.Psp4.Shared.CodeProcedure">
+          <Comment>Zápis na digitální výstupy</Comment>
+          <Body Class="Amit.Psp4.Shared.CodeBodyPse">
+            <Script><![CDATA[	//Digitální výstupy
+	
+	//*************************************************
+	//******************* KANÁL DO0 *******************
+	//*************************************************
+	
+	//Přepnutí AUTOMATICKÝ nebo MANUÁLNÍ režim
+	Let DO0 = ((~DO0_XR | DO0_Valve) & DO0_A) | (DO0_XR & ~DO0_Valve & DO0_R)
+	//Beznárazové přepnuti do ručního režimu  
+	Let DO0_R = DO0
+	
+	//*************** Zápis na digitální výstupy kanálu DO0 ***************
+	DigOut DO0, #0, 0x0000
+]]></Script>
+          </Body>
+        </CodeBlock>
+        <CodeBlock Name="P00_DigIn" Class="Amit.Psp4.Shared.CodeProcess">
+          <Comment>Cteni dig. vst.</Comment>
+          <Body Class="Amit.Psp4.Shared.CodeBodyPse">
+            <Script><![CDATA[// Digitální vstupy
+
+//******************************************************
+//********************* CPU Amini4 *********************
+//******************************************************
+
+Call libDI]]></Script>
+          </Body>
+          <Period>250</Period>
+          <Offset>0</Offset>
+          <Type>0</Type>
+          <InterruptEdge>1</InterruptEdge>
+        </CodeBlock>
+        <CodeBlock Name="P00_DigOut" Class="Amit.Psp4.Shared.CodeProcess">
+          <Comment>Zápis dig. výstupů</Comment>
+          <Body Class="Amit.Psp4.Shared.CodeBodyPse">
+            <Script><![CDATA[// Digitální výstupy
+
+//******************************************************
+//********************* CPU Amini4 *********************
+//******************************************************
+
+Call libDO]]></Script>
+          </Body>
+          <Period>250</Period>
+          <Offset>100</Offset>
+          <Type>6</Type>
+          <InterruptEdge>1</InterruptEdge>
+        </CodeBlock>
+        <CodeBlock Name="P01_AnIN" Class="Amit.Psp4.Shared.CodeProcess">
+          <Comment>Cteni analog. vst.</Comment>
+          <Body Class="Amit.Psp4.Shared.CodeBodyPse">
+            <Script><![CDATA[	
+//Čtení analogových vstupů
+
+//******************************************************
+//********************* CPU Amini4 *********************
+//******************************************************
+
+Call libAI]]></Script>
+          </Body>
+          <Period>500</Period>
+          <Offset>0</Offset>
+          <Type>1</Type>
+          <InterruptEdge>0</InterruptEdge>
+        </CodeBlock>
+        <CodeBlock Name="P02_Regulace" Class="Amit.Psp4.Shared.CodeProcess">
+          <Comment>Rizeni</Comment>
+          <Body Class="Amit.Psp4.Shared.CodeBodyPse">
+            <Script><![CDATA[// Časový plán
+DayPlan 0x0000, 1, 0x007F, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, DP_feasts, DP_times, DP_values, Ix
+Let @DPklid = If (ix > 0, true, false)
+
+// Regulace hladiny
+
+Hyst2 AI0[0,0], @PozadChod, LevelPar[1,0], LevelPar[2,0], 0x0000		// provozní hladina
+Hyst2 AI0[0,0], @PozadChodBl, LevelPar[1,0], LevelPar[3,0], 0x0000		// akumulační hladina
+Let @CerpZap = (not @DPklid and @PozadChod) or @PozadChodBl			// čerpá se buď v době klidu nebo ihned, pokud je hladina přes akumulační
+
+//*******************************************************************
+// Reakce na poruchy
+//*******************************************************************
+
+Let @Test = Alarm_E.1 or Alarm_E.2	or Alarm_E.4	or Alarm_E.5			// nízká hladina nebo přerušené čidlo nebo dlouhý chod
+Let @CerpZap = If (@Test, false, @CerpZap)]]></Script>
+          </Body>
+          <Period>1000</Period>
+          <Offset>0</Offset>
+          <Type>2</Type>
+          <InterruptEdge>0</InterruptEdge>
+        </CodeBlock>
+        <CodeBlock Name="P03_SendSMS" Class="Amit.Psp4.Shared.CodeProcess">
+          <Comment>Posílání SMS</Comment>
+          <Body Class="Amit.Psp4.Shared.CodeBodyPse">
+            <Script><![CDATA[If @Zap_SMS
+	If not StavSMS.0	// SMS zpráva není odesílána
+		If StavSMS.1	// SMS zpráva byla úspěšně odeslána
+			Let Gsm_AdrOrder = If (GSM_TelCis[Gsm_AdrOrder,0] > 0, Gsm_AdrOrder + 1, 0)    	//Pokod je další tel. cislo 0, konec vysílání
+		EndIf
+		Let StavSMS = 0
+		
+		If Gsm_AdrOrder > 0										// Stavový automat, pokud 0 - nevysílá se
+			Let tLong = GSM_TelCis[Gsm_AdrOrder-1,0]						// Pomocná proměnná pro sest. čísla
+			StrFormat SmsAdr, 0, NONE, "+", 11, 45, -1, -1, Gsm_Pred1, NONE.0		// Předčíslí
+			StrFormat SmsAdr, 4, NONE, "", 11, 45, -1, -1, tLong, NONE.0			// Číslo
+			SMSSend :1111, "%s", SMS_Text, NONE, StavSMS, "", SmsAdr[0,*], 1440
+		
+		Else	// Nic se nevysílá, je čas na měření
+			GSMDiag :1111, Gsm_Ntw, Gsm_StvSig, NONE						// GSM diagnostika
+			Let Gsm_Sig = If (Gsm_StvSig >= 99, 0, (100 * Gsm_StvSig) DIV 31)		// Přepočet síly signálu
+		EndIf
+	EndIf
+Else
+	Let Gsm_AdrOrder = 0
+	Let StavSMS = 0
+EndIf]]></Script>
+          </Body>
+          <Period>5000</Period>
+          <Offset>0</Offset>
+          <Type>3</Type>
+          <InterruptEdge>0</InterruptEdge>
+        </CodeBlock>
+        <CodeBlock Name="P04_Alarm" Class="Amit.Psp4.Shared.CodeProcess">
+          <Comment>Poruchy, kvitace</Comment>
+          <Body Class="Amit.Psp4.Shared.CodeBodyPse">
+            <Script><![CDATA[//Příznak restartu
+TimerOn @Restart, Restart_time, ix.0, NONE
+Let @Restart = If(ix.0,false,@Restart)
+
+Let fX = AI0_params[0,4] / 3
+Let LevelPar[0,0] = If (LevelPar[0,0]>fX, fX, LevelPar[0,0])		// havarijní min. musí být v první třetině
+
+Let fX = AI0_params[0,4] / 25						// při rozsahu 2.5m je to 10 cm min. rozdíl hladin
+For ix, 0, 3, 1
+	Let LevelPar[ix+1,0] = If (LevelPar[ix+1,0]<LevelPar[ix,0]+fX, LevelPar[ix,0]+fX, LevelPar[ix+1,0])		// zabezpečení logické posloupnosti hladin
+EndFor
+
+// *****************************************************************************
+//                    PORUCHY
+// *****************************************************************************
+
+Let Alarm_A.0 = AI0[0,0] > LevelPar[4,0]			// hladina nad hav. maximem
+Let Alarm_A.1 = AI0[0,0] < LevelPar[0,0]			// hladina pod hav. minimem
+
+Let fX = AI0_params[0,3]-AI0_params[0,4]/10.000		// min. je -10% z rozsahu, pod tuto hranici chyba snímače
+Let fY = (AI0_params[0,4]-AI0_params[0,3])/100.0
+Hyst AI0[0,0], Alarm_A.2, fX, fY, 0x0001			// přerušení snímače
+
+// Hlídání změny hladiny při čerpání
+If @CerpZap
+	If ChckLev_poc == 0							// náběh čerpadla nebo další interval
+		Let ChckLev_act = AI0[0,0]
+	Else 
+		If ChckLev_poc == ChckLev_time				// interval kontroly je odvozeny od periody procesu!
+			Let @ChckLev = false
+			If (ChckLev_act - AI0[0,0]) < ChckLev_chng
+				Let @ChckLev = true				// zamrznutí snímače nebo ucpané čerpadlo
+			EndIf
+			Let ChckLev_poc = -1
+		EndIf
+	EndIf
+	Let ChckLev_poc = ChckLev_poc + 1
+Else
+	Let ChckLev_poc = 0					// nulování kontroly
+	Let @ChckLev = false
+EndIf
+
+Let Alarm_A.2 = Alarm_A.2 or @ChckLev			// porucha čidla buď kvuli přerušení nebo zamrznutí
+
+Let Alarm_A.3 = @CerpZap and not @ChodCerp		// chod čerpadla
+
+TimerOn @CerpZap, Cerp_timeout, Alarm_A.4, NONE		// dlouhy chod čerpadla
+
+Let Alarm_A.5 = not @Tesnost
+
+Let  Alarm_I = If (@Restart, 0x000F, 0)			// zpoždění detekce poruch po restartu
+
+//Kvitace alarmů
+Let Alarm_Q = If(pQuit.0, ~(Alarm_I | Alarm_A), Alarm_Q)
+Let pQuit.0 = false
+
+ErrSig Alarm_A, 0x0001, Alarm_Q, 0x0001, Alarm_E.0, Alarm_I.0, 3, 0, 4096, 2000, 0, 0
+ErrSig Alarm_A, 0x0002, Alarm_Q, 0x0002, Alarm_E.1, Alarm_I.1, 3, 0, 4096, 2001, 0, 0
+ErrSig Alarm_A, 0x0004, Alarm_Q, 0x0004, Alarm_E.2, Alarm_I.2, 3, 0, 4096, 2002, 0, 0
+ErrSig Alarm_A, 0x0008, Alarm_Q, 0x0008, Alarm_E.3, Alarm_I.3, 3, 0, 4096, 2003, 0, 0
+ErrSig Alarm_A, 0x0010, Alarm_Q, 0x0010, Alarm_E.4, Alarm_I.4, 3, 0, 4096, 2004, 0, 0
+ErrSig Alarm_A, 0x0020, Alarm_Q, 0x0020, Alarm_E.5, Alarm_I.5, 3, 0, 4096, 2005, 0, 0
+
+
+Let @ErrSign = Alarm_E != 0
+If not @ErrSignOld and @ErrSign		// náběh některé z poruch
+	Let Gsm_AdrOrder = 1			// spuštění posílání SMS
+EndIf
+Let @ErrSignOld = @ErrSign
+
+StrFormat SMS_Text, 0, StrIndex, "Jimka: ", -1, -1, -1, -1, NONE[0,0], NONE.0
+Let ListStart = StrIndex
+If Alarm_E.0
+	StrFormat SMS_Text, StrIndex, StrIndex, "Hladina nad max.,", -1, -1, -1, -1, NONE[0,0], @SmsLenOK
+EndIf
+If Alarm_E.1
+	StrFormat SMS_Text, StrIndex, StrIndex, "Hladina pod min.,", -1, -1, -1, -1, NONE[0,0], @SmsLenOK
+EndIf
+If Alarm_E.2
+	StrFormat SMS_Text, StrIndex, StrIndex, "Por. snimace,", -1, -1, -1, -1, NONE[0,0], @SmsLenOK
+EndIf
+If Alarm_E.3
+	StrFormat SMS_Text, StrIndex, StrIndex, "Por. cerpadla,", -1, -1, -1, -1, NONE[0,0], @SmsLenOK
+EndIf
+If Alarm_E.4
+	StrFormat SMS_Text, StrIndex, StrIndex, "Dlouhy chod cerp.,", -1, -1, -1, -1, NONE[0,0], @SmsLenOK
+EndIf
+If Alarm_E.5
+	StrFormat SMS_Text, StrIndex, StrIndex, "Netesnost potrubi,", -1, -1, -1, -1, NONE[0,0], @SmsLenOK
+EndIf
+
+// Je-li porucha, umaž poslední znak (přebývající ",")	
+Let ix.0 = StrIndex > ListStart
+If ix.0
+	If @SmsLenOK
+		Let SMS_Text[0,StrIndex-1] = 0
+	Else
+		//Pokud se text nevleze do SMS
+		StrFormat SMS_Text, 151, StrIndex, ",+dalsi!!", -1, -1, -1, -1, NONE[0,0], @SmsLenOK
+	Endif
+Else
+	StrFormat SMS_Text, StrIndex, StrIndex, "bez poruchy", -1, -1, -1, -1, NONE[0,0], NONE.0
+EndIf]]></Script>
+          </Body>
+          <Period>1000</Period>
+          <Offset>0</Offset>
+          <Type>4</Type>
+          <InterruptEdge>0</InterruptEdge>
+        </CodeBlock>
+        <CodeBlock Name="P05_RTC" Class="Amit.Psp4.Shared.CodeProcess">
+          <Comment>Úprava zimní/letní čas</Comment>
+          <Body Class="Amit.Psp4.Shared.CodeBodyLA">
+            <Script><![CDATA[
+	sb_RTC RTC_time, RTC_slozky]]></Script>
+          </Body>
+          <Period>1000</Period>
+          <Offset>0</Offset>
+          <Type>5</Type>
+          <InterruptEdge>0</InterruptEdge>
+        </CodeBlock>
+        <CodeBlock Name="ProcIDLE" Class="Amit.Psp4.Shared.CodeProcess">
+          <Comment>Obsluha obrazovek</Comment>
+          <Body Class="Amit.Psp4.Shared.CodeBodyPse">
+            <Script><![CDATA[ Lcw3Idle NONE]]></Script>
+          </Body>
+          <Period>1000</Period>
+          <Offset>0</Offset>
+          <Type>16</Type>
+          <InterruptEdge>1</InterruptEdge>
+        </CodeBlock>
+        <CodeBlock Name="ProcINIT" Class="Amit.Psp4.Shared.CodeProcess">
+          <Comment>
+          </Comment>
+          <Body Class="Amit.Psp4.Shared.CodeBodyPse">
+            <Script><![CDATA[Let @Restart = true]]></Script>
+          </Body>
+          <Period>1000</Period>
+          <Offset>0</Offset>
+          <Type>36</Type>
+          <InterruptEdge>0</InterruptEdge>
+        </CodeBlock>
+        <CodeBlock Name="QModem" Class="Amit.Psp4.Shared.CodeProcess">
+          <Comment>Inic GSM modemu</Comment>
+          <Body Class="Amit.Psp4.Shared.CodeBodyPse">
+            <Script><![CDATA[// Inicializace modemu
+:1111 ModemSMS 2, 19200
+]]></Script>
+          </Body>
+          <Period>50</Period>
+          <Offset>0</Offset>
+          <Type>17</Type>
+          <InterruptEdge>0</InterruptEdge>
+        </CodeBlock>
+      </CodeBlockList>
+      <CodeFBList>
+        <CodeBlock Name="sb_RTC" Class="Amit.Psp4.Shared.CodeFB">
+          <Comment>
+          </Comment>
+          <Body Class="Amit.Psp4.Shared.CodeBodyPse">
+            <Script><![CDATA[// Čas RTC
+GetTime RTC_time, RTC_slozky, NONE
+// Změna zimní / letní čas
+Let UTC_time = if(@tmLetniCas, RTC_time - 10800, RTC_time - 7200)
+If @SysStart, :NONE
+Else :NONE
+  Let @tmLetoInit = if((UTC_time < LastUTC_t) or (UTC_time > LastUTC_t + 2), bool(0), @tmLetoInit)
+EndIf
+Let LastUTC_t = UTC_time
+
+ParseTime UTC_time, NONE, NONE, UTC_slozky
+Let @tmLeto = ((UTC_slozky[4, 0] > 3) and (UTC_slozky[4, 0] < 10) or (UTC_slozky[4, 0] == 3) and ((UTC_slozky[3, 0] + 7) - UTC_slozky[6, 0] > 31)) or (UTC_slozky[4, 0] == 10) and ((UTC_slozky[3, 0] + 7) - UTC_slozky[6, 0] <= 31)
+If @tmLetoInit, :NONE
+	Let @tmZmena = @tmLeto xor @tmLetniCas
+	If @tmZmena, :NONE
+      		GetTime RTC_time, NONE, NONE
+      		Let RTC_time = if(@tmLeto, RTC_time + 3600, RTC_time - 3600)
+      		SetTime RTC_time
+      	EndIf 
+EndIf 
+Let @tmLetniCas = @tmLeto
+Let @tmLetoInit = true
+Let @SysStart = false
+]]></Script>
+          </Body>
+          <DBase>
+            <VariableList>
+              <Variable Name="RTC_bin" Class="Amit.Psp4.Shared.Psp4VariableLocal">
+                <Wid>4913</Wid>
+                <Station>4</Station>
+                <Type>dbtInt</Type>
+                <Comment>Čas RTC, logické hodnoty</Comment>
+                <WarmInit>False</WarmInit>
+                <InitialValueFormat>0</InitialValueFormat>
+              </Variable>
+              <Variable Name="UTC_time" Class="Amit.Psp4.Shared.Psp4VariableLocal">
+                <Wid>4914</Wid>
+                <Station>4</Station>
+                <Type>dbtLong</Type>
+                <Comment>Čas Azory, formát DB-Net</Comment>
+                <WarmInit>False</WarmInit>
+                <InitialValueFormat>0</InitialValueFormat>
+              </Variable>
+              <Variable Name="UTC_slozky" Class="Amit.Psp4.Shared.Psp4VariableLocal">
+                <Wid>4915</Wid>
+                <Station>4</Station>
+                <Type>dbtIntMtx</Type>
+                <Comment>Čas Azory, složkový formát</Comment>
+                <WarmInit>False</WarmInit>
+                <InitialValueFormat>0</InitialValueFormat>
+                <Row>8</Row>
+                <Col>1</Col>
+              </Variable>
+              <Variable Name="LastUTC_t" Class="Amit.Psp4.Shared.Psp4VariableLocal">
+                <Wid>4916</Wid>
+                <Station>4</Station>
+                <Type>dbtLong</Type>
+                <Comment>Čas Azory, předchozí hodnota</Comment>
+                <WarmInit>False</WarmInit>
+                <InitialValueFormat>0</InitialValueFormat>
+              </Variable>
+              <Variable Name="Restart" Class="Amit.Psp4.Shared.Psp4VariableLocal">
+                <Wid>4904</Wid>
+                <Station>4</Station>
+                <Type>dbtInt</Type>
+                <Comment>Příznak restartu</Comment>
+                <WarmInit>True</WarmInit>
+                <InitialValueFormat>0</InitialValueFormat>
+                <InitialValue>1</InitialValue>
+              </Variable>
+            </VariableList>
+            <AliasList>
+              <Alias Name="@tmLetniCas" Class="Amit.Psp4.Shared.Psp4Alias">
+                <Comment>Byl proveden přechod na letní čas</Comment>
+                <VarName>RTC_bin</VarName>
+                <Bit>0</Bit>
+              </Alias>
+              <Alias Name="@tmLeto" Class="Amit.Psp4.Shared.Psp4Alias">
+                <Comment>Je letní období</Comment>
+                <VarName>RTC_bin</VarName>
+                <Bit>1</Bit>
+              </Alias>
+              <Alias Name="@tmZmena" Class="Amit.Psp4.Shared.Psp4Alias">
+                <Comment>Změna období</Comment>
+                <VarName>RTC_bin</VarName>
+                <Bit>2</Bit>
+              </Alias>
+              <Alias Name="@tmLetoInit" Class="Amit.Psp4.Shared.Psp4Alias">
+                <Comment>Bylo provedeno počáteční nastavení času</Comment>
+                <VarName>RTC_bin</VarName>
+                <Bit>3</Bit>
+              </Alias>
+              <Alias Name="@SysStart" Class="Amit.Psp4.Shared.Psp4Alias">
+                <Comment>Došlo k restartu řídicího systému</Comment>
+                <VarName>Restart</VarName>
+                <Bit>0</Bit>
+              </Alias>
+            </AliasList>
+          </DBase>
+          <FBParamList>
+            <FBParam Name="RTC_time" Class="Amit.Psp4.Shared.FBParamUni">
+              <PinType>0</PinType>
+              <Comment>Čas RTC, formát DB-Net</Comment>
+              <DataType>1</DataType>
+            </FBParam>
+            <FBParam Name="RTC_slozky" Class="Amit.Psp4.Shared.FBParamUni">
+              <PinType>0</PinType>
+              <Comment>Čas RTC, složkový formát</Comment>
+              <DataType>3</DataType>
+            </FBParam>
+          </FBParamList>
+          <HTMLDoc_cs>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"&gt;
+&lt;HTML xmlns:o = "urn:schemas-microsoft-com:office:office"&gt;&lt;HEAD&gt;
+&lt;META http-equiv=Content-Type content="text/html; charset=utf-8"&gt;
+&lt;META content="MSHTML 6.00.6000.16735" name=GENERATOR&gt;&lt;/HEAD&gt;
+&lt;BODY&gt;&lt;SPAN 
+style="FONT-SIZE: 12pt; FONT-FAMILY: 'Times New Roman','serif'; mso-fareast-font-family: 'Times New Roman'; mso-fareast-language: CS"&gt;
+&lt;H2&gt;fb_RTC&lt;/H2&gt;
+&lt;P&gt;&lt;EM&gt;Načtení okamžitého času do databázové proměnné, vyhodnocení změn a 
+automatická změna zimní/letní čas.&lt;/EM&gt; &lt;/P&gt;
+&lt;DT&gt;&lt;STRONG&gt;Popis &lt;/STRONG&gt;
+&lt;DL&gt;
+  &lt;DL&gt;
+    &lt;DT&gt;Modul&amp;nbsp;načte okamžitý čas v DB-Net formátu do proměnné 
+    &lt;EM&gt;RTC_Time&lt;/EM&gt;. Rozloží okamžitý čas na položky a uloží je do&lt;BR&gt;proměnné 
+    &lt;EM&gt;RTC_Složky.&lt;/EM&gt; Dále provádí automaticky posun hodin při přechodu mezi 
+    zimním a letním časem.
+    &lt;DT&gt;&amp;nbsp;
+    &lt;DT&gt;&lt;STRONG&gt;Modul&amp;nbsp;musí být umístěn&amp;nbsp;do procesu s periodou 1 
+    s.&lt;/STRONG&gt;&lt;/DT&gt;&lt;/DL&gt;&lt;/DL&gt;&lt;/SPAN&gt;
+&lt;P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; LINE-HEIGHT: normal"&gt;&lt;SPAN 
+style="FONT-SIZE: 12pt; FONT-FAMILY: 'Times New Roman','serif'; mso-fareast-font-family: 'Times New Roman'; mso-fareast-language: CS"&gt;&lt;STRONG&gt;Parametry&lt;/STRONG&gt; 
+&lt;/SPAN&gt;&lt;/P&gt;
+&lt;TABLE cellSpacing=3 cellPadding=3 border=1&gt;
+  &lt;TBODY&gt;
+  &lt;TR&gt;
+    &lt;TH bgColor=#ffffcc&gt;Jméno&lt;/TH&gt;
+    &lt;TH bgColor=#ffffcc&gt;Druh&lt;/TH&gt;
+    &lt;TH bgColor=#ffffcc&gt;Typ&lt;/TH&gt;
+    &lt;TH bgColor=#ffffcc&gt;Popis&lt;/TH&gt;&lt;/TR&gt;
+  &lt;TR&gt;
+    &lt;TD&gt;&amp;nbsp;RTC_Time&lt;/TD&gt;
+    &lt;TD&gt;&amp;nbsp;Out&lt;/TD&gt;
+    &lt;TD&gt;&amp;nbsp;L&lt;/TD&gt;
+    &lt;TD&gt;&amp;nbsp;Obsahuje okamžitý čas v DB-Net formátu (počet sekund od 1.1.1980 
+      0:0:0).&lt;/TD&gt;&lt;/TR&gt;
+  &lt;TR&gt;
+    &lt;TD&gt;&amp;nbsp;RTC_Složky&lt;/TD&gt;
+    &lt;TD&gt;&amp;nbsp;Out&lt;/TD&gt;
+    &lt;TD&gt;&amp;nbsp;MI&lt;/TD&gt;
+    &lt;TD&gt;&amp;nbsp;Okamžitý čas po položkách. 
+      &lt;P&gt;Proměnná - matice rozměru [8x1], která obsahuje okamžitý čas rozebraný 
+      na jednotlivé položky - den, měsíc, rok, hodina, sekunda, minuta:&lt;BR&gt;&lt;/P&gt;
+      &lt;P&gt;
+      &lt;TABLE cellSpacing=3 cellPadding=3 align=center border=1&gt;
+        &lt;TBODY&gt;
+        &lt;TR&gt;
+          &lt;TH bgColor=#ffffcc&gt;Řádek&lt;/TH&gt;
+          &lt;TH bgColor=#ffffcc&gt;Význam&lt;/TH&gt;&lt;/TR&gt;
+        &lt;TR&gt;
+          &lt;TD&gt;
+            &lt;P align=center&gt;&amp;nbsp;0&lt;/P&gt;&lt;/TD&gt;
+          &lt;TD&gt;
+            &lt;P align=center&gt;&amp;nbsp;dekundy&lt;/P&gt;&lt;/TD&gt;&lt;/TR&gt;
+        &lt;TR&gt;
+          &lt;TD&gt;
+            &lt;P align=center&gt;&amp;nbsp;1&lt;/P&gt;&lt;/TD&gt;
+          &lt;TD&gt;
+            &lt;P align=center&gt;&amp;nbsp;minuty&lt;/P&gt;&lt;/TD&gt;&lt;/TR&gt;
+        &lt;TR&gt;
+          &lt;TD&gt;
+            &lt;P align=center&gt;&amp;nbsp;2&lt;/P&gt;&lt;/TD&gt;
+          &lt;TD&gt;
+            &lt;P align=center&gt;&amp;nbsp;hodiny&lt;/P&gt;&lt;/TD&gt;&lt;/TR&gt;
+        &lt;TR&gt;
+          &lt;TD&gt;
+            &lt;P align=center&gt;&amp;nbsp;3&lt;/P&gt;&lt;/TD&gt;
+          &lt;TD&gt;
+            &lt;P align=center&gt;&amp;nbsp;den v měsíci&lt;/P&gt;&lt;/TD&gt;&lt;/TR&gt;
+        &lt;TR&gt;
+          &lt;TD&gt;
+            &lt;P align=center&gt;&amp;nbsp;4&lt;/P&gt;&lt;/TD&gt;
+          &lt;TD&gt;
+            &lt;P align=center&gt;&amp;nbsp;měsíc&lt;/P&gt;&lt;/TD&gt;&lt;/TR&gt;
+        &lt;TR&gt;
+          &lt;TD&gt;
+            &lt;P align=center&gt;&amp;nbsp;5&lt;/P&gt;&lt;/TD&gt;
+          &lt;TD&gt;
+            &lt;P align=center&gt;&amp;nbsp;rok&lt;BR&gt;&lt;I&gt;do roku 2000 jsou hodnoty 
+            80..99,&lt;BR&gt;počínaje rokem 2000 jsou hodnoty 00 a výše&lt;/I&gt;&lt;/P&gt;&lt;/TD&gt;&lt;/TR&gt;
+        &lt;TR&gt;
+          &lt;TD&gt;
+            &lt;P align=center&gt;&amp;nbsp;6&lt;/P&gt;&lt;/TD&gt;
+          &lt;TD&gt;
+            &lt;P align=center&gt;&amp;nbsp;den týdne&lt;/P&gt;&lt;/TD&gt;&lt;/TR&gt;
+        &lt;TR&gt;
+          &lt;TD&gt;
+            &lt;P align=center&gt;&amp;nbsp;7&lt;/P&gt;&lt;/TD&gt;
+          &lt;TD&gt;
+            &lt;P align=center&gt;&amp;nbsp;den roku&lt;/P&gt;&lt;/TD&gt;&lt;/TR&gt;&lt;/TBODY&gt;&lt;/TABLE&gt;&lt;/P&gt;
+      &lt;P&gt;&amp;nbsp;&lt;/P&gt;
+      &lt;P&gt;Den týdne má následující význam:&lt;/P&gt;
+      &lt;P&gt;
+      &lt;TABLE cellSpacing=3 cellPadding=3 align=center border=1&gt;
+        &lt;TBODY&gt;
+        &lt;TR&gt;
+          &lt;TH bgColor=#ffffcc&gt;Hodnota&lt;/TH&gt;
+          &lt;TH bgColor=#ffffcc&gt;Význam&lt;/TH&gt;&lt;/TR&gt;
+        &lt;TR&gt;
+          &lt;TD&gt;&amp;nbsp;0&lt;/TD&gt;
+          &lt;TD&gt;&amp;nbsp;Neděle&lt;/TD&gt;&lt;/TR&gt;
+        &lt;TR&gt;
+          &lt;TD&gt;&amp;nbsp;1&lt;/TD&gt;
+          &lt;TD&gt;&amp;nbsp;Pondělí&lt;/TD&gt;&lt;/TR&gt;
+        &lt;TR&gt;
+          &lt;TD&gt;&amp;nbsp;2&lt;/TD&gt;
+          &lt;TD&gt;&amp;nbsp;Úterý&lt;/TD&gt;&lt;/TR&gt;
+        &lt;TR&gt;
+          &lt;TD&gt;&amp;nbsp;3&lt;/TD&gt;
+          &lt;TD&gt;&amp;nbsp;Středa&lt;/TD&gt;&lt;/TR&gt;
+        &lt;TR&gt;
+          &lt;TD&gt;&amp;nbsp;4&lt;/TD&gt;
+          &lt;TD&gt;&amp;nbsp;Čtvrtek&lt;/TD&gt;&lt;/TR&gt;
+        &lt;TR&gt;
+          &lt;TD&gt;&amp;nbsp;5&lt;/TD&gt;
+          &lt;TD&gt;&amp;nbsp;Pátek&lt;/TD&gt;&lt;/TR&gt;
+        &lt;TR&gt;
+          &lt;TD&gt;&amp;nbsp;6&lt;/TD&gt;
+          &lt;TD&gt;&amp;nbsp;Sobota&lt;/TD&gt;&lt;/TR&gt;&lt;/TBODY&gt;&lt;/TABLE&gt;&lt;/P&gt;&lt;/TD&gt;&lt;/TR&gt;&lt;/TBODY&gt;&lt;/TABLE&gt;&lt;/DT&gt;&lt;/BODY&gt;&lt;/HTML&gt;
+</HTMLDoc_cs>
+          <HTMLDoc_en>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"&gt;
+&lt;HTML xmlns:o = "urn:schemas-microsoft-com:office:office"&gt;&lt;HEAD&gt;
+&lt;META http-equiv=Content-Type content="text/html; charset=utf-8"&gt;
+&lt;META content="MSHTML 6.00.6000.16735" name=GENERATOR&gt;&lt;/HEAD&gt;
+&lt;BODY&gt;&lt;SPAN 
+style="FONT-SIZE: 12pt; FONT-FAMILY: 'Times New Roman','serif'; mso-fareast-font-family: 'Times New Roman'; mso-fareast-language: CS"&gt;
+&lt;H2&gt;fb_RTC&lt;/H2&gt;
+&lt;P&gt;&lt;EM&gt;Načtení okamžitého času do databázové proměnné, vyhodnocení změn a 
+automatická změna zimní/letní čas.&lt;/EM&gt; &lt;/P&gt;
+&lt;DT&gt;&lt;STRONG&gt;Popis &lt;/STRONG&gt;
+&lt;DL&gt;
+  &lt;DL&gt;
+    &lt;DT&gt;Modul&amp;nbsp;načte okamžitý čas v DB-Net formátu do proměnné 
+    &lt;EM&gt;RTC_Time&lt;/EM&gt;. Rozloží okamžitý čas na položky a uloží je do&lt;BR&gt;proměnné 
+    &lt;EM&gt;RTC_Složky.&lt;/EM&gt; Dále provádí automaticky posun hodin při přechodu mezi 
+    zimním a letním časem.
+    &lt;DT&gt;&amp;nbsp;
+    &lt;DT&gt;&lt;STRONG&gt;Modul&amp;nbsp;musí být umístěn&amp;nbsp;do procesu s periodou 1 
+    s.&lt;/STRONG&gt;&lt;/DT&gt;&lt;/DL&gt;&lt;/DL&gt;&lt;/SPAN&gt;
+&lt;P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; LINE-HEIGHT: normal"&gt;&lt;SPAN 
+style="FONT-SIZE: 12pt; FONT-FAMILY: 'Times New Roman','serif'; mso-fareast-font-family: 'Times New Roman'; mso-fareast-language: CS"&gt;&lt;STRONG&gt;Parametry&lt;/STRONG&gt; 
+&lt;/SPAN&gt;&lt;/P&gt;
+&lt;TABLE cellSpacing=3 cellPadding=3 border=1&gt;
+  &lt;TBODY&gt;
+  &lt;TR&gt;
+    &lt;TH bgColor=#ffffcc&gt;Jméno&lt;/TH&gt;
+    &lt;TH bgColor=#ffffcc&gt;Druh&lt;/TH&gt;
+    &lt;TH bgColor=#ffffcc&gt;Typ&lt;/TH&gt;
+    &lt;TH bgColor=#ffffcc&gt;Popis&lt;/TH&gt;&lt;/TR&gt;
+  &lt;TR&gt;
+    &lt;TD&gt;&amp;nbsp;RTC_Time&lt;/TD&gt;
+    &lt;TD&gt;&amp;nbsp;Out&lt;/TD&gt;
+    &lt;TD&gt;&amp;nbsp;L&lt;/TD&gt;
+    &lt;TD&gt;&amp;nbsp;Obsahuje okamžitý čas v DB-Net formátu (počet sekund od 1.1.1980 
+      0:0:0).&lt;/TD&gt;&lt;/TR&gt;
+  &lt;TR&gt;
+    &lt;TD&gt;&amp;nbsp;RTC_Složky&lt;/TD&gt;
+    &lt;TD&gt;&amp;nbsp;Out&lt;/TD&gt;
+    &lt;TD&gt;&amp;nbsp;MI&lt;/TD&gt;
+    &lt;TD&gt;&amp;nbsp;Okamžitý čas po položkách. 
+      &lt;P&gt;Proměnná - matice rozměru [8x1], která obsahuje okamžitý čas rozebraný 
+      na jednotlivé položky - den, měsíc, rok, hodina, sekunda, minuta:&lt;BR&gt;&lt;/P&gt;
+      &lt;P&gt;
+      &lt;TABLE cellSpacing=3 cellPadding=3 align=center border=1&gt;
+        &lt;TBODY&gt;
+        &lt;TR&gt;
+          &lt;TH bgColor=#ffffcc&gt;Řádek&lt;/TH&gt;
+          &lt;TH bgColor=#ffffcc&gt;Význam&lt;/TH&gt;&lt;/TR&gt;
+        &lt;TR&gt;
+          &lt;TD&gt;
+            &lt;P align=center&gt;&amp;nbsp;0&lt;/P&gt;&lt;/TD&gt;
+          &lt;TD&gt;
+            &lt;P align=center&gt;&amp;nbsp;dekundy&lt;/P&gt;&lt;/TD&gt;&lt;/TR&gt;
+        &lt;TR&gt;
+          &lt;TD&gt;
+            &lt;P align=center&gt;&amp;nbsp;1&lt;/P&gt;&lt;/TD&gt;
+          &lt;TD&gt;
+            &lt;P align=center&gt;&amp;nbsp;minuty&lt;/P&gt;&lt;/TD&gt;&lt;/TR&gt;
+        &lt;TR&gt;
+          &lt;TD&gt;
+            &lt;P align=center&gt;&amp;nbsp;2&lt;/P&gt;&lt;/TD&gt;
+          &lt;TD&gt;
+            &lt;P align=center&gt;&amp;nbsp;hodiny&lt;/P&gt;&lt;/TD&gt;&lt;/TR&gt;
+        &lt;TR&gt;
+          &lt;TD&gt;
+            &lt;P align=center&gt;&amp;nbsp;3&lt;/P&gt;&lt;/TD&gt;
+          &lt;TD&gt;
+            &lt;P align=center&gt;&amp;nbsp;den v měsíci&lt;/P&gt;&lt;/TD&gt;&lt;/TR&gt;
+        &lt;TR&gt;
+          &lt;TD&gt;
+            &lt;P align=center&gt;&amp;nbsp;4&lt;/P&gt;&lt;/TD&gt;
+          &lt;TD&gt;
+            &lt;P align=center&gt;&amp;nbsp;měsíc&lt;/P&gt;&lt;/TD&gt;&lt;/TR&gt;
+        &lt;TR&gt;
+          &lt;TD&gt;
+            &lt;P align=center&gt;&amp;nbsp;5&lt;/P&gt;&lt;/TD&gt;
+          &lt;TD&gt;
+            &lt;P align=center&gt;&amp;nbsp;rok&lt;BR&gt;&lt;I&gt;do roku 2000 jsou hodnoty 
+            80..99,&lt;BR&gt;počínaje rokem 2000 jsou hodnoty 00 a výše&lt;/I&gt;&lt;/P&gt;&lt;/TD&gt;&lt;/TR&gt;
+        &lt;TR&gt;
+          &lt;TD&gt;
+            &lt;P align=center&gt;&amp;nbsp;6&lt;/P&gt;&lt;/TD&gt;
+          &lt;TD&gt;
+            &lt;P align=center&gt;&amp;nbsp;den týdne&lt;/P&gt;&lt;/TD&gt;&lt;/TR&gt;
+        &lt;TR&gt;
+          &lt;TD&gt;
+            &lt;P align=center&gt;&amp;nbsp;7&lt;/P&gt;&lt;/TD&gt;
+          &lt;TD&gt;
+            &lt;P align=center&gt;&amp;nbsp;den roku&lt;/P&gt;&lt;/TD&gt;&lt;/TR&gt;&lt;/TBODY&gt;&lt;/TABLE&gt;&lt;/P&gt;
+      &lt;P&gt;&amp;nbsp;&lt;/P&gt;
+      &lt;P&gt;Den týdne má následující význam:&lt;/P&gt;
+      &lt;P&gt;
+      &lt;TABLE cellSpacing=3 cellPadding=3 align=center border=1&gt;
+        &lt;TBODY&gt;
+        &lt;TR&gt;
+          &lt;TH bgColor=#ffffcc&gt;Hodnota&lt;/TH&gt;
+          &lt;TH bgColor=#ffffcc&gt;Význam&lt;/TH&gt;&lt;/TR&gt;
+        &lt;TR&gt;
+          &lt;TD&gt;&amp;nbsp;0&lt;/TD&gt;
+          &lt;TD&gt;&amp;nbsp;Neděle&lt;/TD&gt;&lt;/TR&gt;
+        &lt;TR&gt;
+          &lt;TD&gt;&amp;nbsp;1&lt;/TD&gt;
+          &lt;TD&gt;&amp;nbsp;Pondělí&lt;/TD&gt;&lt;/TR&gt;
+        &lt;TR&gt;
+          &lt;TD&gt;&amp;nbsp;2&lt;/TD&gt;
+          &lt;TD&gt;&amp;nbsp;Úterý&lt;/TD&gt;&lt;/TR&gt;
+        &lt;TR&gt;
+          &lt;TD&gt;&amp;nbsp;3&lt;/TD&gt;
+          &lt;TD&gt;&amp;nbsp;Středa&lt;/TD&gt;&lt;/TR&gt;
+        &lt;TR&gt;
+          &lt;TD&gt;&amp;nbsp;4&lt;/TD&gt;
+          &lt;TD&gt;&amp;nbsp;Čtvrtek&lt;/TD&gt;&lt;/TR&gt;
+        &lt;TR&gt;
+          &lt;TD&gt;&amp;nbsp;5&lt;/TD&gt;
+          &lt;TD&gt;&amp;nbsp;Pátek&lt;/TD&gt;&lt;/TR&gt;
+        &lt;TR&gt;
+          &lt;TD&gt;&amp;nbsp;6&lt;/TD&gt;
+          &lt;TD&gt;&amp;nbsp;Sobota&lt;/TD&gt;&lt;/TR&gt;&lt;/TBODY&gt;&lt;/TABLE&gt;&lt;/P&gt;&lt;/TD&gt;&lt;/TR&gt;&lt;/TBODY&gt;&lt;/TABLE&gt;&lt;/DT&gt;&lt;/BODY&gt;&lt;/HTML&gt;
+</HTMLDoc_en>
+        </CodeBlock>
+      </CodeFBList>
+      <DBase>
+        <VariableList>
+          <Variable Name="AI0" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3001</Wid>
+            <Station>3</Station>
+            <Type>dbtFloatMtx</Type>
+            <Comment>AI0 - Hodnoty analogových vstupů po korekcích</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <Row>8</Row>
+            <Col>1</Col>
+          </Variable>
+          <Variable Name="AI0_konst" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3002</Wid>
+            <Station>3</Station>
+            <Type>dbtFloatMtx</Type>
+            <Comment>AI0 - konstanty pro přepočet, filtry</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <Row>8</Row>
+            <Col>3</Col>
+            <InitialValue>1;0;5;1;0;5;1;0;5;1;0;5;1;0;5;1;0;5;1;0;5;1;0;5;</InitialValue>
+          </Variable>
+          <Variable Name="AI0_okamzita" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3003</Wid>
+            <Station>3</Station>
+            <Type>dbtFloatMtx</Type>
+            <Comment>AI0 - okamžité hodnoty</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <Row>8</Row>
+            <Col>1</Col>
+          </Variable>
+          <Variable Name="AI0_params" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3004</Wid>
+            <Station>3</Station>
+            <Type>dbtFloatMtx</Type>
+            <Comment>AI0 - parametry pro AnIn</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <Row>8</Row>
+            <Col>5</Col>
+            <InitialValue>20;4;20;0;250;10;0;10;0;100;10;0;10;0;100;10;0;10;0;100;10;0;10;0;100;10;0;10;0;100;10;0;10;0;100;10;0;10;0;100;</InitialValue>
+          </Variable>
+          <Variable Name="AI0_pom" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3005</Wid>
+            <Station>3</Station>
+            <Type>dbtFloatMtx</Type>
+            <Comment>AI0 - pomocná analogová hodnota </Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <Row>8</Row>
+            <Col>1</Col>
+          </Variable>
+          <Variable Name="AI0_R" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3006</Wid>
+            <Station>3</Station>
+            <Type>dbtFloatMtx</Type>
+            <Comment>AI0 - ruční hodnoty analogových vstupů</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <Row>8</Row>
+            <Col>1</Col>
+          </Variable>
+          <Variable Name="AI0_typ" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3007</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>AI0 - Bitové - typ měření 0 -&gt; AI, 1 -&gt; Ni1000</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="AI0_XR" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3008</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>AI0 - Ruční režim pro AI0</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="Alarm_A" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3009</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>Alarm, aktivita</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="Alarm_D" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3010</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>Alarm pro LCD</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="Alarm_E" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3011</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>Alarm, výstup z ErrSig</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="Alarm_I" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3012</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>Alarm, ignorování</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="Alarm_Q" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3013</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>Alarm, kvitace</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="AO" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3014</Wid>
+            <Station>3</Station>
+            <Type>dbtFloatMtx</Type>
+            <Comment>AO - Hodnoty analogových výstupu</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <Row>4</Row>
+            <Col>1</Col>
+          </Variable>
+          <Variable Name="AO_A" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3015</Wid>
+            <Station>3</Station>
+            <Type>dbtFloatMtx</Type>
+            <Comment>AO - Automatické hodnoty analogových výstupů</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <Row>4</Row>
+            <Col>1</Col>
+          </Variable>
+          <Variable Name="AO_params" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3016</Wid>
+            <Station>3</Station>
+            <Type>dbtFloatMtx</Type>
+            <Comment>AO - parametry pro AnOut</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <Row>4</Row>
+            <Col>5</Col>
+            <InitialValue>10;0;10;0;100;10;0;10;0;100;10;0;10;0;100;10;0;10;0;100;</InitialValue>
+          </Variable>
+          <Variable Name="AO_R" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3017</Wid>
+            <Station>3</Station>
+            <Type>dbtFloatMtx</Type>
+            <Comment>AO - Ruční hodnoty analogových výstupů</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <Row>4</Row>
+            <Col>1</Col>
+          </Variable>
+          <Variable Name="AO_XR" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3018</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>AO - Ruční režim pro AO</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="DAI0" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3019</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>Hodnota digitálních vstupů  DI1</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="DAI0_A" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3020</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>DI1 - Digitální vstupy DI1</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="DAI0_AC" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3021</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>Načtená hodnota digitálních vstupů DI1_AC</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="DAI0_DC" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3022</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>Načtená hodnota digitálních vstupů DI1_DC</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="DAI0_Neg" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3023</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>DI1 - Výběr signálů pro negaci</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="DAI0_R" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3024</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>Ruční hodnoty digitálních vstupů  DI1</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="DAI0_Typ" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3025</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>Typ AC/DC digitálního vstupu na kanálu DI1</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="DAI0_XR" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3026</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>Ruční řežim pro DI1</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="DI0" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3027</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>Hodnota digitálních vstupů  DI0</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="DI0_A" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3028</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>DI0 - Digitální vstupy DI0</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="DI0_AC" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3029</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>Načtená hodnota digitálních vstupů DI0_AC</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="DI0_DC" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3030</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>Načtená hodnota digitálních vstupů  DI0_DC</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="DI0_Neg" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3031</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>DI0 - Výběr signálů pro negaci</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="DI0_R" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3032</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>Ruční hodnoty digitálních vstupů  DI0</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="DI0_Typ" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3033</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>Typ AC/DC digitálního vstupu na kanálu DI0</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="DI0_XR" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3034</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>Ruční řežim pro DI0</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="DI0a" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3035</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>prac DI</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="DI0d" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3036</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>prime cteni DI</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="DI0r" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3037</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>upravene cteni DI</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="DI0xr" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3038</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>aut ruci DI</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="DO0" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3039</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment> DO</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="DO0_1" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3040</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>DO0 - zapisované hodnoty na výstupy</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="DO0_A" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3041</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>DO0 - Automatické povely pro DO0</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="DO0_R" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3042</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>DO0 - Ruční povely pro DO0</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="DO0_Valve" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3043</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>DO0_A - Maska - které bity DO0_A pro modul Valve</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="DO0_XR" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3044</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>DO0 - Ruční režim pro DO0</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="DP_feasts" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3045</Wid>
+            <Station>3</Station>
+            <Type>dbtIntMtx</Type>
+            <Comment>Matice svátků</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <Row>3</Row>
+            <Col>1</Col>
+          </Variable>
+          <Variable Name="DP_times" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3046</Wid>
+            <Station>3</Station>
+            <Type>dbtLongMtx</Type>
+            <Comment>DayPlan matice časů</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <Row>1</Row>
+            <Col>2</Col>
+          </Variable>
+          <Variable Name="DP_values" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3047</Wid>
+            <Station>3</Station>
+            <Type>dbtIntMtx</Type>
+            <Comment>DayPlan matice hodnot</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <Row>1</Row>
+            <Col>2</Col>
+            <InitialValue>1;0;</InitialValue>
+          </Variable>
+          <Variable Name="fX" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3048</Wid>
+            <Station>3</Station>
+            <Type>dbtFloat</Type>
+            <Comment>Vypočítaná korekce - koeficient</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="fY" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3049</Wid>
+            <Station>3</Station>
+            <Type>dbtFloat</Type>
+            <Comment>Vypočítaná korekce - koeficient</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="gen_bin" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3050</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>kontejner logických hodnot</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="Gsm_AdrOrder" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3051</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>Pořadí volaného adresáta SMS</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="Gsm_Ntw" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3052</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>GSM operátor</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="Gsm_Pred1" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3053</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>Předčíslí</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <InitialValue>420</InitialValue>
+          </Variable>
+          <Variable Name="Gsm_Sig" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3054</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>GSM úroveň sigálu v %</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="Gsm_StvSig" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3055</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>GSM úroveň sigálu</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="Gsm_TelCis" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3056</Wid>
+            <Station>3</Station>
+            <Type>dbtLongMtx</Type>
+            <Comment>Telefoní čísla příjemců zpráv</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <Row>5</Row>
+            <Col>1</Col>
+          </Variable>
+          <Variable Name="Ix" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3057</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>Pomocný integer</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="LevelPar" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3058</Wid>
+            <Station>3</Station>
+            <Type>dbtFloatMtx</Type>
+            <Comment>Meze hladin</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <Row>5</Row>
+            <Col>1</Col>
+          </Variable>
+          <Variable Name="ListStart" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3059</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>Index start</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="Ni0_typ" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3060</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>AI0 - Bitové - typ Ni1000 0 -&gt; 6180, 1 -&gt; 5000</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="Ni1_typ" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3061</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>AI1 - Bitové - typ Ni1000 0 -&gt; 6180, 1 -&gt; 5000</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="Ni2_typ" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3062</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>AI2 - Bitové - typ Ni1000 0 -&gt; 6180, 1 -&gt; 5000</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="PDBuffer" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3063</Wid>
+            <Station>3</Station>
+            <Type>dbtIntMtx</Type>
+            <Comment>Buffer provozního deníku</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <Row>1</Row>
+            <Col>408</Col>
+          </Variable>
+          <Variable Name="PDIndex" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3064</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>Index provozního deníku</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="pQuit" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3065</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>Kvitace alarmu</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="Pt1000_Kriv" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3066</Wid>
+            <Station>3</Station>
+            <Type>dbtFloatMtx</Type>
+            <Comment>Hodnoty interpolační křivky pro Pt1000 </Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <Row>16</Row>
+            <Col>2</Col>
+            <InitialValue>0;-24.2;2.86;-20;3.05;0;3.24;20;3.41;40;3.59;60;3.76;80;3.92;100;4.07;120;4.22;140;4.37;160;4.51;180;4.65;200;4.78;220;4.91;240;5;255.26;</InitialValue>
+          </Variable>
+          <Variable Name="Restart_time" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3067</Wid>
+            <Station>3</Station>
+            <Type>dbtLong</Type>
+            <Comment>Čas necitlivosti po restartu</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <InitialValue>10000</InitialValue>
+          </Variable>
+          <Variable Name="RTC_slozky" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3068</Wid>
+            <Station>3</Station>
+            <Type>dbtIntMtx</Type>
+            <Comment>Čas RTC, složkový format</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <Row>8</Row>
+            <Col>1</Col>
+          </Variable>
+          <Variable Name="RTC_time" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3069</Wid>
+            <Station>3</Station>
+            <Type>dbtLong</Type>
+            <Comment>Čas RTC, format DB-Net</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="Ser_R1" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3070</Wid>
+            <Station>3</Station>
+            <Type>dbtIntMtx</Type>
+            <Comment>Text obrazovky Info, řádek 2</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>5</InitialValueFormat>
+            <Row>1</Row>
+            <Col>20</Col>
+            <InitialValue>80;114;111;99;111;110;116;32;115;46;114;46;111;46;0;0;0;0;0;0;</InitialValue>
+          </Variable>
+          <Variable Name="Ser_R2" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3071</Wid>
+            <Station>3</Station>
+            <Type>dbtIntMtx</Type>
+            <Comment>Text obrazovky Info, řádek 2</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>5</InitialValueFormat>
+            <Row>1</Row>
+            <Col>20</Col>
+            <InitialValue>68;345;101;118;110;105;99;107;225;32;52;48;48;57;32;90;108;237;110;0;</InitialValue>
+          </Variable>
+          <Variable Name="Ser_R3" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3072</Wid>
+            <Station>3</Station>
+            <Type>dbtIntMtx</Type>
+            <Comment>Text obrazovky Info, řádek 3</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>5</InitialValueFormat>
+            <Row>1</Row>
+            <Col>20</Col>
+            <InitialValue>32;32;32;32;32;83;87;32;112;114;111;32;77;97;82;0;0;0;0;0;</InitialValue>
+          </Variable>
+          <Variable Name="Ser_R4" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3073</Wid>
+            <Station>3</Station>
+            <Type>dbtIntMtx</Type>
+            <Comment>Text obrazovky Info, řádek 4</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>5</InitialValueFormat>
+            <Row>1</Row>
+            <Col>20</Col>
+            <InitialValue>32;32;73;110;103;46;32;77;46;32;381;109;111;108;237;107;0;0;0;0;</InitialValue>
+          </Variable>
+          <Variable Name="SMS_Text" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3074</Wid>
+            <Station>3</Station>
+            <Type>dbtIntMtx</Type>
+            <Comment>Text do SMS</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <Row>1</Row>
+            <Col>160</Col>
+          </Variable>
+          <Variable Name="SmsAdr" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3075</Wid>
+            <Station>3</Station>
+            <Type>dbtIntMtx</Type>
+            <Comment>Aktuální SMS tel. číslo</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <Row>1</Row>
+            <Col>14</Col>
+          </Variable>
+          <Variable Name="Stav" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3076</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>Stavova prom</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="StavSMS" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3077</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>Flagy stavu odesilani SMS</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="StrIndex" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3078</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>Index stringu</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="TC0_typ" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3079</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>AI0 - bitové - typ teplotního čidla 0 -&gt; Ni1000 1 -&gt; Pt1000</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="TC1_typ" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3080</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>AI1 - bitové - typ teplotního čidla 0 -&gt; Ni1000 1 -&gt; Pt1000</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="TC2_typ" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3081</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>AI2 - bitové - typ teplotního čidla 0 -&gt; Ni1000 1 -&gt; Pt1000</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="tLong" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3082</Wid>
+            <Station>3</Station>
+            <Type>dbtLong</Type>
+            <Comment>temp long</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="Ux" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3083</Wid>
+            <Station>3</Station>
+            <Type>dbtFloatMtx</Type>
+            <Comment>Napětí zálohovací baterie /napájecí napětí</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <Row>2</Row>
+            <Col>1</Col>
+          </Variable>
+          <Variable Name="Ux_A" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3084</Wid>
+            <Station>3</Station>
+            <Type>dbtFloatMtx</Type>
+            <Comment>Napětí zálohovací baterie / napájecí napětí</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <Row>2</Row>
+            <Col>1</Col>
+          </Variable>
+          <Variable Name="Ux_R" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3085</Wid>
+            <Station>3</Station>
+            <Type>dbtFloatMtx</Type>
+            <Comment>Ručně zadané napětí zálohovací baterie / napájecí napětí</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <Row>2</Row>
+            <Col>1</Col>
+          </Variable>
+          <Variable Name="Ux_XR" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3086</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>Ruční režim zálohovací baterie / napájecí napětí</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="ChckLev_poc" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3000</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>počítadlo kontroly změny hladiny</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="ChckLev_time" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3087</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>interval kontroly</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <InitialValue>60</InitialValue>
+          </Variable>
+          <Variable Name="ChckLev_act" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3088</Wid>
+            <Station>3</Station>
+            <Type>dbtFloat</Type>
+            <Comment>paměť kontroly hladiny</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="ChckLev_chng" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3089</Wid>
+            <Station>3</Station>
+            <Type>dbtInt</Type>
+            <Comment>požadovaná minimální derivace</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <InitialValue>2</InitialValue>
+          </Variable>
+          <Variable Name="Cerp_timeout" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>3090</Wid>
+            <Station>3</Station>
+            <Type>dbtLong</Type>
+            <Comment>čas dlouhého čerpání</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <InitialValue>1200000</InitialValue>
+          </Variable>
+        </VariableList>
+        <AliasList>
+          <Alias Name="@ChodCerp" Class="Amit.Psp4.Shared.Psp4Alias">
+            <Comment>Chod čerpadla</Comment>
+            <VarName>DI0</VarName>
+            <Bit>0</Bit>
+          </Alias>
+          <Alias Name="@PozadChod" Class="Amit.Psp4.Shared.Psp4Alias">
+            <Comment>Požadavek na chod čerpadla</Comment>
+            <VarName>Stav</VarName>
+            <Bit>5</Bit>
+          </Alias>
+          <Alias Name="@PozadChodBl" Class="Amit.Psp4.Shared.Psp4Alias">
+            <Comment>Požadavek na chod čerpadla i v blok. době</Comment>
+            <VarName>Stav</VarName>
+            <Bit>6</Bit>
+          </Alias>
+          <Alias Name="@DPklid" Class="Amit.Psp4.Shared.Psp4Alias">
+            <Comment>Casovy plan blokace cerpani</Comment>
+            <VarName>Stav</VarName>
+            <Bit>7</Bit>
+          </Alias>
+          <Alias Name="@HavMin" Class="Amit.Psp4.Shared.Psp4Alias">
+            <Comment>Minimalni hladina</Comment>
+            <VarName>Stav</VarName>
+            <Bit>8</Bit>
+          </Alias>
+          <Alias Name="@HavMax" Class="Amit.Psp4.Shared.Psp4Alias">
+            <Comment>Maximalni hladina</Comment>
+            <VarName>Stav</VarName>
+            <Bit>9</Bit>
+          </Alias>
+          <Alias Name="@CerpZap" Class="Amit.Psp4.Shared.Psp4Alias">
+            <Comment>Zapnuti cerpadla</Comment>
+            <VarName>DO0_A</VarName>
+            <Bit>0</Bit>
+          </Alias>
+          <Alias Name="@SendSMS" Class="Amit.Psp4.Shared.Psp4Alias">
+            <Comment>Vyšli SMS o havárii</Comment>
+            <VarName>Stav</VarName>
+            <Bit>10</Bit>
+          </Alias>
+          <Alias Name="@Restart" Class="Amit.Psp4.Shared.Psp4Alias">
+            <Comment>Příznak restartu řídicího systému</Comment>
+            <VarName>gen_bin</VarName>
+            <Bit>15</Bit>
+          </Alias>
+          <Alias Name="@Reset" Class="Amit.Psp4.Shared.Psp4Alias">
+            <Comment>Reset řídicího systému</Comment>
+            <VarName>gen_bin</VarName>
+            <Bit>14</Bit>
+          </Alias>
+          <Alias Name="@Test" Class="Amit.Psp4.Shared.Psp4Alias">
+            <Comment>Pomocny bit</Comment>
+            <VarName>gen_bin</VarName>
+            <Bit>3</Bit>
+          </Alias>
+          <Alias Name="@AlarmSign" Class="Amit.Psp4.Shared.Psp4Alias">
+            <Comment>Alarm, signalizace</Comment>
+            <VarName>gen_bin</VarName>
+            <Bit>2</Bit>
+          </Alias>
+          <Alias Name="@AlarmAct" Class="Amit.Psp4.Shared.Psp4Alias">
+            <Comment>Alarm, aktivita</Comment>
+            <VarName>gen_bin</VarName>
+            <Bit>1</Bit>
+          </Alias>
+          <Alias Name="@SyncArc" Class="Amit.Psp4.Shared.Psp4Alias">
+            <Comment>Synchro archivu</Comment>
+            <VarName>gen_bin</VarName>
+            <Bit>0</Bit>
+          </Alias>
+          <Alias Name="@ErrSign" Class="Amit.Psp4.Shared.Psp4Alias">
+            <Comment>Suma alarmů</Comment>
+            <VarName>DO0_A</VarName>
+            <Bit>1</Bit>
+          </Alias>
+          <Alias Name="@Zap_SMS" Class="Amit.Psp4.Shared.Psp4Alias">
+            <Comment>Povolení SMS komunikace</Comment>
+            <VarName>gen_bin</VarName>
+            <Bit>5</Bit>
+          </Alias>
+          <Alias Name="@SmsLenOK" Class="Amit.Psp4.Shared.Psp4Alias">
+            <Comment>Formát stringu uspěšný</Comment>
+            <VarName>gen_bin</VarName>
+            <Bit>6</Bit>
+          </Alias>
+          <Alias Name="@ErrSignOld" Class="Amit.Psp4.Shared.Psp4Alias">
+            <Comment>Stav alarmů paměť</Comment>
+            <VarName>gen_bin</VarName>
+            <Bit>7</Bit>
+          </Alias>
+          <Alias Name="@ChckLev" Class="Amit.Psp4.Shared.Psp4Alias">
+            <Comment>Nedostatecna zmena hladiny</Comment>
+            <VarName>gen_bin</VarName>
+            <Bit>4</Bit>
+          </Alias>
+          <Alias Name="@Tesnost" Class="Amit.Psp4.Shared.Psp4Alias">
+            <Comment>Potrubi je v poradku</Comment>
+            <VarName>DI0</VarName>
+            <Bit>1</Bit>
+          </Alias>
+        </AliasList>
+      </DBase>
+      <DteData>
+        <EndOfLineCR>False</EndOfLineCR>
+        <EndOfLineLF>False</EndOfLineLF>
+        <Increment>10</Increment>
+        <Formaty>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>0</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="OK" />
+            <Text Lang="cs-CZ" Text="Žádná chyba" />
+            <Comment>OK</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>16</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="nos" />
+            <Text Lang="cs-CZ" Text="Zavedení operačního systému" />
+            <Comment>Zavedení operačního systému</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>17</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="nos" />
+            <Text Lang="cs-CZ" Text="Studeny start síťového zavaděče" />
+            <Comment>Studeny start síťového zavaděče</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>18</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="nos" />
+            <Text Lang="cs-CZ" Text="Teplý start síťového zavaděče (výpadek: %T)" />
+            <Comment>Teplý start síťového zavaděče</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>19</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="nos" />
+            <Text Lang="cs-CZ" Text="Studený start aplikace" />
+            <Comment>Studený start aplikace</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>20</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="nos" />
+            <Text Lang="cs-CZ" Text="Teplý start aplikace (výpadek: %T)" />
+            <Comment>Teplý start aplikace</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>21</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="nos" />
+            <Text Lang="cs-CZ" Text="Chyba procesoru: %0sw" />
+            <Comment>Chyba procesoru</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>22</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="nos" />
+            <Text Lang="cs-CZ" Text="Zápis do zakázané paměti" />
+            <Comment>Zápis do zakázané paměti</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>23</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="nos" />
+            <Text Lang="cs-CZ" Text="Interní chyba řadiče přerušení, adr.: %d" />
+            <Comment>Interní chyba řadiče přerušení</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>24</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="eth" />
+            <Text Lang="cs-CZ" Text="Rozhraní č. %0w (karta %gh typ %sl" />
+            <Comment>Stav rozhraní Ethernet</Comment>
+            <DWTabulka>EthState</DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>25</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="nos" />
+            <Text Lang="cs-CZ" Text="Použití neexistujícího COM-portu %0i" />
+            <Comment>Použití neexistujícího COM-portu</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>32</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="Db" />
+            <Text Lang="cs-CZ" Text="WID %0i neexistuje." />
+            <Comment>Neplatný WID proměnné</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>33</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="Db" />
+            <Text Lang="cs-CZ" Text="Neplatný handle proměnné %0w" />
+            <Comment>Neplatný vnitřní identifikátor proměnné</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>34</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="Db" />
+            <Text Lang="cs-CZ" Text="Neplatný typ %1sw proměnné %0i" />
+            <Comment>Neplatný typ proměnné</Comment>
+            <DWTabulka>Typy</DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>35</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="Db" />
+            <Text Lang="cs-CZ" Text="Neplatný řádek %1w proměnné %0w" />
+            <Comment>Neplatný řádek proměnné</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>36</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="Db" />
+            <Text Lang="cs-CZ" Text="Neplatný sloupec %1w proměnné %0w" />
+            <Comment>Neplatný sloupec proměnné</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>37</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="Db" />
+            <Text Lang="cs-CZ" Text="Neplatný počet řádků %1w proměnné %0w" />
+            <Comment>Neplatný počet řádků proměnné</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>38</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="Db" />
+            <Text Lang="cs-CZ" Text="Neplatný počet sloupců %1w proměnné %0w" />
+            <Comment>Neplatný počet sloupců proměnné</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>39</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="nos" />
+            <Text Lang="cs-CZ" Text="Nedostatek paměti" />
+            <Comment>Nedostatek paměti</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>40</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="aeg" />
+            <Text Lang="cs-CZ" Text="Špatný 1/4h pulz, délka: %t" />
+            <Comment>Špatný 1/4h pulz při měření odběru el.energie</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>32772</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="val" />
+            <Text Lang="cs-CZ" Text="U ventilu %0w - %1w jsou oba dva KS sepnuty" />
+            <Comment>U ventilu jsou oba koncové spínače sepnuté</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>32773</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="val" />
+            <Text Lang="cs-CZ" Text="U ventilu %0w - %1w jsou oba dva KS v pořádku" />
+            <Comment>U ventilu jsou oba koncové spínače v pořádku</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>32774</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="val" />
+            <Text Lang="cs-CZ" Text="Ventil %0w - %1w nedojel na KS OTEVRENO" />
+            <Comment>Ventil nedojel v časovém limitu na koncový spínač OTEVŘENO</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>32775</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="val" />
+            <Text Lang="cs-CZ" Text="Ventil %0w - %1w nedojel na KS ZAVRENO" />
+            <Comment>Ventil nedojel v časovém limitu na koncový spínač OTEVŘENO</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>32776</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="val" />
+            <Text Lang="cs-CZ" Text="Ventil %0w - %1w dojel na KS OTEVRENO" />
+            <Comment>Ventil dojel na koncový spínač OTEVŘENO</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>32777</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="val" />
+            <Text Lang="cs-CZ" Text="Ventil %0w - %1w dojel na KS ZAVRENO" />
+            <Comment>Ventil dojel na koncový spínač ZAVŘENO</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>32800</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="lcd" />
+            <Text Lang="cs-CZ" Text="Nelze vložit čtecí požadavek do buferu %sl" />
+            <Comment>Nelze vložit čtecí požadavek</Comment>
+            <DWTabulka>Bufer</DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>32801</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="lcd" />
+            <Text Lang="cs-CZ" Text="Nelze vložit zápisový požadavek do buferu %sl" />
+            <Comment>Nelze vložit zápisový požadavek</Comment>
+            <DWTabulka>Bufer</DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>32802</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="lcd" />
+            <Text Lang="cs-CZ" Text="Přihlášení uživatele %0w" />
+            <Comment>Přihlášení uživatele</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>32803</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="lcd" />
+            <Text Lang="cs-CZ" Text="Odhlašení uživatele %0w" />
+            <Comment>Odhlášení uživatele</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>50</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="esi" />
+            <Text Lang="cs-CZ" Text="Studený start aplikace" />
+            <Comment>Studený start aplikace</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>51</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="esi" />
+            <Text Lang="cs-CZ" Text="Teplý start aplikace (výpadek: %T)" />
+            <Comment>Teplý start aplikace</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>52</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="esi" />
+            <Text Lang="cs-CZ" Text="Chyba inicializace RTOS %w" />
+            <Comment>Chyba inicializace RTOS</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>53</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="esi" />
+            <Text Lang="cs-CZ" Text="Chybný uživatelský zápis do provozního deníku %w" />
+            <Comment>Chybný zápis do provozního deníku</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>54</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="esi" />
+            <Text Lang="cs-CZ" Text="Přístup na neplatný index matice (%w, %l, %w)" />
+            <Comment>Přístup na neplatný index matice</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+        </Formaty>
+        <Tabulky>
+          <Tabulka Class="Amit.DetStudio.Shared.DteTable">
+            <Nazev>Bufer</Nazev>
+            <Comment>Buffer (Systémová tabulka)</Comment>
+            <Typ>Long</Typ>
+            <Polozky>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>0</Dolni>
+                <Horni>0</Horni>
+                <Text Lang="cs-CZ" Text="NOSu" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>65536</Dolni>
+                <Horni>65536</Horni>
+                <Text Lang="cs-CZ" Text="LCDSHELLu" />
+              </Polozka>
+            </Polozky>
+          </Tabulka>
+          <Tabulka Class="Amit.DetStudio.Shared.DteTable">
+            <Nazev>EthState</Nazev>
+            <Comment>Stav rozhraní Ethernet (sytémová tabulka)</Comment>
+            <Typ>Long</Typ>
+            <Polozky>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>131072</Dolni>
+                <Horni>131072</Horni>
+                <Text Lang="cs-CZ" Text="AD-ETH100) stav 10Mb/s, poloduplex" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>131073</Dolni>
+                <Horni>131073</Horni>
+                <Text Lang="cs-CZ" Text="AD-ETH100) stav 10Mb/s, plnýduplex" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>131076</Dolni>
+                <Horni>131076</Horni>
+                <Text Lang="cs-CZ" Text="AD-ETH100) stav 100Mb/s, poloduplex" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>131077</Dolni>
+                <Horni>131077</Horni>
+                <Text Lang="cs-CZ" Text="AD-ETH100) stav 100Mb/s, plný duplex" />
+              </Polozka>
+            </Polozky>
+          </Tabulka>
+          <Tabulka Class="Amit.DetStudio.Shared.DteTable">
+            <Nazev>Procesor</Nazev>
+            <Comment>Chyby procesoru (sytémová tabulka)</Comment>
+            <Typ>Long</Typ>
+            <Polozky>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>0</Dolni>
+                <Horni>0</Horni>
+                <Text Lang="cs-CZ" Text="Přetečení uživ./CP zásobníku" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>1</Dolni>
+                <Horni>1</Horni>
+                <Text Lang="cs-CZ" Text="Nedefinovaný kód instrukce" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>2</Dolni>
+                <Horni>2</Horni>
+                <Text Lang="cs-CZ" Text="Zakázaná instrukce" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>3</Dolni>
+                <Horni>3</Horni>
+                <Text Lang="cs-CZ" Text="Špatný typ operandu instrukce" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>4</Dolni>
+                <Horni>4</Horni>
+                <Text Lang="cs-CZ" Text="Špatná adresa dat" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>5</Dolni>
+                <Horni>5</Horni>
+                <Text Lang="cs-CZ" Text="Špatný přístup na sběrnici procesoru" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>6</Dolni>
+                <Horni>6</Horni>
+                <Text Lang="cs-CZ" Text="Přetečení zásobníku procesoru" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>7</Dolni>
+                <Horni>7</Horni>
+                <Text Lang="cs-CZ" Text="Podtečení zásobníku procesoru" />
+              </Polozka>
+            </Polozky>
+          </Tabulka>
+          <Tabulka Class="Amit.DetStudio.Shared.DteTable">
+            <Nazev>Typy</Nazev>
+            <Comment>Databázové typy (sytémová tabulka)</Comment>
+            <Typ>Long</Typ>
+            <Polozky>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>0</Dolni>
+                <Horni>0</Horni>
+                <Text Lang="cs-CZ" Text="DBT_INT" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>1</Dolni>
+                <Horni>1</Horni>
+                <Text Lang="cs-CZ" Text="DBT_LONG" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>2</Dolni>
+                <Horni>2</Horni>
+                <Text Lang="cs-CZ" Text="DBT_FLOAT" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>3</Dolni>
+                <Horni>3</Horni>
+                <Text Lang="cs-CZ" Text="DBT_INTMTX" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>4</Dolni>
+                <Horni>4</Horni>
+                <Text Lang="cs-CZ" Text="DBT_LONGMTX" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>5</Dolni>
+                <Horni>5</Horni>
+                <Text Lang="cs-CZ" Text="DBT_FLOATMTX" />
+              </Polozka>
+            </Polozky>
+          </Tabulka>
+        </Tabulky>
+      </DteData>
+      <ArionManager>
+        <Arion>
+          <ArionLine>
+            <Name>Arion0</Name>
+            <Port>0</Port>
+            <Baud>19200</Baud>
+            <ID>0</ID>
+            <InitPeriodAIAO>2000</InitPeriodAIAO>
+            <InitPeriodDIDO>2000</InitPeriodDIDO>
+            <InitGuardTime>5000</InitGuardTime>
+            <TimeBroadcast>False</TimeBroadcast>
+            <ArionModuleList />
+          </ArionLine>
+        </Arion>
+      </ArionManager>
+      <TelemetrManager>
+        <Telemetr />
+      </TelemetrManager>
+      <ModbusManager>
+        <Psp4Modbus />
+      </ModbusManager>
+      <ModbusMasterManager />
+      <HwDescriptor>
+        <IsModular>False</IsModular>
+        <WidMapping>False</WidMapping>
+        <BlockReadNetDbNames>False</BlockReadNetDbNames>
+        <ProtocolMode>0</ProtocolMode>
+        <Ident1>rayserv_cerpani_odpadni_jimky</Ident1>
+        <Ident2>
+        </Ident2>
+        <WatchActivate>False</WatchActivate>
+        <Connect>1</Connect>
+        <SourceCodeUpload>False</SourceCodeUpload>
+        <SourceCodePassword>True</SourceCodePassword>
+        <VariableBackup>True</VariableBackup>
+        <SkipMtxDiffDim>False</SkipMtxDiffDim>
+        <PortList>
+          <Port>
+            <Num>0</Num>
+            <Comment>
+            </Comment>
+            <SignalList>
+              <Signal>
+                <Num>0</Num>
+                <Name>DIO0_0</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>1</Num>
+                <Name>DIO0_1</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>2</Num>
+                <Name>DIO0_2</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>3</Num>
+                <Name>DIO0_3</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>4</Num>
+                <Name>DIO0_4</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>5</Num>
+                <Name>DIO0_5</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>6</Num>
+                <Name>DIO0_6</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>7</Num>
+                <Name>DIO0_7</Name>
+                <Comment>NC</Comment>
+              </Signal>
+            </SignalList>
+          </Port>
+          <Port>
+            <Num>1</Num>
+            <Comment>
+            </Comment>
+            <SignalList>
+              <Signal>
+                <Num>0</Num>
+                <Name>DIO_AC1_0</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>1</Num>
+                <Name>DIO_AC1_1</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>2</Num>
+                <Name>DIO_AC1_2</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>3</Num>
+                <Name>DIO_AC1_3</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>4</Num>
+                <Name>DIO_AC1_4</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>5</Num>
+                <Name>DIO_AC1_5</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>6</Num>
+                <Name>DIO_AC1_6</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>7</Num>
+                <Name>DIO_AC1_7</Name>
+                <Comment>NC</Comment>
+              </Signal>
+            </SignalList>
+          </Port>
+          <Port>
+            <Num>2</Num>
+            <Comment>
+            </Comment>
+            <SignalList>
+              <Signal>
+                <Num>0</Num>
+                <Name>DAI02_0</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>1</Num>
+                <Name>DAI02_1</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>2</Num>
+                <Name>DAI02_2</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>3</Num>
+                <Name>DAI02_3</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>4</Num>
+                <Name>DAI02_4</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>5</Num>
+                <Name>DAI02_5</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>6</Num>
+                <Name>DAI02_6</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>7</Num>
+                <Name>DAI02_7</Name>
+                <Comment>NC</Comment>
+              </Signal>
+            </SignalList>
+          </Port>
+          <Port>
+            <Num>3</Num>
+            <Comment>
+            </Comment>
+            <SignalList>
+              <Signal>
+                <Num>0</Num>
+                <Name>DAI0_AC3_0</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>1</Num>
+                <Name>DAI0_AC3_1</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>2</Num>
+                <Name>DAI0_AC3_2</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>3</Num>
+                <Name>DAI0_AC3_3</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>4</Num>
+                <Name>DAI0_AC3_4</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>5</Num>
+                <Name>DAI0_AC3_5</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>6</Num>
+                <Name>DAI0_AC3_6</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>7</Num>
+                <Name>DAI0_AC3_7</Name>
+                <Comment>NC</Comment>
+              </Signal>
+            </SignalList>
+          </Port>
+          <Port>
+            <Num>4</Num>
+            <Comment>
+            </Comment>
+            <SignalList>
+              <Signal>
+                <Num>0</Num>
+                <Name>DO00_0</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>1</Num>
+                <Name>DO00_1</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>2</Num>
+                <Name>DO00_2</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>3</Num>
+                <Name>DO00_3</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>4</Num>
+                <Name>DO00_4</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>5</Num>
+                <Name>DO00_5</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>6</Num>
+                <Name>DO00_6</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>7</Num>
+                <Name>DO00_7</Name>
+                <Comment>NC</Comment>
+              </Signal>
+            </SignalList>
+          </Port>
+          <Port>
+            <Num>5</Num>
+            <Comment>
+            </Comment>
+            <SignalList>
+              <Signal>
+                <Num>0</Num>
+                <Name>AI00_0</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>1</Num>
+                <Name>AI00_1</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>2</Num>
+                <Name>AI00_2</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>3</Num>
+                <Name>AI00_3</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>4</Num>
+                <Name>AI00_4</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>5</Num>
+                <Name>AI00_5</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>6</Num>
+                <Name>AI00_6</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>7</Num>
+                <Name>AI00_7</Name>
+                <Comment>NC</Comment>
+              </Signal>
+            </SignalList>
+          </Port>
+          <Port>
+            <Num>6</Num>
+            <Comment>
+            </Comment>
+            <SignalList>
+              <Signal>
+                <Num>0</Num>
+                <Name>Ni10001_0</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>1</Num>
+                <Name>Ni10001_1</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>2</Num>
+                <Name>Ni10001_2</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>3</Num>
+                <Name>Ni10001_3</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>4</Num>
+                <Name>Ni10001_4</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>5</Num>
+                <Name>Ni10001_5</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>6</Num>
+                <Name>Ni10001_6</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>7</Num>
+                <Name>Ni10001_7</Name>
+                <Comment>NC</Comment>
+              </Signal>
+            </SignalList>
+          </Port>
+          <Port>
+            <Num>7</Num>
+            <Comment>
+            </Comment>
+            <SignalList>
+              <Signal>
+                <Num>0</Num>
+                <Name>Vpwr</Name>
+                <Comment>Napájecí napětí 0..55 V</Comment>
+              </Signal>
+              <Signal>
+                <Num>1</Num>
+                <Name>Vibatt</Name>
+                <Comment>Napětí zálohovací baterie 0..5 V</Comment>
+              </Signal>
+            </SignalList>
+          </Port>
+          <Port>
+            <Num>8</Num>
+            <Comment>
+            </Comment>
+            <SignalList>
+              <Signal>
+                <Num>0</Num>
+                <Name>AO00_0</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>1</Num>
+                <Name>AO00_1</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>2</Num>
+                <Name>AO00_2</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>3</Num>
+                <Name>AO00_3</Name>
+                <Comment>NC</Comment>
+              </Signal>
+            </SignalList>
+          </Port>
+        </PortList>
+        <NetOptions />
+      </HwDescriptor>
+      <SettingsRS>
+        <GenWatchInfo>2</GenWatchInfo>
+        <IsGenWatchFBParams>False</IsGenWatchFBParams>
+      </SettingsRS>
+    </Data>
+    <DataManager>
+      <Investigator Name="LoadSave" Class="Amit.Psp.PspTools.ToolInvestigatorMain">
+        <Nastaveni>
+          <NoneArrays>False</NoneArrays>
+          <ArrayFilter>False</ArrayFilter>
+          <ArrayCol>10</ArrayCol>
+          <ArrayRow>10</ArrayRow>
+          <NoPanel>False</NoPanel>
+          <LinkPath>
+          </LinkPath>
+          <CompareWID>Name</CompareWID>
+          <CompareSDf>False</CompareSDf>
+          <CompareUni>False</CompareUni>
+          <CompareArray>False</CompareArray>
+          <ViewWID>False</ViewWID>
+          <ViewNull>False</ViewNull>
+          <ViewHex>False</ViewHex>
+          <ViewRefresh>True</ViewRefresh>
+          <ActualStore>False</ActualStore>
+          <ActualProject>False</ActualProject>
+          <ActualWID>False</ActualWID>
+          <SkipMtxDiffDim>False</SkipMtxDiffDim>
+        </Nastaveni>
+        <SortingNum>0</SortingNum>
+        <SortingDesc>False</SortingDesc>
+        <Soubory />
+      </Investigator>
+    </DataManager>
+    <ArchiveManager>
+      <Archivist Class="Amit.Psp.PspTools.ToolArchiveMain">
+        <Nastaveni>
+          <RefreshS>60</RefreshS>
+          <InterTimeMs>50</InterTimeMs>
+          <SaveSamples>10</SaveSamples>
+          <RefreshWindows>True</RefreshWindows>
+          <DenikTextyAuto>10</DenikTextyAuto>
+          <ViewDenikCas>True</ViewDenikCas>
+          <ViewDenikHistory>True</ViewDenikHistory>
+          <ViewDenikPomVal>False</ViewDenikPomVal>
+          <ViewArchivCas>True</ViewArchivCas>
+          <ViewArchivHistory>False</ViewArchivHistory>
+          <ViewDenikView>ExplOut</ViewDenikView>
+          <ViewDenikSystem>True</ViewDenikSystem>
+          <ViewArchivView>Normal</ViewArchivView>
+          <ExportPath>
+          </ExportPath>
+          <ExportType>Text</ExportType>
+          <QuickLastRows>300</QuickLastRows>
+        </Nastaveni>
+        <SortingNum>0</SortingNum>
+        <SortingDesc>False</SortingDesc>
+        <RunDisabled>False</RunDisabled>
+        <Archives />
+      </Archivist>
+    </ArchiveManager>
+    <NastaveniKomunikace>
+      <AdresaPC>31</AdresaPC>
+      <AdresaStanice>3</AdresaStanice>
+      <TypKomunikace>cmUDP</TypKomunikace>
+      <COM>
+        <ComComPort>0</ComComPort>
+        <ComSpeed>38400</ComSpeed>
+      </COM>
+      <UDP>
+        <UdpAddr>
+          <Byte0>90</Byte0>
+          <Byte1>54</Byte1>
+          <Byte2>188</Byte2>
+          <Byte3>80</Byte3>
+        </UdpAddr>
+        <UdpPort>60</UdpPort>
+        <UdpTimeOut>3000</UdpTimeOut>
+        <UdpPass>22</UdpPass>
+        <EthProtocol>UDP</EthProtocol>
+        <UdpMyPort>0</UdpMyPort>
+        <UdpRedirect>False</UdpRedirect>
+        <UdpSubAddr>
+          <Byte0>0</Byte0>
+          <Byte1>0</Byte1>
+          <Byte2>0</Byte2>
+          <Byte3>0</Byte3>
+        </UdpSubAddr>
+        <UdpSubPort>59</UdpSubPort>
+        <UdpMinDelay>0</UdpMinDelay>
+      </UDP>
+      <Modem>
+        <MdmPass>0</MdmPass>
+        <MdmMyPass>0</MdmMyPass>
+        <MdmComPort>0</MdmComPort>
+        <MdmSpeed>9600</MdmSpeed>
+        <MdmPriority>0</MdmPriority>
+        <MdmSPrior>B</MdmSPrior>
+        <MdmMezPochyb>10</MdmMezPochyb>
+        <MdmInitStr>
+        </MdmInitStr>
+        <MdmCallPrefix>
+        </MdmCallPrefix>
+        <MdmHangStr>
+        </MdmHangStr>
+        <MdmGPS_PIN>
+        </MdmGPS_PIN>
+        <MdmBlockDelay>30</MdmBlockDelay>
+        <MdmTelNum>
+        </MdmTelNum>
+        <MdmNoFail>1</MdmNoFail>
+      </Modem>
+      <Dokopo>
+        <DkpDKP>1</DkpDKP>
+        <DkpSpeed>9600</DkpSpeed>
+      </Dokopo>
+      <Virtual />
+      <Service>
+        <SrvComPort>0</SrvComPort>
+        <SrvTimeOut>1000</SrvTimeOut>
+        <SrvMyPort>59</SrvMyPort>
+        <SrvMyPass>0</SrvMyPass>
+      </Service>
+      <GPRS>
+        <GprsComPort>0</GprsComPort>
+        <GprsDuplFull>False</GprsDuplFull>
+        <GprsModemAddr>
+          <Byte0>0</Byte0>
+          <Byte1>0</Byte1>
+          <Byte2>0</Byte2>
+          <Byte3>0</Byte3>
+        </GprsModemAddr>
+        <GprsModemPort>59</GprsModemPort>
+        <GprsAddr>
+          <Byte0>0</Byte0>
+          <Byte1>0</Byte1>
+          <Byte2>0</Byte2>
+          <Byte3>0</Byte3>
+        </GprsAddr>
+        <GprsPort>59</GprsPort>
+        <GprsMyPass>0</GprsMyPass>
+        <GprsTimeOut>5000</GprsTimeOut>
+      </GPRS>
+    </NastaveniKomunikace>
+  </Project>
+  <Project Class="Amit.Lcw.LcwIde">
+    <Data Class="Amit.Lcw.Shared.LcwProject">
+      <Platform>Amini4DW2</Platform>
+      <LastRevised>0</LastRevised>
+      <SerialPort>0</SerialPort>
+      <BaudRate>9600</BaudRate>
+      <FullDuplex>0</FullDuplex>
+      <ScrollBarWidth>7</ScrollBarWidth>
+      <StartupScreen>Hlavni</StartupScreen>
+      <ColdResetStartupScreen>Hlavni</ColdResetStartupScreen>
+      <Orientation>0</Orientation>
+      <InitialZoom>3</InitialZoom>
+      <FocusStyle>0</FocusStyle>
+      <BlinkInEdit>True</BlinkInEdit>
+      <FontDefault>Tridet 7</FontDefault>
+      <GlobalScreen>
+        <Screen Name="Global" Class="Amit.Lcw.Shared.LcwGlobalScreen">
+          <DisplayType>2</DisplayType>
+          <Refresh>1000</Refresh>
+          <Comment>
+          </Comment>
+          <BackColor>LightGrey</BackColor>
+          <ForeColor>Black</ForeColor>
+          <Zoom>3</Zoom>
+          <GridSize>0,0</GridSize>
+          <DrawGrid>True</DrawGrid>
+          <OnOpen>
+          </OnOpen>
+          <OnClose>
+          </OnClose>
+          <OnRefresh>
+          </OnRefresh>
+          <Elements />
+          <Script><![CDATA[]]></Script>
+          <BackgroundImage />
+        </Screen>
+      </GlobalScreen>
+      <ScreenList>
+        <Screen Name="Hlavni" Class="Amit.Lcw.Shared.LcwScreen">
+          <DisplayType>2</DisplayType>
+          <Refresh>1000</Refresh>
+          <Comment>
+          </Comment>
+          <BackColor>#E6EAAA</BackColor>
+          <ForeColor>#1F375C</ForeColor>
+          <Zoom>3</Zoom>
+          <GridSize>0,0</GridSize>
+          <DrawGrid>True</DrawGrid>
+          <OnOpen>
+          </OnOpen>
+          <OnClose>OnClose</OnClose>
+          <OnRefresh>
+          </OnRefresh>
+          <Elements>
+            <Control Name="DateTimeView1" Class="Amit.Lcw.Lib.General.DateTimeView">
+              <Loc>12,0</Loc>
+              <Size>102,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>1</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>2</TabIndex>
+              <FormatType>DD.MM.YYYY HH:MM</FormatType>
+              <CustomFormat>
+              </CustomFormat>
+              <Variable>$SYS_RTC</Variable>
+            </Control>
+            <Control Name="BitSwitchView2" Class="Amit.Lcw.Lib.General.BitSwitchView">
+              <Loc>63,24</Loc>
+              <Size>57,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>1</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>6</TabIndex>
+              <Variable>@ErrSign</Variable>
+              <Value>False</Value>
+              <ForeColorTrue>#1F375C</ForeColorTrue>
+              <ForeColorFalse>#1F375C</ForeColorFalse>
+              <BackColorTrue>#E6EAAA</BackColorTrue>
+              <BackColorFalse>#E6EAAA</BackColorFalse>
+              <TextFalse Lang="cs-CZ" Text="OK" />
+              <TextTrue Lang="cs-CZ" Text="POR" />
+              <ImageTrue Compress="True">
+              </ImageTrue>
+              <ImageFalse Compress="True">
+              </ImageFalse>
+            </Control>
+            <Control Name="Label2" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,24</Loc>
+              <Size>57,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>1</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>8</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Stav:" />
+            </Control>
+            <Control Name="Label1" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,16</Loc>
+              <Size>69,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>1</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>8</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Hladina:" />
+            </Control>
+            <Control Name="NumericView1" Class="Amit.Lcw.Lib.General.NumericView">
+              <Loc>63,16</Loc>
+              <Size>27,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>4</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>9</TabIndex>
+              <Format>###</Format>
+              <CustomFormat>
+              </CustomFormat>
+              <Variable>AI0[0,0]</Variable>
+              <Value>0</Value>
+              <SmartFloatFormat>False</SmartFloatFormat>
+              <UnitText>
+              </UnitText>
+            </Control>
+            <Control Name="Label3" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>93,16</Loc>
+              <Size>12,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>16</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>10</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="cm" />
+            </Control>
+            <Control Name="Label4" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,8</Loc>
+              <Size>123,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>1</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>8</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="   ODPADNI JIMKA" />
+            </Control>
+            <Control Name="KeyScreen1" Class="Amit.Lcw.Lib.General.KeyScreen">
+              <Enabled>True</Enabled>
+              <Permission>3,3,3</Permission>
+              <Key>Down</Key>
+              <GoToScreen>S_00_00_00</GoToScreen>
+              <OnDown>
+              </OnDown>
+              <OnPress>
+              </OnPress>
+              <OnUp>
+              </OnUp>
+            </Control>
+            <Control Name="Timer1" Class="Amit.Lcw.Lib.General.Timer">
+              <Enabled>True</Enabled>
+              <Permission>3,3,3</Permission>
+              <Interval>20000</Interval>
+              <OnTick>
+              </OnTick>
+            </Control>
+          </Elements>
+          <Script><![CDATA[event Timer1_OnTick()
+	Info.Show();
+end;]]></Script>
+          <BackgroundImage />
+        </Screen>
+        <Screen Name="Info" Class="Amit.Lcw.Shared.LcwScreen">
+          <DisplayType>2</DisplayType>
+          <Refresh>1000</Refresh>
+          <Comment>
+          </Comment>
+          <BackColor>#E6EAAA</BackColor>
+          <ForeColor>#1F375C</ForeColor>
+          <Zoom>3</Zoom>
+          <GridSize>0,0</GridSize>
+          <DrawGrid>True</DrawGrid>
+          <OnOpen>
+          </OnOpen>
+          <OnClose>
+          </OnClose>
+          <OnRefresh>
+          </OnRefresh>
+          <Elements>
+            <Control Name="TextView2" Class="Amit.Lcw.Lib.General.TextView">
+              <Loc>0,8</Loc>
+              <Size>120,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>1</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>2</TabIndex>
+              <Variable>Ser_R2[0,*]</Variable>
+              <Value>Dřevnická 4009 Zlín</Value>
+            </Control>
+            <Control Name="TextView3" Class="Amit.Lcw.Lib.General.TextView">
+              <Loc>0,16</Loc>
+              <Size>120,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>1</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>3</TabIndex>
+              <Variable>Ser_R3[0,*]</Variable>
+              <Value>     SW pro MaR</Value>
+            </Control>
+            <Control Name="TextView5" Class="Amit.Lcw.Lib.General.TextView">
+              <Loc>0,24</Loc>
+              <Size>120,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>1</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>5</TabIndex>
+              <Variable>Ser_R4[0,*]</Variable>
+              <Value>  Ing. M. Žmolík</Value>
+            </Control>
+            <Control Name="TextView1" Class="Amit.Lcw.Lib.General.TextView">
+              <Loc>0,0</Loc>
+              <Size>120,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>1</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>2</TabIndex>
+              <Variable>Ser_R1[0,*]</Variable>
+              <Value>   Procont s.r.o.</Value>
+            </Control>
+            <Control Name="Timer1" Class="Amit.Lcw.Lib.General.Timer">
+              <Enabled>True</Enabled>
+              <Permission>3,3,3</Permission>
+              <Interval>2000</Interval>
+              <OnTick>
+              </OnTick>
+            </Control>
+          </Elements>
+          <Script><![CDATA[event Info_OnOpen()
+  Info.FocusFirstControl();
+end;
+
+event Timer1_OnTick()
+	Hlavni.Show();
+end;]]></Script>
+          <BackgroundImage />
+        </Screen>
+        <Screen Name="S_00_00_00" Class="Amit.Lcw.Shared.LcwScreen">
+          <DisplayType>2</DisplayType>
+          <Refresh>1000</Refresh>
+          <Comment>Hlavní menu</Comment>
+          <BackColor>#E6EAAA</BackColor>
+          <ForeColor>#1F375C</ForeColor>
+          <Zoom>3</Zoom>
+          <GridSize>0,0</GridSize>
+          <DrawGrid>True</DrawGrid>
+          <OnOpen>
+          </OnOpen>
+          <OnClose>
+          </OnClose>
+          <OnRefresh>
+          </OnRefresh>
+          <Elements>
+            <Control Name="Label1" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,0</Loc>
+              <Size>120,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>1</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>0</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Hlavní menu      ..." />
+            </Control>
+            <Control Name="MenuScreen1" Class="Amit.Lcw.Lib.General.MenuScreen">
+              <Loc>0,8</Loc>
+              <Size>120,24</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>16</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>0</TabIndex>
+              <TabIndex>0</TabIndex>
+              <ItemHeight>8</ItemHeight>
+              <HideSelection>False</HideSelection>
+              <CursorWrap>True</CursorWrap>
+              <ShowScrollBar>False</ShowScrollBar>
+              <EscScreen>
+              </EscScreen>
+              <Items>
+                <Item Enabled="True">
+                  <GoToScreen>S_01_00_00</GoToScreen>
+                  <Variable>
+                  </Variable>
+                  <Key>(none)</Key>
+                  <Text Lang="cs-CZ" Text="1 Hladiny" />
+                </Item>
+                <Item Enabled="True">
+                  <GoToScreen>S_02_00_00</GoToScreen>
+                  <Variable>
+                  </Variable>
+                  <Key>(none)</Key>
+                  <Text Lang="cs-CZ" Text="2 Alarmy" />
+                </Item>
+                <Item Enabled="True">
+                  <GoToScreen>S_03_00_00</GoToScreen>
+                  <Variable>
+                  </Variable>
+                  <Key>(none)</Key>
+                  <Text Lang="cs-CZ" Text="3 Servis obsluha" />
+                </Item>
+                <Item Enabled="True">
+                  <GoToScreen>S_login</GoToScreen>
+                  <Variable>
+                  </Variable>
+                  <Key>(none)</Key>
+                  <Text Lang="cs-CZ" Text="4 Servis technolog" />
+                </Item>
+              </Items>
+            </Control>
+            <Control Name="KeyScreen1" Class="Amit.Lcw.Lib.General.KeyScreen">
+              <Enabled>True</Enabled>
+              <Permission>3,3,3</Permission>
+              <Key>Esc</Key>
+              <GoToScreen>Hlavni</GoToScreen>
+              <OnDown>
+              </OnDown>
+              <OnPress>
+              </OnPress>
+              <OnUp>
+              </OnUp>
+            </Control>
+          </Elements>
+          <Script><![CDATA[]]></Script>
+          <BackgroundImage />
+        </Screen>
+        <Screen Name="S_01_00_00" Class="Amit.Lcw.Shared.LcwScreen">
+          <DisplayType>2</DisplayType>
+          <Refresh>1000</Refresh>
+          <Comment>SMS</Comment>
+          <BackColor>#E6EAAA</BackColor>
+          <ForeColor>#1F375C</ForeColor>
+          <Zoom>3</Zoom>
+          <GridSize>0,0</GridSize>
+          <DrawGrid>True</DrawGrid>
+          <OnOpen>
+          </OnOpen>
+          <OnClose>
+          </OnClose>
+          <OnRefresh>
+          </OnRefresh>
+          <Elements>
+            <Control Name="Label1" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,0</Loc>
+              <Size>120,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>1</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>0</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Nastavení hladin: 2/" />
+            </Control>
+            <Control Name="Label3" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,8</Loc>
+              <Size>54,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>1</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>1</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Prov.min." />
+            </Control>
+            <Control Name="Label2" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,16</Loc>
+              <Size>54,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>1</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>1</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Prov.max." />
+            </Control>
+            <Control Name="Label4" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,24</Loc>
+              <Size>54,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>1</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>1</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Akum.max." />
+            </Control>
+            <Control Name="NumericEdit1" Class="Amit.Lcw.Lib.General.NumericEdit">
+              <Loc>54,8</Loc>
+              <Size>54,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>4</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>0</TabIndex>
+              <RangeFrom>
+              </RangeFrom>
+              <RangeTo>
+              </RangeTo>
+              <Format>###</Format>
+              <CustomFormat>
+              </CustomFormat>
+              <Variable>LevelPar[1,0]</Variable>
+              <Value>0</Value>
+              <SysEditor>2</SysEditor>
+              <ActivationKey>(none)</ActivationKey>
+              <StartEdit>0</StartEdit>
+              <AfterEdit>0</AfterEdit>
+              <SmartFloatFormat>False</SmartFloatFormat>
+              <OnEditComplete>
+              </OnEditComplete>
+              <OnEditCanceled>
+              </OnEditCanceled>
+              <OnEditBegin>
+              </OnEditBegin>
+              <UnitText>
+              </UnitText>
+            </Control>
+            <Control Name="NumericEdit2" Class="Amit.Lcw.Lib.General.NumericEdit">
+              <Loc>54,16</Loc>
+              <Size>54,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>4</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>1</TabIndex>
+              <RangeFrom>
+              </RangeFrom>
+              <RangeTo>
+              </RangeTo>
+              <Format>###</Format>
+              <CustomFormat>
+              </CustomFormat>
+              <Variable>LevelPar[2,0]</Variable>
+              <Value>0</Value>
+              <SysEditor>2</SysEditor>
+              <ActivationKey>(none)</ActivationKey>
+              <StartEdit>0</StartEdit>
+              <AfterEdit>0</AfterEdit>
+              <SmartFloatFormat>False</SmartFloatFormat>
+              <OnEditComplete>
+              </OnEditComplete>
+              <OnEditCanceled>
+              </OnEditCanceled>
+              <OnEditBegin>
+              </OnEditBegin>
+              <UnitText>
+              </UnitText>
+            </Control>
+            <Control Name="NumericEdit3" Class="Amit.Lcw.Lib.General.NumericEdit">
+              <Loc>54,24</Loc>
+              <Size>54,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>4</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>2</TabIndex>
+              <RangeFrom>
+              </RangeFrom>
+              <RangeTo>
+              </RangeTo>
+              <Format>###</Format>
+              <CustomFormat>
+              </CustomFormat>
+              <Variable>LevelPar[3,0]</Variable>
+              <Value>0</Value>
+              <SysEditor>2</SysEditor>
+              <ActivationKey>(none)</ActivationKey>
+              <StartEdit>0</StartEdit>
+              <AfterEdit>0</AfterEdit>
+              <SmartFloatFormat>False</SmartFloatFormat>
+              <OnEditComplete>
+              </OnEditComplete>
+              <OnEditCanceled>
+              </OnEditCanceled>
+              <OnEditBegin>
+              </OnEditBegin>
+              <UnitText>
+              </UnitText>
+            </Control>
+            <Control Name="Label5" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>111,8</Loc>
+              <Size>12,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>16</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>3</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="cm" />
+            </Control>
+            <Control Name="Label6" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>111,16</Loc>
+              <Size>12,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>16</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>3</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="cm" />
+            </Control>
+            <Control Name="Label7" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>111,24</Loc>
+              <Size>12,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>16</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>3</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="cm" />
+            </Control>
+            <Control Name="KeyScreen1" Class="Amit.Lcw.Lib.General.KeyScreen">
+              <Enabled>True</Enabled>
+              <Permission>3,3,3</Permission>
+              <Key>Esc</Key>
+              <GoToScreen>S_00_00_00</GoToScreen>
+              <OnDown>
+              </OnDown>
+              <OnPress>
+              </OnPress>
+              <OnUp>
+              </OnUp>
+            </Control>
+            <Control Name="KeyScreen2" Class="Amit.Lcw.Lib.General.KeyScreen">
+              <Enabled>True</Enabled>
+              <Permission>3,3,3</Permission>
+              <Key>Left</Key>
+              <GoToScreen>S_00_00_00</GoToScreen>
+              <OnDown>
+              </OnDown>
+              <OnPress>
+              </OnPress>
+              <OnUp>
+              </OnUp>
+            </Control>
+          </Elements>
+          <Script><![CDATA[event S_01_00_00_OnOpen()
+	S_01_00_00.FocusFirstControl();
+end;]]></Script>
+          <BackgroundImage />
+        </Screen>
+        <Screen Name="S_02_00_00" Class="Amit.Lcw.Shared.LcwScreen">
+          <DisplayType>2</DisplayType>
+          <Refresh>1000</Refresh>
+          <Comment>Poruchy</Comment>
+          <BackColor>#E6EAAA</BackColor>
+          <ForeColor>#1F375C</ForeColor>
+          <Zoom>3</Zoom>
+          <GridSize>0,0</GridSize>
+          <DrawGrid>True</DrawGrid>
+          <OnOpen>
+          </OnOpen>
+          <OnClose>
+          </OnClose>
+          <OnRefresh>
+          </OnRefresh>
+          <Elements>
+            <Control Name="Label3" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>36,0</Loc>
+              <Size>42,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>1</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>3</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Alarmy:" />
+            </Control>
+            <Control Name="Label1" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>24,24</Loc>
+              <Size>72,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>1</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>3</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Kvit = Enter" />
+            </Control>
+            <Control Name="KeyScreen1" Class="Amit.Lcw.Lib.General.KeyScreen">
+              <Enabled>True</Enabled>
+              <Permission>3,3,3</Permission>
+              <Key>Esc</Key>
+              <GoToScreen>S_00_00_00</GoToScreen>
+              <OnDown>
+              </OnDown>
+              <OnPress>
+              </OnPress>
+              <OnUp>
+              </OnUp>
+            </Control>
+            <Control Name="KeyBit1" Class="Amit.Lcw.Lib.General.KeyBit">
+              <Enabled>True</Enabled>
+              <Permission>3,3,3</Permission>
+              <Key>Enter</Key>
+              <Variable>pQuit.0</Variable>
+              <Mode>0</Mode>
+            </Control>
+            <Control Name="Alarm1" Class="Amit.Lcw.Lib.General.Alarm">
+              <Loc>0,12</Loc>
+              <Size>123,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>4</TabIndex>
+              <Variable>Alarm_E</Variable>
+              <Value>0</Value>
+              <ShowDelay>2000</ShowDelay>
+              <ForeColorAlarm>#1F375C</ForeColorAlarm>
+              <BackColorAlarm>#E6EAAA</BackColorAlarm>
+              <DefaultText Lang="cs-CZ" Text="Bez poruchy" />
+              <Items>
+                <Item Value="1">
+                  <Text Lang="cs-CZ" Text="Havarijní maximum" />
+                </Item>
+                <Item Value="2">
+                  <Text Lang="cs-CZ" Text="Havarijní minimum" />
+                </Item>
+                <Item Value="4">
+                  <Text Lang="cs-CZ" Text="Porucha čidla" />
+                </Item>
+                <Item Value="8">
+                  <Text Lang="cs-CZ" Text="Chod čerpadla" />
+                </Item>
+                <Item Value="16">
+                  <Text Lang="cs-CZ" Text="Dlouhé čerpání" />
+                </Item>
+                <Item Value="32">
+                  <Text Lang="cs-CZ" Text="Netěsnost potrubí" />
+                </Item>
+                <Item Value="64">
+                  <Text Lang="cs-CZ" Text="Alarm_7" />
+                </Item>
+                <Item Value="128">
+                  <Text Lang="cs-CZ" Text="Alarm_8" />
+                </Item>
+                <Item Value="256">
+                  <Text Lang="cs-CZ" Text="Alarm_9" />
+                </Item>
+                <Item Value="512">
+                  <Text Lang="cs-CZ" Text="Alarm_10" />
+                </Item>
+                <Item Value="1024">
+                  <Text Lang="cs-CZ" Text="Alarm_11" />
+                </Item>
+                <Item Value="2048">
+                  <Text Lang="cs-CZ" Text="Alarm_12" />
+                </Item>
+                <Item Value="4096">
+                  <Text Lang="cs-CZ" Text="Alarm_13" />
+                </Item>
+                <Item Value="8192">
+                  <Text Lang="cs-CZ" Text="Alarm_14" />
+                </Item>
+                <Item Value="16384">
+                  <Text Lang="cs-CZ" Text="Alarm_15" />
+                </Item>
+                <Item Value="32768">
+                  <Text Lang="cs-CZ" Text="Alarm_16" />
+                </Item>
+              </Items>
+            </Control>
+          </Elements>
+          <Script><![CDATA[]]></Script>
+          <BackgroundImage />
+        </Screen>
+        <Screen Name="S_03_00_00" Class="Amit.Lcw.Shared.LcwScreen">
+          <DisplayType>2</DisplayType>
+          <Refresh>1000</Refresh>
+          <Comment>Menu servisních parametrů pro obsluhu</Comment>
+          <BackColor>#E6EAAA</BackColor>
+          <ForeColor>#1F375C</ForeColor>
+          <Zoom>3</Zoom>
+          <GridSize>0,0</GridSize>
+          <DrawGrid>True</DrawGrid>
+          <OnOpen>
+          </OnOpen>
+          <OnClose>
+          </OnClose>
+          <OnRefresh>
+          </OnRefresh>
+          <Elements>
+            <Control Name="Label1" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,0</Loc>
+              <Size>120,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>1</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>0</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Servis obsluha    3/" />
+            </Control>
+            <Control Name="MenuScreen1" Class="Amit.Lcw.Lib.General.MenuScreen">
+              <Loc>0,8</Loc>
+              <Size>120,24</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>16</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>0</TabIndex>
+              <TabIndex>0</TabIndex>
+              <ItemHeight>8</ItemHeight>
+              <HideSelection>False</HideSelection>
+              <CursorWrap>True</CursorWrap>
+              <ShowScrollBar>False</ShowScrollBar>
+              <EscScreen>S_00_00_00</EscScreen>
+              <Items>
+                <Item Enabled="True">
+                  <GoToScreen>S_03_01_00</GoToScreen>
+                  <Variable>
+                  </Variable>
+                  <Key>(none)</Key>
+                  <Text Lang="cs-CZ" Text="Datum a čas" />
+                </Item>
+                <Item Enabled="True">
+                  <GoToScreen>S_03_02_00</GoToScreen>
+                  <Variable>
+                  </Variable>
+                  <Key>(none)</Key>
+                  <Text Lang="cs-CZ" Text="Časový plán" />
+                </Item>
+                <Item Enabled="True">
+                  <GoToScreen>S_03_03_00</GoToScreen>
+                  <Variable>
+                  </Variable>
+                  <Key>(none)</Key>
+                  <Text Lang="cs-CZ" Text="Nastavení SMS" />
+                </Item>
+              </Items>
+            </Control>
+            <Control Name="KeyScreen1" Class="Amit.Lcw.Lib.General.KeyScreen">
+              <Enabled>True</Enabled>
+              <Permission>3,3,3</Permission>
+              <Key>Esc</Key>
+              <GoToScreen>S_00_00_00</GoToScreen>
+              <OnDown>
+              </OnDown>
+              <OnPress>
+              </OnPress>
+              <OnUp>
+              </OnUp>
+            </Control>
+          </Elements>
+          <Script><![CDATA[event S_03_00_00_OnOpen()
+  S_03_00_00.FocusFirstControl();
+end;]]></Script>
+          <BackgroundImage />
+        </Screen>
+        <Screen Name="S_03_01_00" Class="Amit.Lcw.Shared.LcwScreen">
+          <DisplayType>2</DisplayType>
+          <Refresh>1000</Refresh>
+          <Comment>Zadání času řídicího systému</Comment>
+          <BackColor>#E6EAAA</BackColor>
+          <ForeColor>#1F375C</ForeColor>
+          <Zoom>3</Zoom>
+          <GridSize>0,0</GridSize>
+          <DrawGrid>True</DrawGrid>
+          <OnOpen>
+          </OnOpen>
+          <OnClose>
+          </OnClose>
+          <OnRefresh>
+          </OnRefresh>
+          <Elements>
+            <Control Name="Label1" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,0</Loc>
+              <Size>120,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>1</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>0</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Datum a čas      3/1" />
+            </Control>
+            <Control Name="DateTimeUpDn1" Class="Amit.Lcw.Lib.General.DateTimeUpDn">
+              <Loc>0,8</Loc>
+              <Size>102,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>1</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>0</TabIndex>
+              <FormatType>DD.MM.YYYY HH:MM</FormatType>
+              <CustomFormat>
+              </CustomFormat>
+              <Variable>$SYS_RTC</Variable>
+              <SysEditor>2</SysEditor>
+              <ActivationKey>(none)</ActivationKey>
+              <StartEdit>0</StartEdit>
+              <AfterEdit>0</AfterEdit>
+              <OnEditComplete>
+              </OnEditComplete>
+              <OnEditCanceled>
+              </OnEditCanceled>
+              <OnEditBegin>
+              </OnEditBegin>
+            </Control>
+            <Control Name="KeyScreen1" Class="Amit.Lcw.Lib.General.KeyScreen">
+              <Enabled>True</Enabled>
+              <Permission>3,3,3</Permission>
+              <Key>Esc</Key>
+              <GoToScreen>S_03_00_00</GoToScreen>
+              <OnDown>
+              </OnDown>
+              <OnPress>
+              </OnPress>
+              <OnUp>
+              </OnUp>
+            </Control>
+          </Elements>
+          <Script><![CDATA[event S_03_01_00_OnOpen()
+  S_03_01_00.FocusFirstControl();
+end;]]></Script>
+          <BackgroundImage />
+        </Screen>
+        <Screen Name="S_03_02_00" Class="Amit.Lcw.Shared.LcwScreen">
+          <DisplayType>2</DisplayType>
+          <Refresh>1000</Refresh>
+          <Comment>Čas. plán</Comment>
+          <BackColor>#E6EAAA</BackColor>
+          <ForeColor>#1F375C</ForeColor>
+          <Zoom>3</Zoom>
+          <GridSize>0,0</GridSize>
+          <DrawGrid>True</DrawGrid>
+          <OnOpen>
+          </OnOpen>
+          <OnClose>
+          </OnClose>
+          <OnRefresh>
+          </OnRefresh>
+          <Elements>
+            <Control Name="Label1" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,0</Loc>
+              <Size>123,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>16</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>2</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Klidové pásmo:" />
+            </Control>
+            <Control Name="Label2" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,8</Loc>
+              <Size>48,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>16</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>3</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Začátek:" />
+            </Control>
+            <Control Name="Label3" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,16</Loc>
+              <Size>36,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>16</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>3</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Konec:" />
+            </Control>
+            <Control Name="DateTimeEdit1" Class="Amit.Lcw.Lib.General.DateTimeEdit">
+              <Loc>87,8</Loc>
+              <Size>36,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>16</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>0</TabIndex>
+              <FormatType>HH:MM</FormatType>
+              <CustomFormat>
+              </CustomFormat>
+              <Variable>DP_times[0,0]</Variable>
+              <SysEditor>2</SysEditor>
+              <ActivationKey>(none)</ActivationKey>
+              <StartEdit>0</StartEdit>
+              <AfterEdit>0</AfterEdit>
+              <OnEditComplete>
+              </OnEditComplete>
+              <OnEditCanceled>
+              </OnEditCanceled>
+              <OnEditBegin>
+              </OnEditBegin>
+            </Control>
+            <Control Name="DateTimeEdit2" Class="Amit.Lcw.Lib.General.DateTimeEdit">
+              <Loc>87,16</Loc>
+              <Size>36,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>16</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>1</TabIndex>
+              <FormatType>HH:MM</FormatType>
+              <CustomFormat>
+              </CustomFormat>
+              <Variable>DP_times[0,1]</Variable>
+              <SysEditor>2</SysEditor>
+              <ActivationKey>(none)</ActivationKey>
+              <StartEdit>0</StartEdit>
+              <AfterEdit>0</AfterEdit>
+              <OnEditComplete>
+              </OnEditComplete>
+              <OnEditCanceled>
+              </OnEditCanceled>
+              <OnEditBegin>
+              </OnEditBegin>
+            </Control>
+            <Control Name="KeyScreen1" Class="Amit.Lcw.Lib.General.KeyScreen">
+              <Enabled>True</Enabled>
+              <Permission>3,3,3</Permission>
+              <Key>Esc</Key>
+              <GoToScreen>S_03_00_00</GoToScreen>
+              <OnDown>
+              </OnDown>
+              <OnPress>
+              </OnPress>
+              <OnUp>
+              </OnUp>
+            </Control>
+          </Elements>
+          <Script><![CDATA[event S_03_02_00_OnOpen()
+	S_03_02_00.FocusFirstControl();
+end;]]></Script>
+          <BackgroundImage />
+        </Screen>
+        <Screen Name="S_03_03_00" Class="Amit.Lcw.Shared.LcwScreen">
+          <DisplayType>2</DisplayType>
+          <Refresh>1000</Refresh>
+          <Comment>SMS</Comment>
+          <BackColor>#E6EAAA</BackColor>
+          <ForeColor>#1F375C</ForeColor>
+          <Zoom>3</Zoom>
+          <GridSize>0,0</GridSize>
+          <DrawGrid>True</DrawGrid>
+          <OnOpen>
+          </OnOpen>
+          <OnClose>
+          </OnClose>
+          <OnRefresh>
+          </OnRefresh>
+          <Elements>
+            <Control Name="Label1" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,0</Loc>
+              <Size>120,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>1</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>0</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Nastavení SMS zpráv:" />
+            </Control>
+            <Control Name="Label3" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,8</Loc>
+              <Size>36,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>1</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>1</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Tel.1:" />
+            </Control>
+            <Control Name="Label2" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,16</Loc>
+              <Size>36,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>1</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>1</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Tel.2:" />
+            </Control>
+            <Control Name="Label4" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,24</Loc>
+              <Size>36,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>1</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>1</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Tel.3:" />
+            </Control>
+            <Control Name="NumericEdit1" Class="Amit.Lcw.Lib.General.NumericEdit">
+              <Loc>42,8</Loc>
+              <Size>78,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>4</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>0</TabIndex>
+              <RangeFrom>
+              </RangeFrom>
+              <RangeTo>
+              </RangeTo>
+              <Format>###</Format>
+              <CustomFormat>
+              </CustomFormat>
+              <Variable>Gsm_TelCis[0,0]</Variable>
+              <Value>0</Value>
+              <SysEditor>2</SysEditor>
+              <ActivationKey>(none)</ActivationKey>
+              <StartEdit>0</StartEdit>
+              <AfterEdit>0</AfterEdit>
+              <SmartFloatFormat>False</SmartFloatFormat>
+              <OnEditComplete>
+              </OnEditComplete>
+              <OnEditCanceled>
+              </OnEditCanceled>
+              <OnEditBegin>
+              </OnEditBegin>
+              <UnitText>
+              </UnitText>
+            </Control>
+            <Control Name="NumericEdit2" Class="Amit.Lcw.Lib.General.NumericEdit">
+              <Loc>42,16</Loc>
+              <Size>78,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>4</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>1</TabIndex>
+              <RangeFrom>
+              </RangeFrom>
+              <RangeTo>
+              </RangeTo>
+              <Format>###</Format>
+              <CustomFormat>
+              </CustomFormat>
+              <Variable>Gsm_TelCis[1,0]</Variable>
+              <Value>0</Value>
+              <SysEditor>2</SysEditor>
+              <ActivationKey>(none)</ActivationKey>
+              <StartEdit>0</StartEdit>
+              <AfterEdit>0</AfterEdit>
+              <SmartFloatFormat>False</SmartFloatFormat>
+              <OnEditComplete>
+              </OnEditComplete>
+              <OnEditCanceled>
+              </OnEditCanceled>
+              <OnEditBegin>
+              </OnEditBegin>
+              <UnitText>
+              </UnitText>
+            </Control>
+            <Control Name="NumericEdit3" Class="Amit.Lcw.Lib.General.NumericEdit">
+              <Loc>42,24</Loc>
+              <Size>78,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>4</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>2</TabIndex>
+              <RangeFrom>
+              </RangeFrom>
+              <RangeTo>
+              </RangeTo>
+              <Format>###</Format>
+              <CustomFormat>
+              </CustomFormat>
+              <Variable>Gsm_TelCis[2,0]</Variable>
+              <Value>0</Value>
+              <SysEditor>2</SysEditor>
+              <ActivationKey>(none)</ActivationKey>
+              <StartEdit>0</StartEdit>
+              <AfterEdit>0</AfterEdit>
+              <SmartFloatFormat>False</SmartFloatFormat>
+              <OnEditComplete>
+              </OnEditComplete>
+              <OnEditCanceled>
+              </OnEditCanceled>
+              <OnEditBegin>
+              </OnEditBegin>
+              <UnitText>
+              </UnitText>
+            </Control>
+            <Control Name="KeyScreen1" Class="Amit.Lcw.Lib.General.KeyScreen">
+              <Enabled>True</Enabled>
+              <Permission>3,3,3</Permission>
+              <Key>Esc</Key>
+              <GoToScreen>S_03_00_00</GoToScreen>
+              <OnDown>
+              </OnDown>
+              <OnPress>
+              </OnPress>
+              <OnUp>
+              </OnUp>
+            </Control>
+            <Control Name="KeyScreen2" Class="Amit.Lcw.Lib.General.KeyScreen">
+              <Enabled>True</Enabled>
+              <Permission>3,3,3</Permission>
+              <Key>Right</Key>
+              <GoToScreen>S_03_03_01</GoToScreen>
+              <OnDown>
+              </OnDown>
+              <OnPress>
+              </OnPress>
+              <OnUp>
+              </OnUp>
+            </Control>
+          </Elements>
+          <Script><![CDATA[event S_03_03_00_OnOpen()
+	S_03_03_00.FocusFirstControl();
+end;]]></Script>
+          <BackgroundImage />
+        </Screen>
+        <Screen Name="S_03_03_01" Class="Amit.Lcw.Shared.LcwScreen">
+          <DisplayType>2</DisplayType>
+          <Refresh>1000</Refresh>
+          <Comment>SMS</Comment>
+          <BackColor>#E6EAAA</BackColor>
+          <ForeColor>#1F375C</ForeColor>
+          <Zoom>3</Zoom>
+          <GridSize>0,0</GridSize>
+          <DrawGrid>True</DrawGrid>
+          <OnOpen>
+          </OnOpen>
+          <OnClose>
+          </OnClose>
+          <OnRefresh>
+          </OnRefresh>
+          <Elements>
+            <Control Name="Label2" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,8</Loc>
+              <Size>60,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>1</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>1</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="SMS modem:" />
+            </Control>
+            <Control Name="BitSwitchUpDn1" Class="Amit.Lcw.Lib.General.BitSwitchUpDn">
+              <Loc>96,8</Loc>
+              <Size>24,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>1</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>1</TabIndex>
+              <Variable>@Zap_SMS</Variable>
+              <Value>False</Value>
+              <SysEditor>2</SysEditor>
+              <ActivationKey>(none)</ActivationKey>
+              <StartEdit>0</StartEdit>
+              <AfterEdit>0</AfterEdit>
+              <OnEditComplete>
+              </OnEditComplete>
+              <OnEditCanceled>
+              </OnEditCanceled>
+              <OnEditBegin>
+              </OnEditBegin>
+              <ForeColorTrue>#1F375C</ForeColorTrue>
+              <ForeColorFalse>#1F375C</ForeColorFalse>
+              <BackColorTrue>#E6EAAA</BackColorTrue>
+              <BackColorFalse>#E6EAAA</BackColorFalse>
+              <TextFalse Lang="cs-CZ" Text="VYP" />
+              <TextTrue Lang="cs-CZ" Text="ZAP" />
+            </Control>
+            <Control Name="Label3" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,0</Loc>
+              <Size>36,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>1</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>1</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Tel.4:" />
+            </Control>
+            <Control Name="Label1" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,16</Loc>
+              <Size>54,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>1</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>2</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Operator:" />
+            </Control>
+            <Control Name="Label4" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,24</Loc>
+              <Size>90,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>1</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>2</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Úroveň signálu:" />
+            </Control>
+            <Control Name="NumericView1" Class="Amit.Lcw.Lib.General.NumericView">
+              <Loc>81,16</Loc>
+              <Size>39,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>4</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>3</TabIndex>
+              <Format>###</Format>
+              <CustomFormat>
+              </CustomFormat>
+              <Variable>Gsm_Ntw</Variable>
+              <Value>0</Value>
+              <SmartFloatFormat>False</SmartFloatFormat>
+              <UnitText>
+              </UnitText>
+            </Control>
+            <Control Name="NumericView2" Class="Amit.Lcw.Lib.General.NumericView">
+              <Loc>93,24</Loc>
+              <Size>21,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>4</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>4</TabIndex>
+              <Format>###</Format>
+              <CustomFormat>
+              </CustomFormat>
+              <Variable>GSM_Sig</Variable>
+              <Value>0</Value>
+              <SmartFloatFormat>False</SmartFloatFormat>
+              <UnitText>
+              </UnitText>
+            </Control>
+            <Control Name="Label5" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>114,24</Loc>
+              <Size>6,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>1</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>5</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="%" />
+            </Control>
+            <Control Name="NumericEdit3" Class="Amit.Lcw.Lib.General.NumericEdit">
+              <Loc>42,0</Loc>
+              <Size>78,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>4</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>0</TabIndex>
+              <RangeFrom>
+              </RangeFrom>
+              <RangeTo>
+              </RangeTo>
+              <Format>###</Format>
+              <CustomFormat>
+              </CustomFormat>
+              <Variable>Gsm_TelCis[3,0]</Variable>
+              <Value>0</Value>
+              <SysEditor>2</SysEditor>
+              <ActivationKey>(none)</ActivationKey>
+              <StartEdit>0</StartEdit>
+              <AfterEdit>0</AfterEdit>
+              <SmartFloatFormat>False</SmartFloatFormat>
+              <OnEditComplete>
+              </OnEditComplete>
+              <OnEditCanceled>
+              </OnEditCanceled>
+              <OnEditBegin>
+              </OnEditBegin>
+              <UnitText>
+              </UnitText>
+            </Control>
+            <Control Name="KeyScreen1" Class="Amit.Lcw.Lib.General.KeyScreen">
+              <Enabled>True</Enabled>
+              <Permission>3,3,3</Permission>
+              <Key>Esc</Key>
+              <GoToScreen>S_03_00_00</GoToScreen>
+              <OnDown>
+              </OnDown>
+              <OnPress>
+              </OnPress>
+              <OnUp>
+              </OnUp>
+            </Control>
+            <Control Name="KeyScreen2" Class="Amit.Lcw.Lib.General.KeyScreen">
+              <Enabled>True</Enabled>
+              <Permission>3,3,3</Permission>
+              <Key>Left</Key>
+              <GoToScreen>S_01_00_00</GoToScreen>
+              <OnDown>
+              </OnDown>
+              <OnPress>
+              </OnPress>
+              <OnUp>
+              </OnUp>
+            </Control>
+          </Elements>
+          <Script><![CDATA[event S_03_03_01_OnOpen()
+	S_03_03_01.FocusFirstControl();
+end;]]></Script>
+          <BackgroundImage />
+        </Screen>
+        <Screen Name="S_04_00_00" Class="Amit.Lcw.Shared.LcwScreen">
+          <DisplayType>2</DisplayType>
+          <Refresh>1000</Refresh>
+          <Comment>Menu servisních parametrů</Comment>
+          <BackColor>#E6EAAA</BackColor>
+          <ForeColor>#1F375C</ForeColor>
+          <Zoom>3</Zoom>
+          <GridSize>0,0</GridSize>
+          <DrawGrid>True</DrawGrid>
+          <OnOpen>
+          </OnOpen>
+          <OnClose>
+          </OnClose>
+          <OnRefresh>
+          </OnRefresh>
+          <Elements>
+            <Control Name="Label1" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,0</Loc>
+              <Size>120,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>1</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>0</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Servis technolog 4/1" />
+            </Control>
+            <Control Name="Label3" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,8</Loc>
+              <Size>54,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>1</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>1</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Hav. min." />
+            </Control>
+            <Control Name="Label2" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,16</Loc>
+              <Size>54,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>1</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>1</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Hav. max." />
+            </Control>
+            <Control Name="NumericEdit1" Class="Amit.Lcw.Lib.General.NumericEdit">
+              <Loc>54,8</Loc>
+              <Size>54,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>4</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>1</TabIndex>
+              <RangeFrom>
+              </RangeFrom>
+              <RangeTo>
+              </RangeTo>
+              <Format>###</Format>
+              <CustomFormat>
+              </CustomFormat>
+              <Variable>LevelPar[0,0]</Variable>
+              <Value>0</Value>
+              <SysEditor>2</SysEditor>
+              <ActivationKey>(none)</ActivationKey>
+              <StartEdit>0</StartEdit>
+              <AfterEdit>0</AfterEdit>
+              <SmartFloatFormat>False</SmartFloatFormat>
+              <OnEditComplete>
+              </OnEditComplete>
+              <OnEditCanceled>
+              </OnEditCanceled>
+              <OnEditBegin>
+              </OnEditBegin>
+              <UnitText>
+              </UnitText>
+            </Control>
+            <Control Name="NumericEdit2" Class="Amit.Lcw.Lib.General.NumericEdit">
+              <Loc>54,16</Loc>
+              <Size>54,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>4</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>0</TabIndex>
+              <RangeFrom>
+              </RangeFrom>
+              <RangeTo>
+              </RangeTo>
+              <Format>###</Format>
+              <CustomFormat>
+              </CustomFormat>
+              <Variable>LevelPar[4,0]</Variable>
+              <Value>0</Value>
+              <SysEditor>2</SysEditor>
+              <ActivationKey>(none)</ActivationKey>
+              <StartEdit>0</StartEdit>
+              <AfterEdit>0</AfterEdit>
+              <SmartFloatFormat>False</SmartFloatFormat>
+              <OnEditComplete>
+              </OnEditComplete>
+              <OnEditCanceled>
+              </OnEditCanceled>
+              <OnEditBegin>
+              </OnEditBegin>
+              <UnitText>
+              </UnitText>
+            </Control>
+            <Control Name="Label5" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>111,8</Loc>
+              <Size>12,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>16</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>3</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="cm" />
+            </Control>
+            <Control Name="Label6" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>111,16</Loc>
+              <Size>12,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>16</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>3</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="cm" />
+            </Control>
+            <Control Name="KeyScreen1" Class="Amit.Lcw.Lib.General.KeyScreen">
+              <Enabled>True</Enabled>
+              <Permission>3,3,3</Permission>
+              <Key>Esc</Key>
+              <GoToScreen>S_00_00_00</GoToScreen>
+              <OnDown>
+              </OnDown>
+              <OnPress>
+              </OnPress>
+              <OnUp>
+              </OnUp>
+            </Control>
+            <Control Name="KeyScreen2" Class="Amit.Lcw.Lib.General.KeyScreen">
+              <Enabled>True</Enabled>
+              <Permission>3,3,3</Permission>
+              <Key>Right</Key>
+              <GoToScreen>S_04_00_01</GoToScreen>
+              <OnDown>
+              </OnDown>
+              <OnPress>
+              </OnPress>
+              <OnUp>
+              </OnUp>
+            </Control>
+          </Elements>
+          <Script><![CDATA[]]></Script>
+          <BackgroundImage />
+        </Screen>
+        <Screen Name="S_04_00_01" Class="Amit.Lcw.Shared.LcwScreen">
+          <DisplayType>2</DisplayType>
+          <Refresh>1000</Refresh>
+          <Comment>Menu servisních parametrů</Comment>
+          <BackColor>#E6EAAA</BackColor>
+          <ForeColor>#1F375C</ForeColor>
+          <Zoom>3</Zoom>
+          <GridSize>0,0</GridSize>
+          <DrawGrid>True</DrawGrid>
+          <OnOpen>
+          </OnOpen>
+          <OnClose>
+          </OnClose>
+          <OnRefresh>
+          </OnRefresh>
+          <Elements>
+            <Control Name="Label1" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,0</Loc>
+              <Size>120,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>1</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>0</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Servis technolog 4/2" />
+            </Control>
+            <Control Name="Label3" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,8</Loc>
+              <Size>72,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>1</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>1</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Snímač min." />
+            </Control>
+            <Control Name="Label2" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,16</Loc>
+              <Size>66,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>1</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>1</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Snímač max." />
+            </Control>
+            <Control Name="NumericEdit1" Class="Amit.Lcw.Lib.General.NumericEdit">
+              <Loc>66,8</Loc>
+              <Size>42,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>4</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>1</TabIndex>
+              <RangeFrom>
+              </RangeFrom>
+              <RangeTo>
+              </RangeTo>
+              <Format>###</Format>
+              <CustomFormat>
+              </CustomFormat>
+              <Variable>AI0_params[0,3]</Variable>
+              <Value>0</Value>
+              <SysEditor>2</SysEditor>
+              <ActivationKey>(none)</ActivationKey>
+              <StartEdit>0</StartEdit>
+              <AfterEdit>0</AfterEdit>
+              <SmartFloatFormat>False</SmartFloatFormat>
+              <OnEditComplete>
+              </OnEditComplete>
+              <OnEditCanceled>
+              </OnEditCanceled>
+              <OnEditBegin>
+              </OnEditBegin>
+              <UnitText>
+              </UnitText>
+            </Control>
+            <Control Name="NumericEdit2" Class="Amit.Lcw.Lib.General.NumericEdit">
+              <Loc>66,16</Loc>
+              <Size>42,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>4</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>0</TabIndex>
+              <RangeFrom>
+              </RangeFrom>
+              <RangeTo>
+              </RangeTo>
+              <Format>###</Format>
+              <CustomFormat>
+              </CustomFormat>
+              <Variable>AI0_params[0,4]</Variable>
+              <Value>0</Value>
+              <SysEditor>2</SysEditor>
+              <ActivationKey>(none)</ActivationKey>
+              <StartEdit>0</StartEdit>
+              <AfterEdit>0</AfterEdit>
+              <SmartFloatFormat>False</SmartFloatFormat>
+              <OnEditComplete>
+              </OnEditComplete>
+              <OnEditCanceled>
+              </OnEditCanceled>
+              <OnEditBegin>
+              </OnEditBegin>
+              <UnitText>
+              </UnitText>
+            </Control>
+            <Control Name="Label5" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>111,8</Loc>
+              <Size>12,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>16</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>3</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="cm" />
+            </Control>
+            <Control Name="Label6" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>111,16</Loc>
+              <Size>12,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>16</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>3</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="cm" />
+            </Control>
+            <Control Name="KeyScreen1" Class="Amit.Lcw.Lib.General.KeyScreen">
+              <Enabled>True</Enabled>
+              <Permission>3,3,3</Permission>
+              <Key>Left</Key>
+              <GoToScreen>S_04_00_00</GoToScreen>
+              <OnDown>
+              </OnDown>
+              <OnPress>
+              </OnPress>
+              <OnUp>
+              </OnUp>
+            </Control>
+          </Elements>
+          <Script><![CDATA[event S_04_00_01_OnOpen()
+	S_04_00_01.FocusFirstControl();
+end;]]></Script>
+          <BackgroundImage />
+        </Screen>
+        <Screen Name="S_login" Class="Amit.Lcw.Shared.LcwScreen">
+          <DisplayType>2</DisplayType>
+          <Refresh>1000</Refresh>
+          <Comment>Login</Comment>
+          <BackColor>#E6EAAA</BackColor>
+          <ForeColor>#1F375C</ForeColor>
+          <Zoom>3</Zoom>
+          <GridSize>0,0</GridSize>
+          <DrawGrid>True</DrawGrid>
+          <OnOpen>
+          </OnOpen>
+          <OnClose>
+          </OnClose>
+          <OnRefresh>
+          </OnRefresh>
+          <Elements>
+            <Control Name="Label1" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,0</Loc>
+              <Size>72,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>1</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>0</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Zadání hesla" />
+            </Control>
+            <Control Name="Login1" Class="Amit.Lcw.Lib.General.Login">
+              <Loc>0,8</Loc>
+              <Size>120,8</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#E6EAAA</BackColor>
+              <ForeColor>#1F375C</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>1</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>0</TabIndex>
+              <DefaultSettings>False</DefaultSettings>
+              <AccessGrantScreen>S_04_00_00</AccessGrantScreen>
+              <UserText Lang="cs-CZ" Text="Jméno:" />
+              <PasswordText Lang="cs-CZ" Text="Heslo:" />
+              <UserLabel>
+                <Location>0,32</Location>
+                <Size>55,7</Size>
+              </UserLabel>
+              <UserEdit>
+                <Location>56,32</Location>
+                <Size>50,7</Size>
+              </UserEdit>
+              <PasswordLabel>
+                <Location>0,0</Location>
+                <Size>55,7</Size>
+              </PasswordLabel>
+              <PasswordEdit>
+                <Location>56,0</Location>
+                <Size>50,7</Size>
+              </PasswordEdit>
+            </Control>
+            <Control Name="KeyScreen1" Class="Amit.Lcw.Lib.General.KeyScreen">
+              <Enabled>True</Enabled>
+              <Permission>3,3,3</Permission>
+              <Key>Esc</Key>
+              <GoToScreen>S_00_00_00</GoToScreen>
+              <OnDown>
+              </OnDown>
+              <OnPress>
+              </OnPress>
+              <OnUp>
+              </OnUp>
+            </Control>
+          </Elements>
+          <Script><![CDATA[event S_login_OnOpen()
+	S_login.FocusFirstControl();
+	Login1.User = 1;
+	S_login.NextFocus();
+end;
+
+event Login1_OnAccessDenied()
+	S_login.FocusFirstControl();
+	S_login.NextFocus();
+end;]]></Script>
+          <BackgroundImage />
+        </Screen>
+      </ScreenList>
+    </Data>
+  </Project>
+</DetStation>

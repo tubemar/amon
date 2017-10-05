@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<!-- SimDet project descriptor -->
+<SimDet scheme="0">
+  <Platform>C:\Amit\DS182\Platforms\Amini4DSN3.XML</Platform>
+  <WatchItems>
+    <Watch Name="MH_Day" Expand="false" />
+    <Watch Name="MH_Day_CP" Expand="false" />
+  </WatchItems>
+</SimDet>

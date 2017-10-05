@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DETStudioSpravceDat>
+  <DataItem>
+    <Link>False</Link>
+    <Name>Download backup</Name>
+    <Created>06/22/2017 09:59:23</Created>
+    <CountVar>2</CountVar>
+    <CountBytes>818</CountBytes>
+    <Comment>
+    </Comment>
+    <File>download.backup.psps</File>
+    <Application>
+    </Application>
+    <ActAllStore>True</ActAllStore>
+    <ActAllProject>False</ActAllProject>
+    <AllVarsOK>True</AllVarsOK>
+    <ReadAllVars>True</ReadAllVars>
+  </DataItem>
+  <Variables>
+    <Variable>
+      <Type>dbtInt</Type>
+      <Name>SYS_ERRNDX</Name>
+      <WID>13900</WID>
+      <ValueInt>4</ValueInt>
+      <ActStore>False</ActStore>
+      <ActProject>False</ActProject>
+    </Variable>
+    <Variable>
+      <Type>dbtIntMtx</Type>
+      <Name>SYS_ERRMTX</Name>
+      <WID>13901</WID>
+      <Rows>1</Rows>
+      <Cols>408</Cols>
+      <ValueArrInt>1;408;16;-4429;18044;0;0;-1;0;0;17;-4429;18044;0;0;-1;0;0;18;-4415;18044;0;0;-1;-4426;18044;18;-4408;18044;0;0;-1;-4410;18044;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;</ValueArrInt>
+      <ActStore>False</ActStore>
+      <ActProject>False</ActProject>
+    </Variable>
+  </Variables>
+</DETStudioSpravceDat>

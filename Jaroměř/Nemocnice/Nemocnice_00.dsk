@@ -1,0 +1,737 @@
+<!-- DetStudio Desktop File -->
+<Desktop scheme="0">
+  <WindowParam>
+    <DictItem>
+      <Key>#iofixed</Key>
+      <Value><![CDATA[<DataGridView-Layout><Columns><Column><Width>70</Width><Visible>True</Visible></Column><Column><Width>100</Width><Visible>True</Visible></Column><Column><Width>40</Width><Visible>True</Visible></Column><Column><Width>951</Width><Visible>True</Visible></Column></Columns></DataGridView-Layout>]]></Value>
+    </DictItem>
+    <DictItem>
+      <Key>#watchwin.WatchWindow2</Key>
+      <Value><![CDATA[<WatchWindowDesktop>
+  <TableParams>&lt;DataGridView-Layout&gt;&lt;Columns&gt;&lt;Column&gt;&lt;Width&gt;120&lt;/Width&gt;&lt;Visible&gt;True&lt;/Visible&gt;&lt;/Column&gt;&lt;Column&gt;&lt;Width&gt;31&lt;/Width&gt;&lt;Visible&gt;True&lt;/Visible&gt;&lt;/Column&gt;&lt;Column&gt;&lt;Width&gt;27&lt;/Width&gt;&lt;Visible&gt;True&lt;/Visible&gt;&lt;/Column&gt;&lt;Column&gt;&lt;Width&gt;247&lt;/Width&gt;&lt;Visible&gt;True&lt;/Visible&gt;&lt;/Column&gt;&lt;/Columns&gt;&lt;/DataGridView-Layout&gt;</TableParams>
+  <Inspektor Name="LoadSave" Class="Amit.Psp.PspTools.WatchControl">
+    <Nastaveni>
+      <ZapVyp>True</ZapVyp>
+      <Signal>True</Signal>
+      <ColRowCh>False</ColRowCh>
+      <FlPrint>Automat</FlPrint>
+      <AliasText>True</AliasText>
+      <AliasTextAno>Ano</AliasTextAno>
+      <AliasTextNe>Ne</AliasTextNe>
+      <IntPrint>Dec</IntPrint>
+      <HexCform>True</HexCform>
+      <BinFix>True</BinFix>
+      <HexFix>False</HexFix>
+      <DecFix>False</DecFix>
+      <DecFixValue>5</DecFixValue>
+      <LongAsDate>False</LongAsDate>
+      <DateFormat>Normal</DateFormat>
+      <UkazWID>True</UkazWID>
+      <UkazTyp>True</UkazTyp>
+      <SpaceIncl>True</SpaceIncl>
+      <Statistic>True</Statistic>
+      <Utf8Coding>True</Utf8Coding>
+    </Nastaveni>
+    <GlobNastaveni>
+      <Refresh>250</Refresh>
+      <InterTime>50</InterTime>
+      <AutomVar>True</AutomVar>
+      <DirAlert>C:\D_ALERT.TXT</DirAlert>
+      <DirSave>C:\D_SAVE.TXT</DirSave>
+    </GlobNastaveni>
+    <Vyrazy>
+      <Vyraz>
+        <Name>@DEnStanice</Name>
+        <Typ>Bit</Typ>
+        <WID>7117</WID>
+        <Value>Ano</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>Alarm_E2,b</Name>
+        <Typ>Long</Typ>
+        <WID>7091</WID>
+        <Value>00000000 00000000 00000000 00000000</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>Alarm_A2,b</Name>
+        <Typ>Long</Typ>
+        <WID>7047</WID>
+        <Value>00000000 00000000 00000000 00000000</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>Alarm_E1,b</Name>
+        <Typ>Long</Typ>
+        <WID>7040</WID>
+        <Value>00000000 00000000 00000000 00000000</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>Alarm_A1,b</Name>
+        <Typ>Long</Typ>
+        <WID>7039</WID>
+        <Value>00000000 00000000 00000000 00000000</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>Alarm_I1</Name>
+        <Typ>Long</Typ>
+        <WID>7402</WID>
+        <Value>0</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>pQuit</Name>
+        <Typ>Int</Typ>
+        <WID>7490</WID>
+        <Value>0</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>PTV1</Name>
+        <Typ>Float</Typ>
+        <WID>7004</WID>
+        <Value>189.3528</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>TTUV2_vyst</Name>
+        <Typ>Float</Typ>
+        <WID>7107</WID>
+        <Value>55.01162</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>TKotVyst</Name>
+        <Typ>Float</Typ>
+        <WID>7104</WID>
+        <Value>71.31783</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>RoZ_PIDpar</Name>
+        <Typ>Float&lt;8,1&gt;</Typ>
+        <WID>7128</WID>
+        <Value>(5), (200), (0), (0), (100), (0), (0), (0)</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>RoZ_PIDrezim</Name>
+        <Typ>Int&lt;4,1&gt;</Typ>
+        <WID>7127</WID>
+        <Value>(5), (5), (4), (5)</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>RoZ_PIDzas</Name>
+        <Typ>Float&lt;4,1&gt;</Typ>
+        <WID>7130</WID>
+        <Value>(0), (0), (100), (0)</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>tvx_prebeh</Name>
+        <Typ>Float&lt;16,1&gt;</Typ>
+        <WID>7041</WID>
+        <Value>(120), (120), (120), (300), (300), (150), (150), (150), (300), (150), (150), (120), (120), (120), (120), (120)</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>tvx_akce</Name>
+        <Typ>Float&lt;16,1&gt;</Typ>
+        <WID>7169</WID>
+        <Value>(0), (0), (0), (4.789443), (0), (13.78136), (0), (0), (2.558495), (0), (0), (0), (0), (8.725769), (0), (0)</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>tvx_Tm</Name>
+        <Typ>Float&lt;16,1&gt;</Typ>
+        <WID>7003</WID>
+        <Value>(39.12199), (51.97706), (52.77142), (39.02882), (50.07077), (39.10827), (40.07789), (35.19173), (39.36577), (33.70863), (37.07118), (30.62938), (21.95134), (39.05365), (0), (0)</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>tvx_PIDrezim</Name>
+        <Typ>Int&lt;16,1&gt;</Typ>
+        <WID>7170</WID>
+        <Value>(20), (20), (20), (4), (4), (4), (4), (4), (4), (4), (4), (4), (4), (4), (20), (20)</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>tvx_Tz</Name>
+        <Typ>Float&lt;16,1&gt;</Typ>
+        <WID>7017</WID>
+        <Value>(8), (53), (53), (38.28537), (24.1629), (38.72422), (38.72416), (31.08537), (38.72416), (27.72536), (27.50663), (24.1629), (13), (38.72416), (0), (0)</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>OffsetTUV</Name>
+        <Typ>Float</Typ>
+        <WID>7063</WID>
+        <Value>15</Value>
+      </Vyraz>
+    </Vyrazy>
+  </Inspektor>
+</WatchWindowDesktop>]]></Value>
+    </DictItem>
+    <DictItem>
+      <Key>#watchwin.WatchWindow1</Key>
+      <Value><![CDATA[<WatchWindowDesktop>
+  <TableParams>&lt;DataGridView-Layout&gt;&lt;Columns&gt;&lt;Column&gt;&lt;Width&gt;132&lt;/Width&gt;&lt;Visible&gt;True&lt;/Visible&gt;&lt;/Column&gt;&lt;Column&gt;&lt;Width&gt;63&lt;/Width&gt;&lt;Visible&gt;True&lt;/Visible&gt;&lt;/Column&gt;&lt;Column&gt;&lt;Width&gt;27&lt;/Width&gt;&lt;Visible&gt;True&lt;/Visible&gt;&lt;/Column&gt;&lt;Column&gt;&lt;Width&gt;277&lt;/Width&gt;&lt;Visible&gt;True&lt;/Visible&gt;&lt;/Column&gt;&lt;/Columns&gt;&lt;/DataGridView-Layout&gt;</TableParams>
+  <Inspektor Name="LoadSave" Class="Amit.Psp.PspTools.WatchControl">
+    <Nastaveni>
+      <ZapVyp>True</ZapVyp>
+      <Signal>True</Signal>
+      <ColRowCh>False</ColRowCh>
+      <FlPrint>Automat</FlPrint>
+      <AliasText>True</AliasText>
+      <AliasTextAno>Ano</AliasTextAno>
+      <AliasTextNe>Ne</AliasTextNe>
+      <IntPrint>Dec</IntPrint>
+      <HexCform>True</HexCform>
+      <BinFix>True</BinFix>
+      <HexFix>False</HexFix>
+      <DecFix>False</DecFix>
+      <DecFixValue>5</DecFixValue>
+      <LongAsDate>False</LongAsDate>
+      <DateFormat>Normal</DateFormat>
+      <UkazWID>True</UkazWID>
+      <UkazTyp>True</UkazTyp>
+      <SpaceIncl>True</SpaceIncl>
+      <Statistic>True</Statistic>
+      <Utf8Coding>True</Utf8Coding>
+    </Nastaveni>
+    <GlobNastaveni>
+      <Refresh>250</Refresh>
+      <InterTime>50</InterTime>
+      <AutomVar>True</AutomVar>
+      <DirAlert>C:\D_ALERT.TXT</DirAlert>
+      <DirSave>C:\D_SAVE.TXT</DirSave>
+    </GlobNastaveni>
+    <Vyrazy>
+      <Vyraz>
+        <Name>@DEnKot3</Name>
+        <Typ>Bit</Typ>
+        <WID>7117</WID>
+        <Value>Ano</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>@DEnKot2</Name>
+        <Typ>Bit</Typ>
+        <WID>7117</WID>
+        <Value>Ano</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>@DEnKot1</Name>
+        <Typ>Bit</Typ>
+        <WID>7117</WID>
+        <Value>Ano</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>WTVSpol</Name>
+        <Typ>Float</Typ>
+        <WID>7052</WID>
+        <Value>68</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>TKotVyst</Name>
+        <Typ>Float</Typ>
+        <WID>7104</WID>
+        <Value>71.31783</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>@DisKask</Name>
+        <Typ>Bit</Typ>
+        <WID>7100</WID>
+        <Value>Ne</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>@Poradi</Name>
+        <Typ>Bit</Typ>
+        <WID>7066</WID>
+        <Value>Ne</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>Ka_Period</Name>
+        <Typ>Float</Typ>
+        <WID>7139</WID>
+        <Value>15</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>WKot_Meze[0,0]</Name>
+        <Typ>Float</Typ>
+        <WID>7053</WID>
+        <Value>10</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>WKot_Meze[1,0]</Name>
+        <Typ>Float</Typ>
+        <WID>7053</WID>
+        <Value>95</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>Ka_TypKotlu</Name>
+        <Typ>Int&lt;4,1&gt;</Typ>
+        <WID>7145</WID>
+        <Value>(2), (2), (2), (2)</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>Ka_PorKotlu</Name>
+        <Typ>Int&lt;4,1&gt;</Typ>
+        <WID>7140</WID>
+        <Value>(0), (0), (0), (0)</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>Ka_Rizeni</Name>
+        <Typ>Int&lt;4,3&gt;</Typ>
+        <WID>7045</WID>
+        <Value>(0, 2, 0), (0, 3, 0), (0, 0, 1), (0, 1, 0)</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>Ka_VykonKot</Name>
+        <Typ>Float&lt;4,2&gt;</Typ>
+        <WID>7146</WID>
+        <Value>(0, 0), (0, 0), (65.46134, 0), (0, 0)</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>Ka_ProvozKot</Name>
+        <Typ>Long&lt;4,1&gt;</Typ>
+        <WID>7044</WID>
+        <Value>(9396), (19677), (14963), (7878)</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>Ka_Hladina</Name>
+        <Typ>Int</Typ>
+        <WID>7032</WID>
+        <Value>1</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>Ka_Zesileni</Name>
+        <Typ>Float</Typ>
+        <WID>7147</WID>
+        <Value>7</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>Ka_Integrace</Name>
+        <Typ>Float</Typ>
+        <WID>7034</WID>
+        <Value>40</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>Ka_SDK</Name>
+        <Typ>Float</Typ>
+        <WID>7048</WID>
+        <Value>2</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>Ka_PripojInt</Name>
+        <Typ>Float</Typ>
+        <WID>7042</WID>
+        <Value>200</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>Ka_OdpojInt</Name>
+        <Typ>Float</Typ>
+        <WID>7138</WID>
+        <Value>55</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>Ka_IngralAct</Name>
+        <Typ>Float</Typ>
+        <WID>7033</WID>
+        <Value>15.60952</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>debug1,t</Name>
+        <Typ>Long</Typ>
+        <WID>7059</WID>
+        <Value>3.10.2017 9:00:00</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>tvx_Tpk</Name>
+        <Typ>Float&lt;16,2&gt;</Typ>
+        <WID>7016</WID>
+        <Value>(52, 65), (53, 65), (53, 65), (22, 45), (22, 45), (22, 45), (22, 45), (22, 45), (22, 45), (22, 45), (22, 45), (22, 45), (22, 45), (22, 45), (22, 45), (22, 45)</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>@te_xLeto</Name>
+        <Typ>Bit</Typ>
+        <WID>7300</WID>
+        <Value>Ne</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>TE_leto_par</Name>
+        <Typ>Float&lt;2,1&gt;</Typ>
+        <WID>7526</WID>
+        <Value>(50), (16)</Value>
+        <Rozbaleni />
+      </Vyraz>
+    </Vyrazy>
+  </Inspektor>
+</WatchWindowDesktop>]]></Value>
+    </DictItem>
+    <DictItem>
+      <Key>#watchwin.WatchWindow4</Key>
+      <Value><![CDATA[<WatchWindowDesktop>
+  <TableParams>&lt;DataGridView-Layout&gt;&lt;Columns&gt;&lt;Column&gt;&lt;Width&gt;100&lt;/Width&gt;&lt;Visible&gt;True&lt;/Visible&gt;&lt;/Column&gt;&lt;Column&gt;&lt;Width&gt;100&lt;/Width&gt;&lt;Visible&gt;True&lt;/Visible&gt;&lt;/Column&gt;&lt;Column&gt;&lt;Width&gt;100&lt;/Width&gt;&lt;Visible&gt;True&lt;/Visible&gt;&lt;/Column&gt;&lt;Column&gt;&lt;Width&gt;37&lt;/Width&gt;&lt;Visible&gt;True&lt;/Visible&gt;&lt;/Column&gt;&lt;/Columns&gt;&lt;/DataGridView-Layout&gt;</TableParams>
+  <Inspektor Name="LoadSave" Class="Amit.Psp.PspTools.WatchControl">
+    <Nastaveni>
+      <ZapVyp>True</ZapVyp>
+      <Signal>True</Signal>
+      <ColRowCh>False</ColRowCh>
+      <FlPrint>Automat</FlPrint>
+      <AliasText>True</AliasText>
+      <AliasTextAno>Ano</AliasTextAno>
+      <AliasTextNe>Ne</AliasTextNe>
+      <IntPrint>Dec</IntPrint>
+      <HexCform>True</HexCform>
+      <BinFix>True</BinFix>
+      <HexFix>False</HexFix>
+      <DecFix>False</DecFix>
+      <DecFixValue>5</DecFixValue>
+      <LongAsDate>False</LongAsDate>
+      <DateFormat>Normal</DateFormat>
+      <UkazWID>True</UkazWID>
+      <UkazTyp>True</UkazTyp>
+      <SpaceIncl>True</SpaceIncl>
+      <Statistic>True</Statistic>
+      <Utf8Coding>True</Utf8Coding>
+    </Nastaveni>
+    <GlobNastaveni>
+      <Refresh>250</Refresh>
+      <InterTime>50</InterTime>
+      <AutomVar>True</AutomVar>
+      <DirAlert>C:\D_ALERT.TXT</DirAlert>
+      <DirSave>C:\D_SAVE.TXT</DirSave>
+    </GlobNastaveni>
+    <Vyrazy />
+  </Inspektor>
+</WatchWindowDesktop>]]></Value>
+    </DictItem>
+    <DictItem>
+      <Key>#datamgr.dataManagerWindow1</Key>
+      <Value><![CDATA[<DataManagerWindowDesktop>
+  <TableParams>&lt;ListView-Layout&gt;&lt;Columns&gt;&lt;Column&gt;&lt;Width&gt;200&lt;/Width&gt;&lt;/Column&gt;&lt;Column&gt;&lt;Width&gt;76&lt;/Width&gt;&lt;/Column&gt;&lt;Column&gt;&lt;Width&gt;75&lt;/Width&gt;&lt;/Column&gt;&lt;Column&gt;&lt;Width&gt;125&lt;/Width&gt;&lt;/Column&gt;&lt;/Columns&gt;&lt;/ListView-Layout&gt;</TableParams>
+</DataManagerWindowDesktop>]]></Value>
+    </DictItem>
+    <DictItem>
+      <Key>#arcmgr.archiveManagerWindow1</Key>
+      <Value><![CDATA[<ArchiveManagerWindowDesktop>
+  <TableParams>&lt;ListView-Layout&gt;&lt;Columns&gt;&lt;Column&gt;&lt;Width&gt;110&lt;/Width&gt;&lt;/Column&gt;&lt;Column&gt;&lt;Width&gt;75&lt;/Width&gt;&lt;/Column&gt;&lt;Column&gt;&lt;Width&gt;125&lt;/Width&gt;&lt;/Column&gt;&lt;Column&gt;&lt;Width&gt;125&lt;/Width&gt;&lt;/Column&gt;&lt;Column&gt;&lt;Width&gt;75&lt;/Width&gt;&lt;/Column&gt;&lt;/Columns&gt;&lt;/ListView-Layout&gt;</TableParams>
+</ArchiveManagerWindowDesktop>]]></Value>
+    </DictItem>
+    <DictItem>
+      <Key>#erroutput.errorOutputWindow1</Key>
+      <Value><![CDATA[<ErrorOutputWindowDesktop>
+  <TableParams>&lt;ListView-Layout&gt;&lt;Columns&gt;&lt;Column&gt;&lt;Width&gt;22&lt;/Width&gt;&lt;/Column&gt;&lt;Column&gt;&lt;Width&gt;452&lt;/Width&gt;&lt;/Column&gt;&lt;Column&gt;&lt;Width&gt;378&lt;/Width&gt;&lt;/Column&gt;&lt;Column&gt;&lt;Width&gt;200&lt;/Width&gt;&lt;/Column&gt;&lt;/Columns&gt;&lt;/ListView-Layout&gt;</TableParams>
+</ErrorOutputWindowDesktop>]]></Value>
+    </DictItem>
+    <DictItem>
+      <Key>#watchwin.AutoWatch</Key>
+      <Value><![CDATA[<WatchWindowDesktop>
+  <TableParams>&lt;DataGridView-Layout&gt;&lt;Columns&gt;&lt;Column&gt;&lt;Width&gt;100&lt;/Width&gt;&lt;Visible&gt;True&lt;/Visible&gt;&lt;/Column&gt;&lt;Column&gt;&lt;Width&gt;100&lt;/Width&gt;&lt;Visible&gt;True&lt;/Visible&gt;&lt;/Column&gt;&lt;Column&gt;&lt;Width&gt;100&lt;/Width&gt;&lt;Visible&gt;True&lt;/Visible&gt;&lt;/Column&gt;&lt;Column&gt;&lt;Width&gt;5&lt;/Width&gt;&lt;Visible&gt;True&lt;/Visible&gt;&lt;/Column&gt;&lt;/Columns&gt;&lt;/DataGridView-Layout&gt;</TableParams>
+  <Inspektor Name="LoadSave" Class="Amit.Psp.PspTools.WatchControl">
+    <Nastaveni>
+      <ZapVyp>True</ZapVyp>
+      <Signal>True</Signal>
+      <ColRowCh>False</ColRowCh>
+      <FlPrint>Automat</FlPrint>
+      <AliasText>True</AliasText>
+      <AliasTextAno>Ano</AliasTextAno>
+      <AliasTextNe>Ne</AliasTextNe>
+      <IntPrint>Dec</IntPrint>
+      <HexCform>True</HexCform>
+      <BinFix>True</BinFix>
+      <HexFix>False</HexFix>
+      <DecFix>False</DecFix>
+      <DecFixValue>5</DecFixValue>
+      <LongAsDate>False</LongAsDate>
+      <DateFormat>Normal</DateFormat>
+      <UkazWID>True</UkazWID>
+      <UkazTyp>True</UkazTyp>
+      <SpaceIncl>True</SpaceIncl>
+      <Statistic>True</Statistic>
+      <Utf8Coding>True</Utf8Coding>
+    </Nastaveni>
+    <GlobNastaveni>
+      <Refresh>250</Refresh>
+      <InterTime>50</InterTime>
+      <AutomVar>True</AutomVar>
+      <DirAlert>C:\D_ALERT.TXT</DirAlert>
+      <DirSave>C:\D_SAVE.TXT</DirSave>
+    </GlobNastaveni>
+    <Vyrazy>
+      <Vyraz>
+        <Name>AR_DI0_R</Name>
+        <Typ>Long</Typ>
+        <WID>65243</WID>
+        <Value>5062656</Value>
+      </Vyraz>
+    </Vyrazy>
+  </Inspektor>
+</WatchWindowDesktop>]]></Value>
+    </DictItem>
+    <DictItem>
+      <Key>#findresult.findResultWindow1</Key>
+      <Value><![CDATA[<FindResultWindowDesktop />]]></Value>
+    </DictItem>
+    <DictItem>
+      <Key>#watchwin.WatchWindow3</Key>
+      <Value><![CDATA[<WatchWindowDesktop>
+  <TableParams>&lt;DataGridView-Layout&gt;&lt;Columns&gt;&lt;Column&gt;&lt;Width&gt;100&lt;/Width&gt;&lt;Visible&gt;True&lt;/Visible&gt;&lt;/Column&gt;&lt;Column&gt;&lt;Width&gt;25&lt;/Width&gt;&lt;Visible&gt;True&lt;/Visible&gt;&lt;/Column&gt;&lt;Column&gt;&lt;Width&gt;37&lt;/Width&gt;&lt;Visible&gt;True&lt;/Visible&gt;&lt;/Column&gt;&lt;Column&gt;&lt;Width&gt;524&lt;/Width&gt;&lt;Visible&gt;True&lt;/Visible&gt;&lt;/Column&gt;&lt;/Columns&gt;&lt;/DataGridView-Layout&gt;</TableParams>
+  <Inspektor Name="LoadSave" Class="Amit.Psp.PspTools.WatchControl">
+    <Nastaveni>
+      <ZapVyp>True</ZapVyp>
+      <Signal>True</Signal>
+      <ColRowCh>False</ColRowCh>
+      <FlPrint>Automat</FlPrint>
+      <AliasText>True</AliasText>
+      <AliasTextAno>Ano</AliasTextAno>
+      <AliasTextNe>Ne</AliasTextNe>
+      <IntPrint>Dec</IntPrint>
+      <HexCform>True</HexCform>
+      <BinFix>True</BinFix>
+      <HexFix>False</HexFix>
+      <DecFix>False</DecFix>
+      <DecFixValue>5</DecFixValue>
+      <LongAsDate>False</LongAsDate>
+      <DateFormat>Normal</DateFormat>
+      <UkazWID>True</UkazWID>
+      <UkazTyp>True</UkazTyp>
+      <SpaceIncl>True</SpaceIncl>
+      <Statistic>True</Statistic>
+      <Utf8Coding>True</Utf8Coding>
+    </Nastaveni>
+    <GlobNastaveni>
+      <Refresh>250</Refresh>
+      <InterTime>50</InterTime>
+      <AutomVar>True</AutomVar>
+      <DirAlert>C:\D_ALERT.TXT</DirAlert>
+      <DirSave>C:\D_SAVE.TXT</DirSave>
+    </GlobNastaveni>
+    <Vyrazy>
+      <Vyraz>
+        <Name>AR_UI2_okam</Name>
+        <Typ>Float&lt;8,1&gt;</Typ>
+        <WID>65052</WID>
+        <Value>(30.36434), (21.59226), (39.02102), (99.97559), (-149.4944), (-149.5404), (0.06103516), (0.03051758)</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>AR_UI2</Name>
+        <Typ>Float&lt;8,1&gt;</Typ>
+        <WID>65050</WID>
+        <Value>(30.51221), (21.92959), (38.99456), (99.97559), (-149.5482), (-149.6223), (0.05593036), (0.05238998)</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>AR_DO4_XR,b</Name>
+        <Typ>Long</Typ>
+        <WID>65381</WID>
+        <Value>00000000 00000000 00000000 00000000</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>AR_DO4_R,b</Name>
+        <Typ>Long</Typ>
+        <WID>65383</WID>
+        <Value>00000000 00000000 00000000 00101100</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>TE_tlum</Name>
+        <Typ>Float</Typ>
+        <WID>7326</WID>
+        <Value>16.29259</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>TVenk</Name>
+        <Typ>Float</Typ>
+        <WID>7000</WID>
+        <Value>17.08789</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>AR_DI2,b</Name>
+        <Typ>Long</Typ>
+        <WID>65260</WID>
+        <Value>00000000 00000000 00000000 00001000</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>WTVSpol</Name>
+        <Typ>Float</Typ>
+        <WID>7052</WID>
+        <Value>68</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>WTV_Max</Name>
+        <Typ>Float</Typ>
+        <WID>7051</WID>
+        <Value>48.84807</Value>
+      </Vyraz>
+      <Vyraz>
+        <Name>WTUV_Max</Name>
+        <Typ>Float</Typ>
+        <WID>7049</WID>
+        <Value>68</Value>
+      </Vyraz>
+    </Vyrazy>
+  </Inspektor>
+</WatchWindowDesktop>]]></Value>
+    </DictItem>
+    <DictItem>
+      <Key>#arion</Key>
+      <Value><![CDATA[<DataGridView-Layout><SortColumn>3</SortColumn><SortDirection>1</SortDirection><Columns><Column><Width>25</Width><Visible>True</Visible></Column><Column><Width>85</Width><Visible>True</Visible></Column><Column><Width>280</Width><Visible>True</Visible></Column><Column><Width>50</Width><Visible>True</Visible></Column><Column><Width>45</Width><Visible>True</Visible></Column><Column><Width>80</Width><Visible>True</Visible></Column><Column><Width>80</Width><Visible>True</Visible></Column><Column><Width>80</Width><Visible>True</Visible></Column><Column><Width>80</Width><Visible>True</Visible></Column></Columns></DataGridView-Layout>]]></Value>
+    </DictItem>
+    <DictItem>
+      <Key>#gdb</Key>
+      <Value><![CDATA[<DataGridView-Layout><SortColumn>0</SortColumn><SortDirection>1</SortDirection><Columns><Column><Width>100</Width><Visible>True</Visible></Column><Column><Width>50</Width><Visible>True</Visible></Column><Column><Width>60</Width><Visible>True</Visible></Column><Column><Width>60</Width><Visible>True</Visible></Column><Column><Width>60</Width><Visible>True</Visible></Column><Column><Width>60</Width><Visible>True</Visible></Column><Column><Width>90</Width><Visible>True</Visible></Column><Column><Width>65</Width><Visible>True</Visible></Column><Column><Width>616</Width><Visible>True</Visible></Column></Columns></DataGridView-Layout>]]></Value>
+    </DictItem>
+    <DictItem>
+      <Key>#galiases</Key>
+      <Value><![CDATA[<DataGridView-Layout><SortColumn>1</SortColumn><SortDirection>1</SortDirection><Columns><Column><Width>100</Width><Visible>True</Visible></Column><Column><Width>100</Width><Visible>True</Visible></Column><Column><Width>40</Width><Visible>True</Visible></Column><Column><Width>292</Width><Visible>True</Visible></Column></Columns></DataGridView-Layout>]]></Value>
+    </DictItem>
+    <DictItem>
+      <Key>#fb</Key>
+      <Value><![CDATA[<?xml version="1.0" encoding="utf-16"?>
+<Layout>
+  <Window Guid="4f8544ad-6a54-4365-80d0-ae22ef330e23" FloatingSize="550, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="200" />
+  <Window Guid="e53022ce-f674-4a63-bbce-8c95be301327" FloatingSize="550, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="200" />
+  <Window Guid="c58ff0f0-3389-4b8a-b154-c9de0b4428a2" FloatingSize="550, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="200" />
+  <Window Guid="c3603d27-9b5c-4cde-b0ca-d2a33615eb86" FloatingSize="550, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="200" />
+  <Window Guid="e767c116-609e-428f-930f-e5399eac61b3" FloatingSize="550, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="200" />
+  <DocumentContainer Dock="5">
+    <SplitLayoutSystem WorkingSize="1177, 426" SplitMode="0">
+      <ControlLayoutSystem WorkingSize="1177, 426" Collapsed="0" SelectedControl="c3603d27-9b5c-4cde-b0ca-d2a33615eb86">
+        <Controls>
+          <Control Guid="e767c116-609e-428f-930f-e5399eac61b3" />
+          <Control Guid="e53022ce-f674-4a63-bbce-8c95be301327" />
+          <Control Guid="c58ff0f0-3389-4b8a-b154-c9de0b4428a2" />
+          <Control Guid="c3603d27-9b5c-4cde-b0ca-d2a33615eb86" />
+          <Control Guid="4f8544ad-6a54-4365-80d0-ae22ef330e23" />
+        </Controls>
+      </ControlLayoutSystem>
+    </SplitLayoutSystem>
+  </DocumentContainer>
+</Layout>]]></Value>
+    </DictItem>
+    <DictItem>
+      <Key>#fbdb</Key>
+      <Value><![CDATA[<DataGridView-Layout><SortColumn>0</SortColumn><SortDirection>1</SortDirection><Columns><Column><Width>100</Width><Visible>True</Visible></Column><Column><Width>50</Width><Visible>True</Visible></Column><Column><Width>60</Width><Visible>True</Visible></Column><Column><Width>60</Width><Visible>True</Visible></Column><Column><Width>60</Width><Visible>False</Visible></Column><Column><Width>60</Width><Visible>True</Visible></Column><Column><Width>90</Width><Visible>True</Visible></Column><Column><Width>65</Width><Visible>False</Visible></Column><Column><Width>123</Width><Visible>True</Visible></Column></Columns></DataGridView-Layout>]]></Value>
+    </DictItem>
+    <DictItem>
+      <Key>#params</Key>
+      <Value><![CDATA[<DataGridView-Layout><Columns><Column><Width>90</Width><Visible>True</Visible></Column><Column><Width>90</Width><Visible>True</Visible></Column><Column><Width>90</Width><Visible>True</Visible></Column><Column><Width>235</Width><Visible>True</Visible></Column></Columns></DataGridView-Layout>]]></Value>
+    </DictItem>
+    <DictItem>
+      <Key>#fbaliases</Key>
+      <Value><![CDATA[<DataGridView-Layout><SortColumn>1</SortColumn><SortDirection>1</SortDirection><Columns><Column><Width>100</Width><Visible>True</Visible></Column><Column><Width>100</Width><Visible>True</Visible></Column><Column><Width>40</Width><Visible>True</Visible></Column><Column><Width>932</Width><Visible>True</Visible></Column></Columns></DataGridView-Layout>]]></Value>
+    </DictItem>
+    <DictItem>
+      <Key>#procedures</Key>
+      <Value><![CDATA[<DataGridView-Layout><SortColumn>0</SortColumn><SortDirection>1</SortDirection><Columns><Column><Width>100</Width><Visible>True</Visible></Column><Column><Width>100</Width><Visible>True</Visible></Column><Column><Width>961</Width><Visible>True</Visible></Column></Columns></DataGridView-Layout>]]></Value>
+    </DictItem>
+    <DictItem>
+      <Key>#processes</Key>
+      <Value><![CDATA[<DataGridView-Layout><SortColumn>0</SortColumn><SortDirection>1</SortDirection><Columns><Column><Width>100</Width><Visible>True</Visible></Column><Column><Width>100</Width><Visible>True</Visible></Column><Column><Width>70</Width><Visible>True</Visible></Column><Column><Width>70</Width><Visible>True</Visible></Column><Column><Width>50</Width><Visible>True</Visible></Column><Column><Width>788</Width><Visible>True</Visible></Column></Columns></DataGridView-Layout>]]></Value>
+    </DictItem>
+  </WindowParam>
+  <OpenWindows>
+    <DictItem>
+      <Key>98cff2f0-ad10-4bfb-9ec6-eae817488f78</Key>
+      <Value Class="System.String">#psp4ide.#aliases</Value>
+    </DictItem>
+    <DictItem>
+      <Key>84c4d470-9c00-4e35-a36b-c67fb6481322</Key>
+      <Value Class="System.String">#psp4ide.#process.procInputs</Value>
+    </DictItem>
+    <DictItem>
+      <Key>9fbb42b1-88e2-4376-b57a-0f28f4495ece</Key>
+      <Value Class="System.String">#psp4ide.#procedure.libZdroje</Value>
+    </DictItem>
+    <DictItem>
+      <Key>52883f0e-55eb-4693-907b-eb17a331e164</Key>
+      <Value Class="System.String">#psp4ide.#process.procCtrl</Value>
+    </DictItem>
+    <DictItem>
+      <Key>ef760ca8-7384-49c1-9aab-2bf2918e4ead</Key>
+      <Value Class="System.String">#psp4ide.#procedure.libObecne</Value>
+    </DictItem>
+    <DictItem>
+      <Key>4740100c-5014-4706-b7bf-e8bc8ba21ab5</Key>
+      <Value Class="System.String">#psp4ide.#vars</Value>
+    </DictItem>
+    <DictItem>
+      <Key>2e8eb833-737f-4ac2-b5fb-43d78957ff87</Key>
+      <Value Class="System.String">#psp4ide.#process.ProcAlarm</Value>
+    </DictItem>
+  </OpenWindows>
+  <Location>0,0</Location>
+  <Size>0,0</Size>
+  <WindowState>2</WindowState>
+  <DockLayout><![CDATA[<?xml version="1.0" encoding="utf-16"?>
+<Layout>
+  <Window Guid="c1749065-d2cd-4ec7-8877-ad073a98cdd6" FloatingSize="250, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="337" />
+  <Window Guid="3f50b27c-930b-4a38-ac6e-b5cd1a873909" FloatingSize="250, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="126" />
+  <Window Guid="fe943f20-5a4e-4e4d-9c98-0ef19cefe885" FloatingSize="250, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="337" />
+  <Window Guid="a4fccb5d-a196-41c9-b43b-5ad0b716bad6" FloatingSize="250, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="337" />
+  <Window Guid="4740100c-5014-4706-b7bf-e8bc8ba21ab5" FloatingSize="550, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="200" />
+  <Window Guid="2e8eb833-737f-4ac2-b5fb-43d78957ff87" FloatingSize="550, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="200" />
+  <Window Guid="24f44e4b-8a71-4e28-a9d8-7e812159b3cd" FloatingSize="250, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="337" />
+  <Window Guid="d153c70b-bffc-43bd-a34c-6350cdf0a12c" FloatingSize="250, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="337" />
+  <Window Guid="4cfd07ed-6b1c-4fd9-b43b-d0a5fb7f3825" FloatingSize="250, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="277" />
+  <Window Guid="127229bd-84bd-4f17-af9c-214bc79c6929" FloatingSize="250, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="337" />
+  <Window Guid="ef760ca8-7384-49c1-9aab-2bf2918e4ead" FloatingSize="550, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="200" />
+  <Window Guid="7d7fcb15-6f45-4f5d-a4bc-7fe581204a71" FloatingSize="250, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="197" />
+  <Window Guid="84c4d470-9c00-4e35-a36b-c67fb6481322" FloatingSize="550, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="200" />
+  <Window Guid="98cff2f0-ad10-4bfb-9ec6-eae817488f78" FloatingSize="550, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="200" />
+  <Window Guid="fe1e3f73-12a8-465f-8eb1-57615dd67b99" FloatingSize="250, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="337" />
+  <Window Guid="0172cb3b-e31d-464e-8df0-38961f3addb3" FloatingSize="250, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="197" />
+  <Window Guid="9fbb42b1-88e2-4376-b57a-0f28f4495ece" FloatingSize="550, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="200" />
+  <Window Guid="52883f0e-55eb-4693-907b-eb17a331e164" FloatingSize="550, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="200" />
+  <Window Guid="d8ae5fe2-13bb-4cd1-abd3-bfcf8707c404" FloatingSize="250, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="100" />
+  <Window Guid="ba71ad41-e1bc-42e1-908b-cad3e2f8a118" FloatingSize="250, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="277" />
+  <Container Dock="3" ContentSize="126">
+    <SplitLayoutSystem WorkingSize="126, 466" SplitMode="0">
+      <ControlLayoutSystem WorkingSize="126, 466" Collapsed="0" SelectedControl="3f50b27c-930b-4a38-ac6e-b5cd1a873909">
+        <Controls>
+          <Control Guid="3f50b27c-930b-4a38-ac6e-b5cd1a873909" />
+        </Controls>
+      </ControlLayoutSystem>
+    </SplitLayoutSystem>
+  </Container>
+  <Container Dock="4" ContentSize="277">
+    <SplitLayoutSystem WorkingSize="277, 466" SplitMode="0">
+      <ControlLayoutSystem WorkingSize="277, 236" Collapsed="0" SelectedControl="4cfd07ed-6b1c-4fd9-b43b-d0a5fb7f3825">
+        <Controls>
+          <Control Guid="4cfd07ed-6b1c-4fd9-b43b-d0a5fb7f3825" />
+        </Controls>
+      </ControlLayoutSystem>
+      <ControlLayoutSystem WorkingSize="277, 225" Collapsed="0" SelectedControl="ba71ad41-e1bc-42e1-908b-cad3e2f8a118">
+        <Controls>
+          <Control Guid="ba71ad41-e1bc-42e1-908b-cad3e2f8a118" />
+        </Controls>
+      </ControlLayoutSystem>
+    </SplitLayoutSystem>
+  </Container>
+  <Container Dock="2" ContentSize="337">
+    <SplitLayoutSystem WorkingSize="1600, 337" SplitMode="1">
+      <ControlLayoutSystem WorkingSize="256, 337" Collapsed="0" SelectedControl="127229bd-84bd-4f17-af9c-214bc79c6929">
+        <Controls>
+          <Control Guid="d153c70b-bffc-43bd-a34c-6350cdf0a12c" />
+          <Control Guid="127229bd-84bd-4f17-af9c-214bc79c6929" />
+        </Controls>
+      </ControlLayoutSystem>
+      <ControlLayoutSystem WorkingSize="516, 337" Collapsed="0" SelectedControl="fe943f20-5a4e-4e4d-9c98-0ef19cefe885">
+        <Controls>
+          <Control Guid="fe943f20-5a4e-4e4d-9c98-0ef19cefe885" />
+        </Controls>
+      </ControlLayoutSystem>
+      <ControlLayoutSystem WorkingSize="442, 337" Collapsed="0" SelectedControl="c1749065-d2cd-4ec7-8877-ad073a98cdd6">
+        <Controls>
+          <Control Guid="c1749065-d2cd-4ec7-8877-ad073a98cdd6" />
+        </Controls>
+      </ControlLayoutSystem>
+      <ControlLayoutSystem WorkingSize="372, 337" Collapsed="0" SelectedControl="fe1e3f73-12a8-465f-8eb1-57615dd67b99">
+        <Controls>
+          <Control Guid="fe1e3f73-12a8-465f-8eb1-57615dd67b99" />
+        </Controls>
+      </ControlLayoutSystem>
+    </SplitLayoutSystem>
+  </Container>
+  <DocumentContainer Dock="5">
+    <SplitLayoutSystem WorkingSize="1187, 464" SplitMode="0">
+      <ControlLayoutSystem WorkingSize="1187, 464" Collapsed="0" SelectedControl="2e8eb833-737f-4ac2-b5fb-43d78957ff87">
+        <Controls>
+          <Control Guid="4740100c-5014-4706-b7bf-e8bc8ba21ab5" />
+          <Control Guid="98cff2f0-ad10-4bfb-9ec6-eae817488f78" />
+          <Control Guid="84c4d470-9c00-4e35-a36b-c67fb6481322" />
+          <Control Guid="9fbb42b1-88e2-4376-b57a-0f28f4495ece" />
+          <Control Guid="52883f0e-55eb-4693-907b-eb17a331e164" />
+          <Control Guid="ef760ca8-7384-49c1-9aab-2bf2918e4ead" />
+          <Control Guid="2e8eb833-737f-4ac2-b5fb-43d78957ff87" />
+        </Controls>
+      </ControlLayoutSystem>
+    </SplitLayoutSystem>
+  </DocumentContainer>
+</Layout>]]></DockLayout>
+</Desktop>

@@ -1,0 +1,788 @@
+<?xml version="1.0"?>
+<!-- DetStudio project descriptor -->
+<DetStation scheme="0">
+  <guid>5f87a397-f32f-4d40-9c56-5d1e377e1273</guid>
+  <!--AMR-UI2RDO2-->
+  <DSversion>1.8.2.23</DSversion>
+  <StationDescriptor>
+    <Version>1.0.0</Version>
+    <Copyright>(c) 2016, AMiT, spol. s r.o.</Copyright>
+    <Comment>
+    </Comment>
+    <Author>latina</Author>
+    <TridetLink>
+    </TridetLink>
+    <AdresaStanice>2</AdresaStanice>
+    <VersionAutoIncrement>False</VersionAutoIncrement>
+    <PostBuild>
+    </PostBuild>
+    <Sapp>False</Sapp>
+    <EepromClear>False</EepromClear>
+    <Notes><![CDATA[]]></Notes>
+  </StationDescriptor>
+  <ExternalStationManager>
+    <Stations />
+  </ExternalStationManager>
+  <Languages Actual="cs-CZ">
+    <Language ci="cs-CZ" />
+  </Languages>
+  <UserGroups>
+    <UserGroup Name="OBSLUHA" />
+    <UserGroup Name="TECHNOLOG" />
+    <UserGroup Name="PROGRAMATOR" />
+  </UserGroups>
+  <Users>
+    <User Name="Neznámý" Group="OBSLUHA" Password="1234" />
+  </Users>
+  <Project Class="Amit.Ngs.Ide.NgsIde">
+    <Data Class="Amit.Ngs.Core.NgsData">
+      <CommunicationProfileManager>
+        <CommunicationProfile Name="New_profile" Class="Amit.Ngs.Core.NgsSerialModbusProfile">
+          <Baudrate>38400</Baudrate>
+          <SerialPort>COM7</SerialPort>
+          <Parity>1</Parity>
+        </CommunicationProfile>
+      </CommunicationProfileManager>
+      <HwDescriptor>
+        <VariableBackup>False</VariableBackup>
+        <Ident1>
+        </Ident1>
+        <Ident2>
+        </Ident2>
+      </HwDescriptor>
+      <Object Name="App" Class="Amit.Ngs.Core.DsGenericObject" Def="App">
+        <Id>1</Id>
+        <Comment>
+        </Comment>
+        <ParentObject>
+        </ParentObject>
+        <Property BindId="0" Value="0" />
+        <Property BindId="1" Value="0" />
+        <Property BindId="2" Value="0" />
+      </Object>
+      <Object Name="PersistentStorage" Class="Amit.Ngs.Core.PersistentMemoryManager" Def="">
+        <Id>0</Id>
+      </Object>
+      <Object Name="Ela" Class="Amit.Ngs.Core.NgsElaStorage" Def="">
+        <Id>0</Id>
+        <ELAStorage />
+      </Object>
+      <Object Name="Ram" Class="Amit.Ngs.Core.NgsLocalVariables" Def="">
+        <Id>3</Id>
+        <Variable Name="$SYS_RTC" Class="Amit.Ngs.Core.NgsLocalVar" Def="">
+          <ParentObject>Ram</ParentObject>
+          <Id>9</Id>
+          <Typ>9</Typ>
+        </Variable>
+        <LocalVariableList />
+      </Object>
+      <Object Name="EEprom" Class="Amit.Ngs.Core.NgsEEpromVariables" Def="">
+        <Id>4</Id>
+        <EEpromVariableList />
+      </Object>
+      <Object Name="IO" Class="Amit.Ngs.Core.HwAmrUI2RDO2" Def="HwAmrUI2RDO2">
+        <Id>5</Id>
+        <AIconfig0>5000</AIconfig0>
+        <AIconfig1>5000</AIconfig1>
+      </Object>
+      <Object Name="ProcessInit" Class="Amit.Ngs.Core.NgsProcessInit" Def="ProcessInit">
+        <Id>6</Id>
+        <Body Class="Amit.Ngs.Core.NgsCodeBodyText"><![CDATA[]]><Regions /></Body>
+      </Object>
+      <Object Name="Process1" Class="Amit.Ngs.Core.NgsProcessPeriod" Def="Process">
+        <Id>7</Id>
+        <Body Class="Amit.Ngs.Core.NgsCodeBodyText"><![CDATA[	//cz// Číslicové vstupy
+	//en// Digital inputs
+	
+	//cz// Holding Registers
+	//en// Holding Registers
+	ModbusSlave.hr_DAI.0 = IO.DI0;
+	ModbusSlave.hr_DAI.1 = IO.DI1;
+
+	//cz// Input Registers
+	//en// Input Registers
+	ModbusSlave.ir_DAI.0 = IO.DI0;
+	ModbusSlave.ir_DAI.1 = IO.DI1;
+	
+	//cz// Discrete inputs
+	//en// Discrete inputs 
+	ModbusSlave.di_DI0 = IO.DI0;
+	ModbusSlave.di_DI1 = IO.DI1;
+	
+	//cz// Analogové vstupy
+	//en// Analog inputs
+	
+	//cz// Holding Registers
+	//en// Holding Registers
+	ModbusSlave.hr_UI_Ni0 = IO.Ni0;
+	ModbusSlave.hr_UI_Ni1 = IO.Ni1;
+	
+	//cz// Input Registers
+	//en// Input Registers
+	ModbusSlave.ir_UI_Ni0 = IO.Ni0 * 10;
+	ModbusSlave.ir_UI_Ni1 = IO.Ni1 * 10;
+
+	//cz// Číslicové výstupy
+	//en// Digitals outputs
+	if ModbusSlave.Connect then
+		//cz// Relé je sepnuto, pokud je aktivní požadavek v registru typu "Output coils" nebo v registru typu "Holding registers"
+		//en// Relay is connected by active requirement by register "Output coils" or "Holding registers"
+		IO.RL0 = ModbusSlave.hr_RL.0 or ModbusSlave.c_RL0;
+		IO.RL1 = ModbusSlave.hr_RL.1 or ModbusSlave.c_RL1;
+	else
+		//cz// Ztráta komunikace s nadřazeným systémem, výstupy do bezpečného stavu
+		//en// Disconnected, outputs are set to safe state
+		IO.RL0 = false;
+		IO.RL1 = false;
+	endif;	]]><Regions /></Body>
+        <Period>200</Period>
+        <Offset>0</Offset>
+        <Priority>1</Priority>
+      </Object>
+      <Object Name="ModbusSlave" Class="Amit.Ngs.Core.NgsModbusSlave" Def="ModbusSlave">
+        <Id>8</Id>
+        <Baudrate>38400</Baudrate>
+        <ModbusRegistrsCount>14</ModbusRegistrsCount>
+        <ModbusStatusRegister>2</ModbusStatusRegister>
+        <SerialPort>0</SerialPort>
+        <Parity>1</Parity>
+        <ModbusGuardTime>10000</ModbusGuardTime>
+        <Mode>1</Mode>
+        <RegistryOffset>100</RegistryOffset>
+        <ModbusSlaveItemList>
+          <ModbusSlaveItem Name="hr_UI_Ni0" Class="Amit.Ngs.Core.NgsModbusSlaveFloatReg">
+            <RegMbus>110</RegMbus>
+            <Comment>AI0 - teplotní čidlo / temperature sensor</Comment>
+            <Id>10</Id>
+            <Channel>2</Channel>
+          </ModbusSlaveItem>
+          <ModbusSlaveItem Name="hr_UI_Ni1" Class="Amit.Ngs.Core.NgsModbusSlaveFloatReg">
+            <RegMbus>112</RegMbus>
+            <Comment>AI1 - teplotní čidlo / temperature sensor</Comment>
+            <Id>11</Id>
+            <Channel>2</Channel>
+          </ModbusSlaveItem>
+          <ModbusSlaveItem Name="hr_RL" Class="Amit.Ngs.Core.NgsModbusSlaveWordReg">
+            <RegMbus>200</RegMbus>
+            <Comment>DO - zápis / write</Comment>
+            <Id>13</Id>
+            <Offset>0</Offset>
+            <BitLength>32</BitLength>
+            <Channel>2</Channel>
+          </ModbusSlaveItem>
+          <ModbusSlaveItem Name="hr_DAI" Class="Amit.Ngs.Core.NgsModbusSlaveWordReg">
+            <RegMbus>100</RegMbus>
+            <Comment>DAI - stavy / states</Comment>
+            <Id>14</Id>
+            <Offset>0</Offset>
+            <BitLength>32</BitLength>
+            <Channel>2</Channel>
+          </ModbusSlaveItem>
+          <ModbusSlaveItem Name="ir_DAI" Class="Amit.Ngs.Core.NgsModbusSlaveInputReg">
+            <RegMbus>0</RegMbus>
+            <Comment>DAI - stavy</Comment>
+            <Id>15</Id>
+            <Offset>0</Offset>
+            <BitLength>32</BitLength>
+            <Channel>2</Channel>
+          </ModbusSlaveItem>
+          <ModbusSlaveItem Name="ir_UI_Ni0" Class="Amit.Ngs.Core.NgsModbusSlaveInputReg">
+            <RegMbus>1</RegMbus>
+            <Comment>AI0 - teplotní čidlo</Comment>
+            <Id>16</Id>
+            <Offset>0</Offset>
+            <BitLength>32</BitLength>
+            <Channel>2</Channel>
+          </ModbusSlaveItem>
+          <ModbusSlaveItem Name="ir_UI_Ni1" Class="Amit.Ngs.Core.NgsModbusSlaveInputReg">
+            <RegMbus>2</RegMbus>
+            <Comment>AI1 - teplotní čidlo</Comment>
+            <Id>17</Id>
+            <Offset>0</Offset>
+            <BitLength>32</BitLength>
+            <Channel>2</Channel>
+          </ModbusSlaveItem>
+          <ModbusSlaveItem Name="c_RL0" Class="Amit.Ngs.Core.NgsModbusSlaveCoil">
+            <RegMbus>0</RegMbus>
+            <Comment>DO0 - zápis</Comment>
+            <Id>18</Id>
+            <Channel>2</Channel>
+          </ModbusSlaveItem>
+          <ModbusSlaveItem Name="c_RL1" Class="Amit.Ngs.Core.NgsModbusSlaveCoil">
+            <RegMbus>1</RegMbus>
+            <Comment>DO1 - zápis</Comment>
+            <Id>19</Id>
+            <Channel>2</Channel>
+          </ModbusSlaveItem>
+          <ModbusSlaveItem Name="di_DI0" Class="Amit.Ngs.Core.NgsModbusSlaveDirectInput">
+            <RegMbus>0</RegMbus>
+            <Comment>DAI0 - stav</Comment>
+            <Id>20</Id>
+            <Channel>2</Channel>
+          </ModbusSlaveItem>
+          <ModbusSlaveItem Name="di_DI1" Class="Amit.Ngs.Core.NgsModbusSlaveDirectInput">
+            <RegMbus>1</RegMbus>
+            <Comment>DAI1 - stav</Comment>
+            <Id>21</Id>
+            <Channel>2</Channel>
+          </ModbusSlaveItem>
+        </ModbusSlaveItemList>
+      </Object>
+      <ReferenceId>
+        <RefItem Name="App.SystemLedActivity" IdO="1" IdP="0" Type="8" />
+        <RefItem Name="App.ColdStart" IdO="1" IdP="1" Type="8" ReadOnly="true" />
+        <RefItem Name="App.ActualLanguage" IdO="1" IdP="2" Type="13" />
+        <RefItem Name="IO.DI0" IdO="5" IdP="0" Type="8" ReadOnly="true" />
+        <RefItem Name="IO.DI1" IdO="5" IdP="1" Type="8" ReadOnly="true" />
+        <RefItem Name="IO.RL0" IdO="5" IdP="2" Type="8" />
+        <RefItem Name="IO.RL1" IdO="5" IdP="3" Type="8" />
+        <RefItem Name="IO.Ni0" IdO="5" IdP="4" Type="3" ReadOnly="true" />
+        <RefItem Name="IO.Ni1" IdO="5" IdP="5" Type="3" ReadOnly="true" />
+        <RefItem Name="ProcessInit.ExecutionTime" IdO="6" IdP="1" Type="15" ReadOnly="true" />
+        <RefItem Name="Process1.Period" IdO="7" IdP="0" Type="15" />
+        <RefItem Name="Process1.ExecutionTime" IdO="7" IdP="1" Type="15" ReadOnly="true" />
+        <RefItem Name="Process1.ExecutionTimeMax" IdO="7" IdP="2" Type="15" />
+        <RefItem Name="Process1.Offset" IdO="7" IdP="3" Type="15" />
+        <RefItem Name="Process1.MaxPeriod" IdO="7" IdP="4" Type="15" />
+        <RefItem Name="Process1.Avg10Period" IdO="7" IdP="5" Type="15" ReadOnly="true" />
+        <RefItem Name="ModbusSlave.Address" IdO="8" IdP="0" Type="11" />
+        <RefItem Name="ModbusSlave.ModbusParity" IdO="8" IdP="3" Type="1" />
+        <RefItem Name="ModbusSlave.BaudRate" IdO="8" IdP="4" Type="2" />
+        <RefItem Name="ModbusSlave.State" IdO="8" IdP="5" Type="8" ReadOnly="true" />
+        <RefItem Name="ModbusSlave.Connect" IdO="8" IdP="6" Type="8" ReadOnly="true" />
+        <RefItem Name="ModbusSlave.Incoming" IdO="8" IdP="7" Type="15" />
+        <RefItem Name="ModbusSlave.Outgoing" IdO="8" IdP="8" Type="15" />
+        <RefItem Name="Ram.$SYS_RTC.Value" IdO="9" IdP="0" Type="0" ReadOnly="true" Var="true" />
+        <RefItem Name="ModbusSlave.hr_UI_Ni0.Value" IdO="10" IdP="0" Type="3" Var="true" />
+        <RefItem Name="ModbusSlave.hr_UI_Ni1.Value" IdO="11" IdP="0" Type="3" Var="true" />
+        <RefItem Name="ModbusSlave.hr_RL.Value" IdO="13" IdP="0" Type="13" Var="true" />
+        <RefItem Name="ModbusSlave.hr_DAI.Value" IdO="14" IdP="0" Type="13" Var="true" />
+        <RefItem Name="ModbusSlave.ir_DAI.Value" IdO="15" IdP="0" Type="13" Var="true" />
+        <RefItem Name="ModbusSlave.ir_UI_Ni0.Value" IdO="16" IdP="0" Type="13" Var="true" />
+        <RefItem Name="ModbusSlave.ir_UI_Ni1.Value" IdO="17" IdP="0" Type="13" Var="true" />
+        <RefItem Name="ModbusSlave.c_RL0.Value" IdO="18" IdP="0" Type="8" Var="true" />
+        <RefItem Name="ModbusSlave.c_RL1.Value" IdO="19" IdP="0" Type="8" Var="true" />
+        <RefItem Name="ModbusSlave.di_DI0.Value" IdO="20" IdP="0" Type="8" Var="true" />
+        <RefItem Name="ModbusSlave.di_DI1.Value" IdO="21" IdP="0" Type="8" Var="true" />
+      </ReferenceId>
+      <DteData>
+        <EndOfLineCR>False</EndOfLineCR>
+        <EndOfLineLF>False</EndOfLineLF>
+        <Increment>10</Increment>
+        <Formaty>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>0</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="OK" />
+            <Text Lang="cs-CZ" Text="Žádná chyba" />
+            <Comment>OK</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>16</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="nos" />
+            <Text Lang="cs-CZ" Text="Zavedení operačního systému" />
+            <Comment>Zavedení operačního systému</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>17</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="nos" />
+            <Text Lang="cs-CZ" Text="Studeny start síťového zavaděče" />
+            <Comment>Studeny start síťového zavaděče</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>18</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="nos" />
+            <Text Lang="cs-CZ" Text="Teplý start síťového zavaděče (výpadek: %T)" />
+            <Comment>Teplý start síťového zavaděče</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>19</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="nos" />
+            <Text Lang="cs-CZ" Text="Studený start aplikace" />
+            <Comment>Studený start aplikace</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>20</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="nos" />
+            <Text Lang="cs-CZ" Text="Teplý start aplikace (výpadek: %T)" />
+            <Comment>Teplý start aplikace</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>21</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="nos" />
+            <Text Lang="cs-CZ" Text="Chyba procesoru: %0sw" />
+            <Comment>Chyba procesoru</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>22</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="nos" />
+            <Text Lang="cs-CZ" Text="Zápis do zakázané paměti" />
+            <Comment>Zápis do zakázané paměti</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>23</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="nos" />
+            <Text Lang="cs-CZ" Text="Interní chyba řadiče přerušení, adr.: %d" />
+            <Comment>Interní chyba řadiče přerušení</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>24</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="eth" />
+            <Text Lang="cs-CZ" Text="Rozhraní č. %0w (karta %gh typ %sl" />
+            <Comment>Stav rozhraní Ethernet</Comment>
+            <DWTabulka>EthState</DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>25</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="nos" />
+            <Text Lang="cs-CZ" Text="Použití neexistujícího COM-portu %0i" />
+            <Comment>Použití neexistujícího COM-portu</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>32</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="Db" />
+            <Text Lang="cs-CZ" Text="WID %0i neexistuje." />
+            <Comment>Neplatný WID proměnné</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>33</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="Db" />
+            <Text Lang="cs-CZ" Text="Neplatný handle proměnné %0w" />
+            <Comment>Neplatný vnitřní identifikátor proměnné</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>34</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="Db" />
+            <Text Lang="cs-CZ" Text="Neplatný typ %1sw proměnné %0i" />
+            <Comment>Neplatný typ proměnné</Comment>
+            <DWTabulka>Typy</DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>35</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="Db" />
+            <Text Lang="cs-CZ" Text="Neplatný řádek %1w proměnné %0w" />
+            <Comment>Neplatný řádek proměnné</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>36</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="Db" />
+            <Text Lang="cs-CZ" Text="Neplatný sloupec %1w proměnné %0w" />
+            <Comment>Neplatný sloupec proměnné</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>37</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="Db" />
+            <Text Lang="cs-CZ" Text="Neplatný počet řádků %1w proměnné %0w" />
+            <Comment>Neplatný počet řádků proměnné</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>38</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="Db" />
+            <Text Lang="cs-CZ" Text="Neplatný počet sloupců %1w proměnné %0w" />
+            <Comment>Neplatný počet sloupců proměnné</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>39</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="nos" />
+            <Text Lang="cs-CZ" Text="Nedostatek paměti" />
+            <Comment>Nedostatek paměti</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>40</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="aeg" />
+            <Text Lang="cs-CZ" Text="Špatný 1/4h pulz, délka: %t" />
+            <Comment>Špatný 1/4h pulz při měření odběru el.energie</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>32772</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="val" />
+            <Text Lang="cs-CZ" Text="U ventilu %0w - %1w jsou oba dva KS sepnuty" />
+            <Comment>U ventilu jsou oba koncové spínače sepnuté</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>32773</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="val" />
+            <Text Lang="cs-CZ" Text="U ventilu %0w - %1w jsou oba dva KS v pořádku" />
+            <Comment>U ventilu jsou oba koncové spínače v pořádku</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>32774</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="val" />
+            <Text Lang="cs-CZ" Text="Ventil %0w - %1w nedojel na KS OTEVRENO" />
+            <Comment>Ventil nedojel v časovém limitu na koncový spínač OTEVŘENO</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>32775</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="val" />
+            <Text Lang="cs-CZ" Text="Ventil %0w - %1w nedojel na KS ZAVRENO" />
+            <Comment>Ventil nedojel v časovém limitu na koncový spínač OTEVŘENO</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>32776</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="val" />
+            <Text Lang="cs-CZ" Text="Ventil %0w - %1w dojel na KS OTEVRENO" />
+            <Comment>Ventil dojel na koncový spínač OTEVŘENO</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>32777</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="val" />
+            <Text Lang="cs-CZ" Text="Ventil %0w - %1w dojel na KS ZAVRENO" />
+            <Comment>Ventil dojel na koncový spínač ZAVŘENO</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>32800</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="lcd" />
+            <Text Lang="cs-CZ" Text="Nelze vložit čtecí požadavek do buferu %sl" />
+            <Comment>Nelze vložit čtecí požadavek</Comment>
+            <DWTabulka>Bufer</DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>32801</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="lcd" />
+            <Text Lang="cs-CZ" Text="Nelze vložit zápisový požadavek do buferu %sl" />
+            <Comment>Nelze vložit zápisový požadavek</Comment>
+            <DWTabulka>Bufer</DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>32802</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="lcd" />
+            <Text Lang="cs-CZ" Text="Přihlášení uživatele %0w" />
+            <Comment>Přihlášení uživatele</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>32803</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="lcd" />
+            <Text Lang="cs-CZ" Text="Odhlašení uživatele %0w" />
+            <Comment>Odhlášení uživatele</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>50</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="esi" />
+            <Text Lang="cs-CZ" Text="Studený start aplikace" />
+            <Comment>Studený start aplikace</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>51</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="esi" />
+            <Text Lang="cs-CZ" Text="Teplý start aplikace (výpadek: %T)" />
+            <Comment>Teplý start aplikace</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>52</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="esi" />
+            <Text Lang="cs-CZ" Text="Chyba inicializace RTOS %w" />
+            <Comment>Chyba inicializace RTOS</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>53</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="esi" />
+            <Text Lang="cs-CZ" Text="Chybný uživatelský zápis do provozního deníku %w" />
+            <Comment>Chybný zápis do provozního deníku</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>54</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="esi" />
+            <Text Lang="cs-CZ" Text="Přístup na neplatný index matice (%w, %l, %w)" />
+            <Comment>Přístup na neplatný index matice</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+        </Formaty>
+        <Tabulky>
+          <Tabulka Class="Amit.DetStudio.Shared.DteTable">
+            <Nazev>Bufer</Nazev>
+            <Comment>Buffer (Systémová tabulka)</Comment>
+            <Typ>Long</Typ>
+            <Polozky>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>0</Dolni>
+                <Horni>0</Horni>
+                <Text Lang="cs-CZ" Text="NOSu" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>65536</Dolni>
+                <Horni>65536</Horni>
+                <Text Lang="cs-CZ" Text="LCDSHELLu" />
+              </Polozka>
+            </Polozky>
+          </Tabulka>
+          <Tabulka Class="Amit.DetStudio.Shared.DteTable">
+            <Nazev>EthState</Nazev>
+            <Comment>Stav rozhraní Ethernet (sytémová tabulka)</Comment>
+            <Typ>Long</Typ>
+            <Polozky>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>131072</Dolni>
+                <Horni>131072</Horni>
+                <Text Lang="cs-CZ" Text="AD-ETH100) stav 10Mb/s, poloduplex" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>131073</Dolni>
+                <Horni>131073</Horni>
+                <Text Lang="cs-CZ" Text="AD-ETH100) stav 10Mb/s, plnýduplex" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>131076</Dolni>
+                <Horni>131076</Horni>
+                <Text Lang="cs-CZ" Text="AD-ETH100) stav 100Mb/s, poloduplex" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>131077</Dolni>
+                <Horni>131077</Horni>
+                <Text Lang="cs-CZ" Text="AD-ETH100) stav 100Mb/s, plný duplex" />
+              </Polozka>
+            </Polozky>
+          </Tabulka>
+          <Tabulka Class="Amit.DetStudio.Shared.DteTable">
+            <Nazev>Procesor</Nazev>
+            <Comment>Chyby procesoru (sytémová tabulka)</Comment>
+            <Typ>Long</Typ>
+            <Polozky>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>0</Dolni>
+                <Horni>0</Horni>
+                <Text Lang="cs-CZ" Text="Přetečení uživ./CP zásobníku" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>1</Dolni>
+                <Horni>1</Horni>
+                <Text Lang="cs-CZ" Text="Nedefinovaný kód instrukce" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>2</Dolni>
+                <Horni>2</Horni>
+                <Text Lang="cs-CZ" Text="Zakázaná instrukce" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>3</Dolni>
+                <Horni>3</Horni>
+                <Text Lang="cs-CZ" Text="Špatný typ operandu instrukce" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>4</Dolni>
+                <Horni>4</Horni>
+                <Text Lang="cs-CZ" Text="Špatná adresa dat" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>5</Dolni>
+                <Horni>5</Horni>
+                <Text Lang="cs-CZ" Text="Špatný přístup na sběrnici procesoru" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>6</Dolni>
+                <Horni>6</Horni>
+                <Text Lang="cs-CZ" Text="Přetečení zásobníku procesoru" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>7</Dolni>
+                <Horni>7</Horni>
+                <Text Lang="cs-CZ" Text="Podtečení zásobníku procesoru" />
+              </Polozka>
+            </Polozky>
+          </Tabulka>
+          <Tabulka Class="Amit.DetStudio.Shared.DteTable">
+            <Nazev>Typy</Nazev>
+            <Comment>Databázové typy (sytémová tabulka)</Comment>
+            <Typ>Long</Typ>
+            <Polozky>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>0</Dolni>
+                <Horni>0</Horni>
+                <Text Lang="cs-CZ" Text="DBT_INT" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>1</Dolni>
+                <Horni>1</Horni>
+                <Text Lang="cs-CZ" Text="DBT_LONG" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>2</Dolni>
+                <Horni>2</Horni>
+                <Text Lang="cs-CZ" Text="DBT_FLOAT" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>3</Dolni>
+                <Horni>3</Horni>
+                <Text Lang="cs-CZ" Text="DBT_INTMTX" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>4</Dolni>
+                <Horni>4</Horni>
+                <Text Lang="cs-CZ" Text="DBT_LONGMTX" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>5</Dolni>
+                <Horni>5</Horni>
+                <Text Lang="cs-CZ" Text="DBT_FLOATMTX" />
+              </Polozka>
+            </Polozky>
+          </Tabulka>
+        </Tabulky>
+      </DteData>
+    </Data>
+  </Project>
+</DetStation>

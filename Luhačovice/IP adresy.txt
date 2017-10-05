@@ -1,0 +1,13 @@
+
+veøejná IP plovárny: 178.20.139.189
+
+vnitøní IP:
+DT1: 10.0.0.91, port zvenku 9159
+DT2: 10.0.0.92, port zvenku 9259
+DT3: 10.0.0.93, port zvenku 9359
+DT4: 10.0.0.94, port zvenku 9459
+DT5: 10.0.0.95, port zvenku 9559
+ASEKO Lantronix 1: 10.0.0.96
+ASEKO Lantronix 2: 10.0.0.97
+ASEKO Lantronix 3: 10.0.0.98
+ASEKO Lantronix 4: 10.0.0.99

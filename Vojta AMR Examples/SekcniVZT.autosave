@@ -1,0 +1,3846 @@
+<?xml version="1.0"?>
+<!-- DetStudio project descriptor -->
+<DetStation scheme="0">
+  <guid>d948ed61-a94e-41c1-bf30-cea569f230ef</guid>
+  <!--AMR-OP7x-->
+  <DSversion>1.8.2.23</DSversion>
+  <StationDescriptor>
+    <Version>1.0.25</Version>
+    <Copyright>(c) 2008, AMiT, spol. s r.o.</Copyright>
+    <Comment>Sekční ovládání VZT</Comment>
+    <Author>Vojta</Author>
+    <TridetLink>
+    </TridetLink>
+    <AdresaStanice>1</AdresaStanice>
+    <VersionAutoIncrement>True</VersionAutoIncrement>
+    <PostBuild>
+    </PostBuild>
+    <Sapp>False</Sapp>
+    <EepromClear>False</EepromClear>
+    <Notes><![CDATA[]]></Notes>
+  </StationDescriptor>
+  <ExternalStationManager>
+    <Stations />
+  </ExternalStationManager>
+  <Languages Actual="cs-CZ">
+    <Language ci="cs-CZ" />
+  </Languages>
+  <UserGroups>
+    <UserGroup Name="OBSLUHA" />
+    <UserGroup Name="TECHNOLOG" />
+    <UserGroup Name="PROGRAMATOR" />
+  </UserGroups>
+  <Users>
+    <User Name="Neznámý" Group="OBSLUHA" Password="1234" />
+  </Users>
+  <Project Class="Amit.Ngs.Ide.NgsIde">
+    <Data Class="Amit.Ngs.Core.NgsData">
+      <CommunicationProfileManager>
+        <CommunicationProfile Name="New_profile" Class="Amit.Ngs.Core.NgsSerialModbusProfile">
+          <Baudrate>38400</Baudrate>
+          <SerialPort>COM9</SerialPort>
+          <Parity>1</Parity>
+        </CommunicationProfile>
+      </CommunicationProfileManager>
+      <HwDescriptor>
+        <VariableBackup>False</VariableBackup>
+        <Ident1>
+        </Ident1>
+        <Ident2>
+        </Ident2>
+      </HwDescriptor>
+      <Object Name="App" Class="Amit.Ngs.Core.DsGenericObject" Def="App">
+        <Id>0</Id>
+        <Comment>
+        </Comment>
+        <ParentObject>
+        </ParentObject>
+        <Property BindId="0" Value="0" />
+        <Property BindId="1" Value="0" />
+        <Property BindId="2" Value="0" />
+      </Object>
+      <Object Name="PersistentStorage" Class="Amit.Ngs.Core.PersistentMemoryManager" Def="">
+        <Id>0</Id>
+      </Object>
+      <Object Name="Ela" Class="Amit.Ngs.Core.NgsElaStorage" Def="">
+        <Id>0</Id>
+        <ELAStorage />
+      </Object>
+      <Object Name="Ram" Class="Amit.Ngs.Core.NgsLocalVariables" Def="">
+        <Id>0</Id>
+        <Variable Name="$SYS_RTC" Class="Amit.Ngs.Core.NgsLocalVar" Def="">
+          <ParentObject>Ram</ParentObject>
+          <Id>0</Id>
+          <Typ>9</Typ>
+        </Variable>
+        <LocalVariableList>
+          <Variable Name="TeplPrivod" Class="Amit.Ngs.Core.NgsLocalVar" Def="">
+            <Comment>Teplota přívod, měřená</Comment>
+            <Id>0</Id>
+            <Typ>3</Typ>
+          </Variable>
+          <Variable Name="TeplProstor" Class="Amit.Ngs.Core.NgsLocalVar" Def="">
+            <Comment>Teplota prostorová</Comment>
+            <Id>0</Id>
+            <Typ>3</Typ>
+          </Variable>
+          <Variable Name="DI" Class="Amit.Ngs.Core.NgsLocalVar" Def="">
+            <Comment>DI vstupy</Comment>
+            <Id>0</Id>
+            <Typ>2</Typ>
+          </Variable>
+          <Variable Name="RDO" Class="Amit.Ngs.Core.NgsLocalVar" Def="">
+            <Comment>RDO výstupy</Comment>
+            <Id>0</Id>
+            <Typ>2</Typ>
+          </Variable>
+          <Variable Name="TwilightTime" Class="Amit.Ngs.Core.NgsLocalVar" Def="">
+            <Comment>Doba stmívání podsvitu</Comment>
+            <Id>0</Id>
+            <Typ>1</Typ>
+          </Variable>
+          <Variable Name="Contrast" Class="Amit.Ngs.Core.NgsLocalVar" Def="">
+            <Comment>Pomocná proměnná pro nastavení kontrastu</Comment>
+            <Id>0</Id>
+            <Typ>1</Typ>
+          </Variable>
+          <Variable Name="Brightness" Class="Amit.Ngs.Core.NgsLocalVar" Def="">
+            <Comment>Pomocná proměnná pro nastavení jasu</Comment>
+            <Id>0</Id>
+            <Typ>1</Typ>
+          </Variable>
+          <Variable Name="Restart" Class="Amit.Ngs.Core.NgsLocalVar" Def="">
+            <Comment>Příznak restartu</Comment>
+            <Id>0</Id>
+            <Typ>1</Typ>
+          </Variable>
+          <Variable Name="TeplPrivod_temp" Class="Amit.Ngs.Core.NgsLocalVar" Def="">
+            <Comment>Teplota přívod, pomocná</Comment>
+            <Id>0</Id>
+            <Typ>3</Typ>
+          </Variable>
+          <Variable Name="Req" Class="Amit.Ngs.Core.NgsLocalVar" Def="">
+            <Comment>Požadavky...</Comment>
+            <Id>0</Id>
+            <Typ>1</Typ>
+          </Variable>
+          <Variable Name="ComError" Class="Amit.Ngs.Core.NgsLocalVar" Def="">
+            <Comment>Stav komunikace</Comment>
+            <Id>0</Id>
+            <Typ>1</Typ>
+          </Variable>
+          <Variable Name="Klapka" Class="Amit.Ngs.Core.NgsLocalVar" Def="">
+            <Comment>Požadavek na klapku</Comment>
+            <Id>0</Id>
+            <Typ>1</Typ>
+          </Variable>
+          <Variable Name="CounterScr" Class="Amit.Ngs.Core.NgsLocalVar" Def="">
+            <Comment>Pomocná proměnná pro otevření systémové obrazovky</Comment>
+            <Id>0</Id>
+            <Typ>1</Typ>
+          </Variable>
+        </LocalVariableList>
+      </Object>
+      <Object Name="EEprom" Class="Amit.Ngs.Core.NgsEEpromVariables" Def="">
+        <Id>0</Id>
+        <EEpromVariableList>
+          <Variable Name="Brightness" Class="Amit.Ngs.Core.NgsEEpromVar" Def="">
+            <Comment>Jas</Comment>
+            <Id>0</Id>
+            <Typ>1</Typ>
+          </Variable>
+          <Variable Name="ScreenSaverTime" Class="Amit.Ngs.Core.NgsEEpromVar" Def="">
+            <Comment>Čas pro stmívání displeje</Comment>
+            <Id>0</Id>
+            <Typ>1</Typ>
+          </Variable>
+          <Variable Name="TempSenzorCorrection" Class="Amit.Ngs.Core.NgsEEpromVar" Def="">
+            <Comment>Korekce čidla teploty</Comment>
+            <Id>0</Id>
+            <Typ>3</Typ>
+          </Variable>
+          <Variable Name="UserPin" Class="Amit.Ngs.Core.NgsEEpromVar" Def="">
+            <Comment>Uživatelský PIN</Comment>
+            <Id>0</Id>
+            <Typ>1</Typ>
+          </Variable>
+          <Variable Name="TempSenzorCorrection2" Class="Amit.Ngs.Core.NgsEEpromVar" Def="">
+            <Comment>Korekce čidla teploty</Comment>
+            <Id>0</Id>
+            <Typ>3</Typ>
+          </Variable>
+          <Variable Name="Hysteresis" Class="Amit.Ngs.Core.NgsEEpromVar" Def="">
+            <Comment>Hystereze</Comment>
+            <Id>0</Id>
+            <Typ>3</Typ>
+          </Variable>
+          <Variable Name="Setpoint1" Class="Amit.Ngs.Core.NgsEEpromVarMatrix" Def="">
+            <Comment>Zadaná mez teploty (dolní, horní, hystereze)</Comment>
+            <Id>0</Id>
+            <Typ>6</Typ>
+            <DimRow>3</DimRow>
+            <DimCol>1</DimCol>
+          </Variable>
+          <Variable Name="Setpoint2" Class="Amit.Ngs.Core.NgsEEpromVarMatrix" Def="">
+            <Comment>Zadaná mez teploty (dolní, horní, hystereze)</Comment>
+            <Id>0</Id>
+            <Typ>6</Typ>
+            <DimRow>3</DimRow>
+            <DimCol>1</DimCol>
+          </Variable>
+          <Variable Name="AutoVent1" Class="Amit.Ngs.Core.NgsEEpromVarMatrix" Def="">
+            <Comment>Max. doba zavření klapky [min], doba otevření klapky [min]</Comment>
+            <Id>0</Id>
+            <Typ>4</Typ>
+            <DimRow>2</DimRow>
+            <DimCol>1</DimCol>
+          </Variable>
+          <Variable Name="AutoVent2" Class="Amit.Ngs.Core.NgsEEpromVarMatrix" Def="">
+            <Comment>Max. doba zavření klapky [min], doba otevření klapky [min]</Comment>
+            <Id>0</Id>
+            <Typ>4</Typ>
+            <DimRow>2</DimRow>
+            <DimCol>1</DimCol>
+          </Variable>
+        </EEpromVariableList>
+      </Object>
+      <Object Name="IO" Class="Amit.Ngs.Core.HwAmrOP7x" Def="HwAmrOP7x">
+        <Id>0</Id>
+        <AIconfig0>6180</AIconfig0>
+      </Object>
+      <Object Name="Process1" Class="Amit.Ngs.Core.NgsProcessPeriod" Def="Process">
+        <Id>0</Id>
+        <Body Class="Amit.Ngs.Core.NgsCodeBodyText"><![CDATA[//zpoždění po restartu
+TimerOnRestart.Exec(Ram.Restart.0);
+if (TimerOnRestart.Out) then
+	Ram.Restart.0 = false;
+endif;
+
+//načtení a filtrace teploty v potrubí
+Ram.TeplPrivod_temp = Filtr1R1.Output(ModbusAmr1.AI0);
+if (Ram.Restart.0) then
+	Ram.TeplPrivod = ModbusAmr1.AI0 + EEprom.TempSenzorCorrection2;
+else
+	Ram.TeplPrivod = Ram.TeplPrivod_temp + EEprom.TempSenzorCorrection2;
+endif;
+
+Ram.TeplProstor = IO.DeviceTemperature + EEprom.TempSenzorCorrection;
+
+//Místnost 3D měření
+//horní mez
+if (Ram.TeplPrivod > (EEprom.Setpoint1[1,0] + EEprom.Setpoint1[2,0]*0.5)) then
+	Ram.Req.0 = false;
+else
+	if (Ram.TeplPrivod < (EEprom.Setpoint1[1,0] - EEprom.Setpoint1[2,0]*0.5)) then
+		Ram.Req.0 = true;
+	endif;
+endif;
+//dolní mez
+if (Ram.TeplPrivod < (EEprom.Setpoint1[0,0] - EEprom.Setpoint1[2,0]*0.5)) then
+	Ram.Req.1 = false;
+else
+	if (Ram.TeplPrivod > (EEprom.Setpoint1[0,0] + EEprom.Setpoint1[2,0]*0.5)) then
+		Ram.Req.1 = true;
+	endif;
+endif;
+
+//Místnost TPV
+//horní mez
+if (Ram.TeplPrivod > (EEprom.Setpoint2[1,0] + EEprom.Setpoint2[2,0]*0.5)) then
+	Ram.Req.2 = false;
+else
+	if (Ram.TeplPrivod < (EEprom.Setpoint2[1,0] - EEprom.Setpoint2[2,0]*0.5)) then
+		Ram.Req.2 = true;
+	endif;
+endif;
+//dolní mez
+if (Ram.TeplPrivod < (EEprom.Setpoint2[0,0] - EEprom.Setpoint2[2,0]*0.5)) then
+	Ram.Req.3 = false;
+else
+	if (Ram.TeplPrivod > (EEprom.Setpoint2[0,0] + EEprom.Setpoint2[2,0]*0.5)) then
+		Ram.Req.3 = true;
+	endif;
+endif;
+
+//provětrávání 3DM
+Ram.Req.4 = not Ram.Klapka.0 and (TimerPulse1.PulseLenght > 0);
+TimerOn1.Exec(Ram.Req.4);
+TimerPulse1.Exec(TimerOn1.Out);
+
+//provětrávání TPV
+Ram.Req.5 = not Ram.Klapka.1 and (TimerPulse2.PulseLenght > 0);
+TimerOn2.Exec(Ram.Req.5);
+TimerPulse2.Exec(TimerOn2.Out);
+
+//klapka 3DM
+Ram.Klapka.0 = not Ram.Restart.0 and ((Ram.Req.0 and Ram.Req.1) or (TimerPulse1.Out));
+Ram.RDO.0 = Ram.Klapka.0;
+
+//klapka TPV
+Ram.Klapka.1 = not Ram.Restart.0 and ((Ram.Req.2 and Ram.Req.3) or (TimerPulse2.Out));
+Ram.RDO.1 = Ram.Klapka.1;
+
+//požadavek na VZT
+Ram.RDO.2 = Ram.RDO.0 or Ram.RDO.1;
+
+ModbusAmr1.RDO = Ram.RDO;
+
+//stav komunikace
+Ram.ComError = ModBusMaster.Disconnected;
+]]><Regions /></Body>
+        <Period>200</Period>
+        <Offset>0</Offset>
+        <Priority>1</Priority>
+      </Object>
+      <Object Name="ProcessInit" Class="Amit.Ngs.Core.NgsProcessInit" Def="ProcessInit">
+        <Id>0</Id>
+        <Body Class="Amit.Ngs.Core.NgsCodeBodyText"><![CDATA[	//Restart
+Ram.Restart.0 = true;]]><Regions /></Body>
+      </Object>
+      <Object Name="DateTime" Class="Amit.Ngs.Core.DsGenericObject" Def="DateTime">
+        <Id>0</Id>
+        <Comment>
+        </Comment>
+        <ParentObject>
+        </ParentObject>
+        <Property BindId="0" Value="0" />
+        <Property BindId="1" Value="0" />
+        <Property BindId="2" Value="0" />
+        <Property BindId="3" Value="0" />
+        <Property BindId="4" Value="0" />
+        <Property BindId="5" Value="0" />
+        <Property BindId="6" Value="0" />
+        <Property BindId="7" Value="0" />
+        <Property BindId="8" Value="0" />
+        <Property BindId="9" Value="1" />
+        <Property BindId="10" Value="1" />
+      </Object>
+      <Object Name="ModbusMaster" Class="Amit.Ngs.Core.DsModbusMaster" Def="ModbusMaster">
+        <Id>0</Id>
+        <Baudrate>38400</Baudrate>
+        <TORecive>45</TORecive>
+        <SerialPort>0</SerialPort>
+        <Parity>1</Parity>
+      </Object>
+      <Object Name="ModbusAmr1" Class="Amit.Ngs.Core.DsAmrDriver" Def="ModbusAmr">
+        <ParentObject>ModbusMaster</ParentObject>
+        <Id>0</Id>
+        <ModbusRegistrsCount>302</ModbusRegistrsCount>
+        <ModbusStatusRegister>2</ModbusStatusRegister>
+        <ModbusGuardTime>30000</ModbusGuardTime>
+        <Address>2</Address>
+        <SBDriverItemList>
+          <SBDriverItem Name="AI_Type" Class="Amit.Ngs.Core.NgsSBDriverIntReg">
+            <RegMbus>300</RegMbus>
+            <Id>0</Id>
+            <Priority>2</Priority>
+            <Function>16</Function>
+            <Offset>0</Offset>
+            <BitLength>32</BitLength>
+          </SBDriverItem>
+          <SBDriverItem Name="DI" Class="Amit.Ngs.Core.NgsSBDriverIntReg">
+            <RegMbus>100</RegMbus>
+            <Id>0</Id>
+            <Priority>2</Priority>
+            <Function>16</Function>
+            <Offset>0</Offset>
+            <BitLength>32</BitLength>
+          </SBDriverItem>
+          <SBDriverItem Name="AI0" Class="Amit.Ngs.Core.NgsSBDriverFloatReg">
+            <RegMbus>110</RegMbus>
+            <Id>0</Id>
+            <Priority>2</Priority>
+            <Function>16</Function>
+          </SBDriverItem>
+          <SBDriverItem Name="AI1" Class="Amit.Ngs.Core.NgsSBDriverFloatReg">
+            <RegMbus>112</RegMbus>
+            <Id>0</Id>
+            <Priority>2</Priority>
+            <Function>16</Function>
+          </SBDriverItem>
+          <SBDriverItem Name="RDO" Class="Amit.Ngs.Core.NgsSBDriverIntReg">
+            <RegMbus>200</RegMbus>
+            <Id>0</Id>
+            <Priority>2</Priority>
+            <Function>16</Function>
+            <Offset>0</Offset>
+            <BitLength>32</BitLength>
+          </SBDriverItem>
+          <SBDriverItem Name="TYO" Class="Amit.Ngs.Core.NgsSBDriverIntReg">
+            <RegMbus>202</RegMbus>
+            <Id>0</Id>
+            <Priority>2</Priority>
+            <Function>16</Function>
+            <Offset>0</Offset>
+            <BitLength>32</BitLength>
+          </SBDriverItem>
+        </SBDriverItemList>
+      </Object>
+      <Object Name="Filtr1R1" Class="Amit.Ngs.Core.DsGenericObject" Def="Filtr1R">
+        <Id>0</Id>
+        <Comment>
+        </Comment>
+        <ParentObject>
+        </ParentObject>
+        <Property BindId="0" Value="5" />
+      </Object>
+      <Object Name="Hyst1" Class="Amit.Ngs.Core.DsGenericObject" Def="Hyst">
+        <Id>0</Id>
+        <Comment>
+        </Comment>
+        <ParentObject>
+        </ParentObject>
+        <Property BindId="0" Value="0" />
+        <Property BindId="1" Value="0" />
+      </Object>
+      <Object Name="TimerOnRestart" Class="Amit.Ngs.Core.DsGenericObject" Def="TimerOn">
+        <Id>0</Id>
+        <Comment>
+        </Comment>
+        <ParentObject>
+        </ParentObject>
+        <Property BindId="0" Value="20000" />
+        <Property BindId="1" Value="0" />
+        <Property BindId="2" Value="0" />
+      </Object>
+      <Object Name="TimerOn1" Class="Amit.Ngs.Core.DsGenericObject" Def="TimerOn">
+        <Id>0</Id>
+        <Comment>
+        </Comment>
+        <ParentObject>
+        </ParentObject>
+        <Property BindId="0" Value="1000" />
+        <Property BindId="1" Value="0" />
+        <Property BindId="2" Value="0" />
+      </Object>
+      <Object Name="TimerPulse1" Class="Amit.Ngs.Core.DsGenericObject" Def="TimerPulse">
+        <Id>0</Id>
+        <Comment>
+        </Comment>
+        <ParentObject>
+        </ParentObject>
+        <Property BindId="0" Value="1000" />
+        <Property BindId="1" Value="0" />
+        <Property BindId="2" Value="0" />
+      </Object>
+      <Object Name="TimerPulse2" Class="Amit.Ngs.Core.DsGenericObject" Def="TimerPulse">
+        <Id>0</Id>
+        <Comment>
+        </Comment>
+        <ParentObject>
+        </ParentObject>
+        <Property BindId="0" Value="1000" />
+        <Property BindId="1" Value="0" />
+        <Property BindId="2" Value="0" />
+      </Object>
+      <Object Name="TimerOn2" Class="Amit.Ngs.Core.DsGenericObject" Def="TimerOn">
+        <Id>0</Id>
+        <Comment>
+        </Comment>
+        <ParentObject>
+        </ParentObject>
+        <Property BindId="0" Value="1000" />
+        <Property BindId="1" Value="0" />
+        <Property BindId="2" Value="0" />
+      </Object>
+      <ReferenceId>
+        <RefItem Name="App.SystemLedActivity" IdO="0" IdP="0" Type="8" />
+        <RefItem Name="App.ColdStart" IdO="0" IdP="1" Type="8" ReadOnly="true" />
+        <RefItem Name="App.ActualLanguage" IdO="0" IdP="2" Type="13" />
+        <RefItem Name="IO.DeviceTemperature" IdO="0" IdP="0" Type="3" ReadOnly="true" />
+        <RefItem Name="IO.ExternalTemperature" IdO="0" IdP="1" Type="3" ReadOnly="true" />
+        <RefItem Name="IO.Vbatt" IdO="0" IdP="2" Type="3" ReadOnly="true" />
+        <RefItem Name="Process1.Period" IdO="0" IdP="0" Type="15" />
+        <RefItem Name="Process1.ExecutionTime" IdO="0" IdP="1" Type="15" ReadOnly="true" />
+        <RefItem Name="Process1.ExecutionTimeMax" IdO="0" IdP="2" Type="15" />
+        <RefItem Name="Process1.Offset" IdO="0" IdP="3" Type="15" />
+        <RefItem Name="Process1.MaxPeriod" IdO="0" IdP="4" Type="15" />
+        <RefItem Name="Process1.Avg10Period" IdO="0" IdP="5" Type="15" ReadOnly="true" />
+        <RefItem Name="ProcessInit.ExecutionTime" IdO="0" IdP="1" Type="15" ReadOnly="true" />
+        <RefItem Name="DateTime.NowLong" IdO="0" IdP="0" Type="2" />
+        <RefItem Name="DateTime.Day" IdO="0" IdP="1" Type="1" ReadOnly="true" />
+        <RefItem Name="DateTime.Month" IdO="0" IdP="2" Type="1" ReadOnly="true" />
+        <RefItem Name="DateTime.Year" IdO="0" IdP="3" Type="1" ReadOnly="true" />
+        <RefItem Name="DateTime.Hour" IdO="0" IdP="4" Type="1" ReadOnly="true" />
+        <RefItem Name="DateTime.Minute" IdO="0" IdP="5" Type="1" ReadOnly="true" />
+        <RefItem Name="DateTime.Second" IdO="0" IdP="6" Type="1" ReadOnly="true" />
+        <RefItem Name="DateTime.DayOfWeek" IdO="0" IdP="7" Type="1" ReadOnly="true" />
+        <RefItem Name="DateTime.SecondsOfDay" IdO="0" IdP="8" Type="2" ReadOnly="true" />
+        <RefItem Name="DateTime.DaylightSavingTime" IdO="0" IdP="9" Type="8" />
+        <RefItem Name="DateTime.TimeZone" IdO="0" IdP="10" Type="13" />
+        <RefItem Name="ModbusMaster.ModbusParity" IdO="0" IdP="1" Type="1" />
+        <RefItem Name="ModbusMaster.BaudRate" IdO="0" IdP="2" Type="2" />
+        <RefItem Name="ModbusMaster.Disconnected" IdO="0" IdP="3" Type="8" ReadOnly="true" />
+        <RefItem Name="ModbusMaster.FrameOkCounter" IdO="0" IdP="4" Type="15" />
+        <RefItem Name="ModbusMaster.FrameErrorCounter" IdO="0" IdP="5" Type="15" />
+        <RefItem Name="ModbusAmr1.Disconnected" IdO="0" IdP="0" Type="8" ReadOnly="true" />
+        <RefItem Name="Filtr1R1.T" IdO="0" IdP="0" Type="3" />
+        <RefItem Name="Hyst1.Hysteresis" IdO="0" IdP="0" Type="3" />
+        <RefItem Name="Hyst1.Limit" IdO="0" IdP="1" Type="3" />
+        <RefItem Name="TimerOnRestart.Delay" IdO="0" IdP="0" Type="15" />
+        <RefItem Name="TimerOnRestart.ElapsedTime" IdO="0" IdP="1" Type="15" ReadOnly="true" />
+        <RefItem Name="TimerOnRestart.Out" IdO="0" IdP="2" Type="8" ReadOnly="true" />
+        <RefItem Name="TimerOn1.Delay" IdO="0" IdP="0" Type="15" />
+        <RefItem Name="TimerOn1.ElapsedTime" IdO="0" IdP="1" Type="15" ReadOnly="true" />
+        <RefItem Name="TimerOn1.Out" IdO="0" IdP="2" Type="8" ReadOnly="true" />
+        <RefItem Name="TimerPulse1.PulseLenght" IdO="0" IdP="0" Type="15" />
+        <RefItem Name="TimerPulse1.ElapsedTime" IdO="0" IdP="1" Type="15" ReadOnly="true" />
+        <RefItem Name="TimerPulse1.Out" IdO="0" IdP="2" Type="8" ReadOnly="true" />
+        <RefItem Name="TimerPulse2.PulseLenght" IdO="0" IdP="0" Type="15" />
+        <RefItem Name="TimerPulse2.ElapsedTime" IdO="0" IdP="1" Type="15" ReadOnly="true" />
+        <RefItem Name="TimerPulse2.Out" IdO="0" IdP="2" Type="8" ReadOnly="true" />
+        <RefItem Name="TimerOn2.Delay" IdO="0" IdP="0" Type="15" />
+        <RefItem Name="TimerOn2.ElapsedTime" IdO="0" IdP="1" Type="15" ReadOnly="true" />
+        <RefItem Name="TimerOn2.Out" IdO="0" IdP="2" Type="8" ReadOnly="true" />
+        <RefItem Name="Ram.$SYS_RTC.Value" IdO="0" IdP="0" Type="0" ReadOnly="true" Var="true" />
+        <RefItem Name="Ram.TeplPrivod.Value" IdO="0" IdP="0" Type="3" Var="true" />
+        <RefItem Name="Ram.TeplProstor.Value" IdO="0" IdP="0" Type="3" Var="true" />
+        <RefItem Name="Ram.DI.Value" IdO="0" IdP="0" Type="2" Var="true" />
+        <RefItem Name="Ram.RDO.Value" IdO="0" IdP="0" Type="2" Var="true" />
+        <RefItem Name="Ram.TwilightTime.Value" IdO="0" IdP="0" Type="1" Var="true" />
+        <RefItem Name="Ram.Contrast.Value" IdO="0" IdP="0" Type="1" Var="true" />
+        <RefItem Name="Ram.Brightness.Value" IdO="0" IdP="0" Type="1" Var="true" />
+        <RefItem Name="Ram.Restart.Value" IdO="0" IdP="0" Type="1" Var="true" />
+        <RefItem Name="Ram.TeplPrivod_temp.Value" IdO="0" IdP="0" Type="3" Var="true" />
+        <RefItem Name="Ram.Req.Value" IdO="0" IdP="0" Type="1" Var="true" />
+        <RefItem Name="Ram.ComError.Value" IdO="0" IdP="0" Type="1" Var="true" />
+        <RefItem Name="Ram.Klapka.Value" IdO="0" IdP="0" Type="1" Var="true" />
+        <RefItem Name="Ram.CounterScr.Value" IdO="0" IdP="0" Type="1" Var="true" />
+        <RefItem Name="EEprom.Brightness.Value" IdO="0" IdP="0" Type="1" Var="true" />
+        <RefItem Name="EEprom.ScreenSaverTime.Value" IdO="0" IdP="0" Type="1" Var="true" />
+        <RefItem Name="EEprom.TempSenzorCorrection.Value" IdO="0" IdP="0" Type="3" Var="true" />
+        <RefItem Name="EEprom.UserPin.Value" IdO="0" IdP="0" Type="1" Var="true" />
+        <RefItem Name="EEprom.TempSenzorCorrection2.Value" IdO="0" IdP="0" Type="3" Var="true" />
+        <RefItem Name="EEprom.Hysteresis.Value" IdO="0" IdP="0" Type="3" Var="true" />
+        <RefItem Name="EEprom.Setpoint1.Value" IdO="0" IdP="0" Type="6" DimRow="3" DimCol="1" Var="true" />
+        <RefItem Name="EEprom.Setpoint1.DimRow" IdO="0" IdP="1" Type="13" ReadOnly="true" Var="true" />
+        <RefItem Name="EEprom.Setpoint1.DimCol" IdO="0" IdP="2" Type="13" ReadOnly="true" Var="true" />
+        <RefItem Name="EEprom.Setpoint2.Value" IdO="0" IdP="0" Type="6" DimRow="3" DimCol="1" Var="true" />
+        <RefItem Name="EEprom.Setpoint2.DimRow" IdO="0" IdP="1" Type="13" ReadOnly="true" Var="true" />
+        <RefItem Name="EEprom.Setpoint2.DimCol" IdO="0" IdP="2" Type="13" ReadOnly="true" Var="true" />
+        <RefItem Name="EEprom.AutoVent1.Value" IdO="0" IdP="0" Type="4" DimRow="2" DimCol="1" Var="true" />
+        <RefItem Name="EEprom.AutoVent1.DimRow" IdO="0" IdP="1" Type="13" ReadOnly="true" Var="true" />
+        <RefItem Name="EEprom.AutoVent1.DimCol" IdO="0" IdP="2" Type="13" ReadOnly="true" Var="true" />
+        <RefItem Name="EEprom.AutoVent2.Value" IdO="0" IdP="0" Type="4" DimRow="2" DimCol="1" Var="true" />
+        <RefItem Name="EEprom.AutoVent2.DimRow" IdO="0" IdP="1" Type="13" ReadOnly="true" Var="true" />
+        <RefItem Name="EEprom.AutoVent2.DimCol" IdO="0" IdP="2" Type="13" ReadOnly="true" Var="true" />
+        <RefItem Name="ModbusAmr1.AI_Type.Value" IdO="0" IdP="0" Type="2" Var="true" />
+        <RefItem Name="ModbusAmr1.DI.Value" IdO="0" IdP="0" Type="2" Var="true" />
+        <RefItem Name="ModbusAmr1.AI0.Value" IdO="0" IdP="0" Type="3" Var="true" />
+        <RefItem Name="ModbusAmr1.AI1.Value" IdO="0" IdP="0" Type="3" Var="true" />
+        <RefItem Name="ModbusAmr1.RDO.Value" IdO="0" IdP="0" Type="2" Var="true" />
+        <RefItem Name="ModbusAmr1.TYO.Value" IdO="0" IdP="0" Type="2" Var="true" />
+      </ReferenceId>
+      <DteData>
+        <EndOfLineCR>False</EndOfLineCR>
+        <EndOfLineLF>False</EndOfLineLF>
+        <Increment>10</Increment>
+        <Formaty />
+        <Tabulky />
+      </DteData>
+    </Data>
+  </Project>
+  <Project Class="Amit.Lcw.LcwIde">
+    <Data Class="Amit.Lcw.Shared.LcwProject">
+      <Platform>AMR_OP7x</Platform>
+      <LastRevised>0</LastRevised>
+      <SerialPort>0</SerialPort>
+      <BaudRate>9600</BaudRate>
+      <FullDuplex>0</FullDuplex>
+      <ScrollBarWidth>7</ScrollBarWidth>
+      <StartupScreen>S_Start</StartupScreen>
+      <ColdResetStartupScreen>S_Start</ColdResetStartupScreen>
+      <Orientation>1</Orientation>
+      <InitialZoom>3</InitialZoom>
+      <FocusStyle>0</FocusStyle>
+      <BlinkInEdit>True</BlinkInEdit>
+      <FontDefault>Tridet 7</FontDefault>
+      <GlobalScreen>
+        <Screen Name="Global" Class="Amit.Lcw.Shared.LcwGlobalScreen">
+          <DisplayType>4</DisplayType>
+          <Refresh>1000</Refresh>
+          <Comment>
+          </Comment>
+          <BackColor>LightGrey</BackColor>
+          <ForeColor>Black</ForeColor>
+          <Zoom>3</Zoom>
+          <GridSize>0,0</GridSize>
+          <DrawGrid>True</DrawGrid>
+          <OnOpen>
+          </OnOpen>
+          <OnClose>
+          </OnClose>
+          <OnRefresh>
+          </OnRefresh>
+          <Elements>
+            <Control Name="ScreenSaver1" Class="Amit.Lcw.Lib.General.ScreenSaver">
+              <Enabled>False</Enabled>
+              <SwitchOffDisplay>False</SwitchOffDisplay>
+              <Permission>3,3,3</Permission>
+              <Interval>30</Interval>
+              <Variable>
+              </Variable>
+              <OnActivated>
+              </OnActivated>
+              <OnDeactivated>
+              </OnDeactivated>
+            </Control>
+            <Control Name="Timer1" Class="Amit.Lcw.Lib.General.Timer">
+              <Enabled>False</Enabled>
+              <Permission>3,3,3</Permission>
+              <Interval>10000</Interval>
+              <OnTick>
+              </OnTick>
+            </Control>
+          </Elements>
+          <Script><![CDATA[event ScreenSaver1_OnActivated()
+	Application.Brightness = 0;
+	S_ScreenSaver.Show();
+end;
+
+event Timer1_OnTick()
+	//Odchod z editačního režimu po uplynutí času
+	Application.SendKey(keys.Esc);
+end;]]></Script>
+          <BackgroundImage />
+        </Screen>
+      </GlobalScreen>
+      <ScreenList>
+        <Screen Name="S_Brightness" Class="Amit.Lcw.Shared.LcwScreen">
+          <DisplayType>4</DisplayType>
+          <Refresh>1000</Refresh>
+          <Comment>Jas</Comment>
+          <BackColor>#CBD7E7</BackColor>
+          <ForeColor>#1F375D</ForeColor>
+          <Zoom>3</Zoom>
+          <GridSize>0,0</GridSize>
+          <DrawGrid>True</DrawGrid>
+          <OnOpen>
+          </OnOpen>
+          <OnClose>
+          </OnClose>
+          <OnRefresh>
+          </OnRefresh>
+          <Elements>
+            <Control Name="Shape1" Class="Amit.Lcw.Lib.General.Shape">
+              <Loc>8,15</Loc>
+              <Size>18,82</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>1</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>8</TabIndex>
+              <Shape>0</Shape>
+              <FillStyle>3</FillStyle>
+              <FillColor>#E6EAAA</FillColor>
+            </Control>
+            <Control Name="Label1" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>2,2</Loc>
+              <Size>60,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>0</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Jas" />
+            </Control>
+            <Control Name="Button3" Class="Amit.Lcw.Lib.General.Button">
+              <Loc>31,15</Loc>
+              <Size>30,40</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>1</TabIndex>
+              <ImageAlignment>32</ImageAlignment>
+              <BorderStyle>1</BorderStyle>
+              <AutoSize>False</AutoSize>
+              <ImageData Compress="True">
+              </ImageData>
+              <ImageDataDown Compress="True">
+              </ImageDataDown>
+              <ImageDataDisable Compress="True">
+              </ImageDataDisable>
+              <OnDown>OnButtonDown</OnDown>
+              <OnPress>
+              </OnPress>
+              <OnUp>
+              </OnUp>
+              <Text Lang="cs-CZ" Text="+" />
+            </Control>
+            <Control Name="Button4" Class="Amit.Lcw.Lib.General.Button">
+              <Loc>31,57</Loc>
+              <Size>30,40</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>2</TabIndex>
+              <ImageAlignment>32</ImageAlignment>
+              <BorderStyle>1</BorderStyle>
+              <AutoSize>False</AutoSize>
+              <ImageData Compress="True">
+              </ImageData>
+              <ImageDataDown Compress="True">
+              </ImageDataDown>
+              <ImageDataDisable Compress="True">
+              </ImageDataDisable>
+              <OnDown>
+              </OnDown>
+              <OnPress>
+              </OnPress>
+              <OnUp>
+              </OnUp>
+              <Text Lang="cs-CZ" Text="-" />
+            </Control>
+            <Control Name="ProgressBar1" Class="Amit.Lcw.Lib.General.ProgressBar">
+              <Loc>9,16</Loc>
+              <Size>16,80</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>1</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>3</TabIndex>
+              <Variable>
+              </Variable>
+              <Min>0</Min>
+              <Max>100</Max>
+              <Style>0</Style>
+              <Value>25</Value>
+            </Control>
+            <Control Name="Button1" Class="Amit.Lcw.Lib.General.Button">
+              <Loc>34,104</Loc>
+              <Size>30,25</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>10</TabIndex>
+              <ImageAlignment>32</ImageAlignment>
+              <BorderStyle>1</BorderStyle>
+              <AutoSize>False</AutoSize>
+              <ImageData Compress="True">
+              </ImageData>
+              <ImageDataDown Compress="True">
+              </ImageDataDown>
+              <ImageDataDisable Compress="True">
+              </ImageDataDisable>
+              <OnDown>
+              </OnDown>
+              <OnPress>
+              </OnPress>
+              <OnUp>
+              </OnUp>
+              <Text Lang="cs-CZ" Text="OK" />
+            </Control>
+            <Control Name="Button2" Class="Amit.Lcw.Lib.General.Button">
+              <Loc>0,104</Loc>
+              <Size>30,25</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>9</TabIndex>
+              <ImageAlignment>32</ImageAlignment>
+              <BorderStyle>1</BorderStyle>
+              <AutoSize>False</AutoSize>
+              <ImageData Compress="True">
+              </ImageData>
+              <ImageDataDown Compress="True">
+              </ImageDataDown>
+              <ImageDataDisable Compress="True">
+              </ImageDataDisable>
+              <OnDown>
+              </OnDown>
+              <OnPress>
+              </OnPress>
+              <OnUp>
+              </OnUp>
+              <Text Lang="cs-CZ" Text="Esc" />
+            </Control>
+          </Elements>
+          <Script><![CDATA[event S_Brightness_OnOpen()
+	//cz// Aktuální hodnota jasu.
+	//en// Actual value of brightness.
+	ProgressBar1.Value = Application.Brightness;
+	Ram.Brightness = Application.Brightness;
+end;
+
+//cz// Inkrementace jasu.
+//en// Brightness increment.
+event Button3_OnButtonPress()
+	if ProgressBar1.Value < 100 then
+		ProgressBar1.Value = ProgressBar1.Value + 10;
+	else
+		ProgressBar1.Value = 100;
+	endif;
+	Application.Brightness = ProgressBar1.Value;
+end;
+
+//cz// Dekrementace jasu.
+//en// Brightness decrement.
+event Button4_OnButtonPress()
+	if ProgressBar1.Value > 0 then
+		ProgressBar1.Value = ProgressBar1.Value - 10;
+	else
+		ProgressBar1.Value = 0;
+	endif;
+	Application.Brightness = ProgressBar1.Value;	
+end;
+
+//cz// Uložení hodnoty jasu.
+//en// Storage brightness value.
+event Button1_OnButtonDown()
+	EEprom.Brightness = ProgressBar1.Value;
+	S_UserMenu.Show();
+end;
+
+//cz// Návrat beze změny.
+//en// Cancel changes.
+event Button2_OnButtonDown()
+	Application.Brightness = Ram.Brightness;
+	S_UserMenu.Show();
+end;]]></Script>
+          <BackgroundImage />
+        </Screen>
+        <Screen Name="S_Calib" Class="Amit.Lcw.Shared.LcwScreen">
+          <DisplayType>4</DisplayType>
+          <Refresh>1000</Refresh>
+          <Comment>Kalibrace...</Comment>
+          <BackColor>#CBD7E7</BackColor>
+          <ForeColor>#1F375D</ForeColor>
+          <Zoom>3</Zoom>
+          <GridSize>0,0</GridSize>
+          <DrawGrid>True</DrawGrid>
+          <OnOpen>
+          </OnOpen>
+          <OnClose>
+          </OnClose>
+          <OnRefresh>
+          </OnRefresh>
+          <Elements>
+            <Control Name="Adjuster1" Class="Amit.Lcw.Lib.General.Adjuster">
+              <Loc>0,0</Loc>
+              <Size>64,132</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>1</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>0</TabIndex>
+              <TextStep1 Lang="cs-CZ" Text="Přidrž + !" />
+              <TextStep2 Lang="cs-CZ" Text="Přidrž + !" />
+              <TextComplete Lang="cs-CZ" Text="Potvrď !" />
+            </Control>
+          </Elements>
+          <Script><![CDATA[event S_Calib_OnOpen()
+	S_Calib.FocusFirstControl();
+end;
+event Adjuster1_OnComplete()
+	S_SystMenu.Show();
+end;
+event Adjuster1_OnCancel()
+	S_Calib_Fail.Show();
+end;]]></Script>
+          <BackgroundImage />
+        </Screen>
+        <Screen Name="S_Calib_Fail" Class="Amit.Lcw.Shared.LcwScreen">
+          <DisplayType>4</DisplayType>
+          <Refresh>1000</Refresh>
+          <Comment>Kalibrace KO</Comment>
+          <BackColor>#CBD7E7</BackColor>
+          <ForeColor>#1F375D</ForeColor>
+          <Zoom>3</Zoom>
+          <GridSize>0,0</GridSize>
+          <DrawGrid>True</DrawGrid>
+          <OnOpen>
+          </OnOpen>
+          <OnClose>
+          </OnClose>
+          <OnRefresh>
+          </OnRefresh>
+          <Elements>
+            <Control Name="Label1" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,8</Loc>
+              <Size>64,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>0</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Kalibrace" />
+            </Control>
+            <Control Name="Label2" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,20</Loc>
+              <Size>64,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>1</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="selhala" />
+            </Control>
+            <Control Name="Button1" Class="Amit.Lcw.Lib.General.Button">
+              <Loc>2,104</Loc>
+              <Size>60,25</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>1</TabIndex>
+              <ImageAlignment>32</ImageAlignment>
+              <BorderStyle>1</BorderStyle>
+              <AutoSize>False</AutoSize>
+              <ImageData Compress="True">
+              </ImageData>
+              <ImageDataDown Compress="True">
+              </ImageDataDown>
+              <ImageDataDisable Compress="True">
+              </ImageDataDisable>
+              <OnDown>
+              </OnDown>
+              <OnPress>
+              </OnPress>
+              <OnUp>
+              </OnUp>
+              <Text Lang="cs-CZ" Text="Návrat" />
+            </Control>
+          </Elements>
+          <Script><![CDATA[event S_Calib_Fail_OnOpen()
+	S_Calib_Fail.FocusFirstControl();
+end;
+event Button1_OnButtonDown()
+	S_SystMenu.Show();
+end;]]></Script>
+          <BackgroundImage />
+        </Screen>
+        <Screen Name="S_Contrast" Class="Amit.Lcw.Shared.LcwScreen">
+          <DisplayType>4</DisplayType>
+          <Refresh>1000</Refresh>
+          <Comment>Kontrast</Comment>
+          <BackColor>#CBD7E7</BackColor>
+          <ForeColor>#1F375D</ForeColor>
+          <Zoom>3</Zoom>
+          <GridSize>0,0</GridSize>
+          <DrawGrid>True</DrawGrid>
+          <OnOpen>
+          </OnOpen>
+          <OnClose>
+          </OnClose>
+          <OnRefresh>
+          </OnRefresh>
+          <Elements>
+            <Control Name="Shape1" Class="Amit.Lcw.Lib.General.Shape">
+              <Loc>8,15</Loc>
+              <Size>18,82</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>1</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>8</TabIndex>
+              <Shape>0</Shape>
+              <FillStyle>3</FillStyle>
+              <FillColor>#E6EAAA</FillColor>
+            </Control>
+            <Control Name="Label1" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>2,2</Loc>
+              <Size>60,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>0</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Kontrast" />
+            </Control>
+            <Control Name="Button3" Class="Amit.Lcw.Lib.General.Button">
+              <Loc>31,15</Loc>
+              <Size>30,40</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>1</TabIndex>
+              <ImageAlignment>32</ImageAlignment>
+              <BorderStyle>1</BorderStyle>
+              <AutoSize>False</AutoSize>
+              <ImageData Compress="True">
+              </ImageData>
+              <ImageDataDown Compress="True">
+              </ImageDataDown>
+              <ImageDataDisable Compress="True">
+              </ImageDataDisable>
+              <OnDown>OnButtonDown</OnDown>
+              <OnPress>
+              </OnPress>
+              <OnUp>
+              </OnUp>
+              <Text Lang="cs-CZ" Text="+" />
+            </Control>
+            <Control Name="Button4" Class="Amit.Lcw.Lib.General.Button">
+              <Loc>31,57</Loc>
+              <Size>30,40</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>2</TabIndex>
+              <ImageAlignment>32</ImageAlignment>
+              <BorderStyle>1</BorderStyle>
+              <AutoSize>False</AutoSize>
+              <ImageData Compress="True">
+              </ImageData>
+              <ImageDataDown Compress="True">
+              </ImageDataDown>
+              <ImageDataDisable Compress="True">
+              </ImageDataDisable>
+              <OnDown>
+              </OnDown>
+              <OnPress>
+              </OnPress>
+              <OnUp>
+              </OnUp>
+              <Text Lang="cs-CZ" Text="-" />
+            </Control>
+            <Control Name="ProgressBar1" Class="Amit.Lcw.Lib.General.ProgressBar">
+              <Loc>9,16</Loc>
+              <Size>16,80</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>1</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>3</TabIndex>
+              <Variable>
+              </Variable>
+              <Min>0</Min>
+              <Max>100</Max>
+              <Style>0</Style>
+              <Value>25</Value>
+            </Control>
+            <Control Name="Button1" Class="Amit.Lcw.Lib.General.Button">
+              <Loc>34,104</Loc>
+              <Size>30,25</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>10</TabIndex>
+              <ImageAlignment>32</ImageAlignment>
+              <BorderStyle>1</BorderStyle>
+              <AutoSize>False</AutoSize>
+              <ImageData Compress="True">
+              </ImageData>
+              <ImageDataDown Compress="True">
+              </ImageDataDown>
+              <ImageDataDisable Compress="True">
+              </ImageDataDisable>
+              <OnDown>
+              </OnDown>
+              <OnPress>
+              </OnPress>
+              <OnUp>
+              </OnUp>
+              <Text Lang="cs-CZ" Text="OK" />
+            </Control>
+            <Control Name="Button2" Class="Amit.Lcw.Lib.General.Button">
+              <Loc>0,104</Loc>
+              <Size>30,25</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>9</TabIndex>
+              <ImageAlignment>32</ImageAlignment>
+              <BorderStyle>1</BorderStyle>
+              <AutoSize>False</AutoSize>
+              <ImageData Compress="True">
+              </ImageData>
+              <ImageDataDown Compress="True">
+              </ImageDataDown>
+              <ImageDataDisable Compress="True">
+              </ImageDataDisable>
+              <OnDown>
+              </OnDown>
+              <OnPress>
+              </OnPress>
+              <OnUp>
+              </OnUp>
+              <Text Lang="cs-CZ" Text="Esc" />
+            </Control>
+          </Elements>
+          <Script><![CDATA[event S_Contrast_OnOpen()
+	//cz// Aktuální hodnota kontrastu.
+	//en// Actual value of contrast.
+	ProgressBar1.Value = Application.Contrast;
+	Ram.Contrast = Application.Contrast;
+end;
+
+//cz// Inkrementace kontrastu.
+//en// Contrast increment.
+event Button3_OnButtonPress()
+	if ProgressBar1.Value < 100 then
+		ProgressBar1.Value = ProgressBar1.Value + 10;
+	else
+		ProgressBar1.Value = 100;
+	endif;
+	Application.Contrast = ProgressBar1.Value;
+end;
+
+//cz// Dekrementace komtrastu.
+//en// Contrast decrement.
+event Button4_OnButtonPress()
+	if ProgressBar1.Value > 0 then
+		ProgressBar1.Value = ProgressBar1.Value - 10;
+	else
+		ProgressBar1.Value = 0;
+	endif;
+	Application.Contrast = ProgressBar1.Value;
+end;
+
+//cz// Uložení hodnoty kontrastu.
+//en// Storage contrast value.
+event Button1_OnButtonDown()
+	S_UserMenu.Show();
+end;
+
+//cz// Návrat beze změny.
+//en// Cancel changes.
+event Button2_OnButtonDown()
+	Application.Contrast = Ram.Contrast;	
+	S_UserMenu.Show();
+end;]]></Script>
+          <BackgroundImage />
+        </Screen>
+        <Screen Name="S_DispSet" Class="Amit.Lcw.Shared.LcwScreen">
+          <DisplayType>4</DisplayType>
+          <Refresh>1000</Refresh>
+          <Comment>Screen saver nastavení</Comment>
+          <BackColor>#CBD7E7</BackColor>
+          <ForeColor>#1F375D</ForeColor>
+          <Zoom>3</Zoom>
+          <GridSize>0,0</GridSize>
+          <DrawGrid>True</DrawGrid>
+          <OnOpen>
+          </OnOpen>
+          <OnClose>
+          </OnClose>
+          <OnRefresh>
+          </OnRefresh>
+          <Elements>
+            <Control Name="Label1" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,0</Loc>
+              <Size>64,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>0</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Čas" />
+            </Control>
+            <Control Name="Label2" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,10</Loc>
+              <Size>64,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>0</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="stmívání" />
+            </Control>
+            <Control Name="NumericView1" Class="Amit.Lcw.Lib.General.NumericView">
+              <Loc>18,40</Loc>
+              <Size>26,11</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>64</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>6</TabIndex>
+              <Format>###</Format>
+              <CustomFormat>
+              </CustomFormat>
+              <Variable>
+              </Variable>
+              <Value>0</Value>
+              <SmartFloatFormat>False</SmartFloatFormat>
+              <UnitText>
+              </UnitText>
+            </Control>
+            <Control Name="Button4" Class="Amit.Lcw.Lib.General.Button">
+              <Loc>0,70</Loc>
+              <Size>30,25</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>7</TabIndex>
+              <ImageAlignment>32</ImageAlignment>
+              <BorderStyle>1</BorderStyle>
+              <AutoSize>False</AutoSize>
+              <ImageData Compress="True">
+              </ImageData>
+              <ImageDataDown Compress="True">
+              </ImageDataDown>
+              <ImageDataDisable Compress="True">
+              </ImageDataDisable>
+              <OnDown>
+              </OnDown>
+              <OnPress>
+              </OnPress>
+              <OnUp>
+              </OnUp>
+              <Text Lang="cs-CZ" Text="-" />
+            </Control>
+            <Control Name="Button3" Class="Amit.Lcw.Lib.General.Button">
+              <Loc>34,70</Loc>
+              <Size>30,25</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>8</TabIndex>
+              <ImageAlignment>32</ImageAlignment>
+              <BorderStyle>1</BorderStyle>
+              <AutoSize>False</AutoSize>
+              <ImageData Compress="True">
+              </ImageData>
+              <ImageDataDown Compress="True">
+              </ImageDataDown>
+              <ImageDataDisable Compress="True">
+              </ImageDataDisable>
+              <OnDown>
+              </OnDown>
+              <OnPress>
+              </OnPress>
+              <OnUp>
+              </OnUp>
+              <Text Lang="cs-CZ" Text="+" />
+            </Control>
+            <Control Name="Button2" Class="Amit.Lcw.Lib.General.Button">
+              <Loc>0,104</Loc>
+              <Size>30,25</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>9</TabIndex>
+              <ImageAlignment>32</ImageAlignment>
+              <BorderStyle>1</BorderStyle>
+              <AutoSize>False</AutoSize>
+              <ImageData Compress="True">
+              </ImageData>
+              <ImageDataDown Compress="True">
+              </ImageDataDown>
+              <ImageDataDisable Compress="True">
+              </ImageDataDisable>
+              <OnDown>
+              </OnDown>
+              <OnPress>
+              </OnPress>
+              <OnUp>
+              </OnUp>
+              <Text Lang="cs-CZ" Text="Esc" />
+            </Control>
+            <Control Name="Button1" Class="Amit.Lcw.Lib.General.Button">
+              <Loc>34,104</Loc>
+              <Size>30,25</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>10</TabIndex>
+              <ImageAlignment>32</ImageAlignment>
+              <BorderStyle>1</BorderStyle>
+              <AutoSize>False</AutoSize>
+              <ImageData Compress="True">
+              </ImageData>
+              <ImageDataDown Compress="True">
+              </ImageDataDown>
+              <ImageDataDisable Compress="True">
+              </ImageDataDisable>
+              <OnDown>
+              </OnDown>
+              <OnPress>
+              </OnPress>
+              <OnUp>
+              </OnUp>
+              <Text Lang="cs-CZ" Text="OK" />
+            </Control>
+          </Elements>
+          <Script><![CDATA[event S_DispSet_OnOpen()
+	//cz// Aktuální doba spořiče obrazovky.
+	//en// Actual screensaver delay.
+	NumericView1.Value = EEprom.ScreenSaverTime;
+end;
+
+//cz// Inkrementace doby.
+//en// Screensaver delay increment.
+event Button3_OnButtonPress()
+	if NumericView1.Value == -1 then
+		NumericView1.Value = 10;
+	else
+		if NumericView1.Value < 120 then	
+			NumericView1.Value = NumericView1.Value + 1;
+		endif;
+	endif;
+end;
+
+//cz// Dekrementace doby.
+//en// Screensaver delay decrement.
+event Button4_OnButtonPress()
+	if NumericView1.Value == 10 then
+		NumericView1.Value = -1;
+	endif;
+	if NumericView1.Value > 10 then
+		NumericView1.Value = NumericView1.Value -1;
+	endif;
+end;
+
+//cz// Uložení doby spořiče obrazovky.
+//en// Storage screensaver delay.
+event Button1_OnButtonDown()
+	EEprom.ScreenSaverTime = NumericView1.Value; 
+	Global.ScreenSaver1.Value = NumericView1.Value;
+	S_UserMenu.Show();
+end;
+
+//cz// Návrat beze změny.
+//en// Cancel changes.
+event Button2_OnButtonDown()
+	S_UserMenu.Show();	
+end;]]></Script>
+          <BackgroundImage />
+        </Screen>
+        <Screen Name="S_EnterNewPIN" Class="Amit.Lcw.Shared.LcwScreen">
+          <DisplayType>4</DisplayType>
+          <Refresh>1000</Refresh>
+          <Comment>Zadání nového PINu</Comment>
+          <BackColor>#CBD7E7</BackColor>
+          <ForeColor>#1F375D</ForeColor>
+          <Zoom>3</Zoom>
+          <GridSize>0,0</GridSize>
+          <DrawGrid>True</DrawGrid>
+          <OnOpen>
+          </OnOpen>
+          <OnClose>
+          </OnClose>
+          <OnRefresh>
+          </OnRefresh>
+          <Elements>
+            <Control Name="Label1" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>4,0</Loc>
+              <Size>50,12</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>AF Aw 9 Regular</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>0</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Starý PIN:" />
+            </Control>
+            <Control Name="Button1" Class="Amit.Lcw.Lib.General.Button">
+              <Loc>34,104</Loc>
+              <Size>30,25</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>10</TabIndex>
+              <ImageAlignment>32</ImageAlignment>
+              <BorderStyle>1</BorderStyle>
+              <AutoSize>False</AutoSize>
+              <ImageData Compress="True">
+              </ImageData>
+              <ImageDataDown Compress="True">
+              </ImageDataDown>
+              <ImageDataDisable Compress="True">
+              </ImageDataDisable>
+              <OnDown>
+              </OnDown>
+              <OnPress>
+              </OnPress>
+              <OnUp>
+              </OnUp>
+              <Text Lang="cs-CZ" Text="OK" />
+            </Control>
+            <Control Name="Button2" Class="Amit.Lcw.Lib.General.Button">
+              <Loc>0,104</Loc>
+              <Size>30,25</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>9</TabIndex>
+              <ImageAlignment>32</ImageAlignment>
+              <BorderStyle>1</BorderStyle>
+              <AutoSize>False</AutoSize>
+              <ImageData Compress="True">
+              </ImageData>
+              <ImageDataDown Compress="True">
+              </ImageDataDown>
+              <ImageDataDisable Compress="True">
+              </ImageDataDisable>
+              <OnDown>
+              </OnDown>
+              <OnPress>
+              </OnPress>
+              <OnUp>
+              </OnUp>
+              <Text Lang="cs-CZ" Text="Esc" />
+            </Control>
+            <Control Name="PinEnter1" Class="Amit.Lcw.Lib.General.PinEnter">
+              <Loc>4,16</Loc>
+              <Size>52,15</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>64</Alignment>
+              <Dock>0</Dock>
+              <Border>True</Border>
+              <TabIndex>2</TabIndex>
+              <OnEditComplete>
+              </OnEditComplete>
+              <OnEditCanceled>
+              </OnEditCanceled>
+              <OnEditBegin>
+              </OnEditBegin>
+              <StartEdit>0</StartEdit>
+              <AfterEdit>0</AfterEdit>
+              <SysEditor>2</SysEditor>
+            </Control>
+            <Control Name="Label2" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>4,32</Loc>
+              <Size>50,12</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>AF Aw 9 Regular</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>0</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Nový PIN:" />
+            </Control>
+            <Control Name="PinEnter2" Class="Amit.Lcw.Lib.General.PinEnter">
+              <Loc>4,48</Loc>
+              <Size>52,15</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>64</Alignment>
+              <Dock>0</Dock>
+              <Border>True</Border>
+              <TabIndex>1</TabIndex>
+              <OnEditComplete>
+              </OnEditComplete>
+              <OnEditCanceled>
+              </OnEditCanceled>
+              <OnEditBegin>
+              </OnEditBegin>
+              <StartEdit>0</StartEdit>
+              <AfterEdit>0</AfterEdit>
+              <SysEditor>2</SysEditor>
+            </Control>
+            <Control Name="Label3" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>4,64</Loc>
+              <Size>56,12</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>AF Aw 9 Regular</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>0</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Potrvrď PIN:" />
+            </Control>
+            <Control Name="PinEnter3" Class="Amit.Lcw.Lib.General.PinEnter">
+              <Loc>4,80</Loc>
+              <Size>52,15</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>64</Alignment>
+              <Dock>0</Dock>
+              <Border>True</Border>
+              <TabIndex>0</TabIndex>
+              <OnEditComplete>
+              </OnEditComplete>
+              <OnEditCanceled>
+              </OnEditCanceled>
+              <OnEditBegin>
+              </OnEditBegin>
+              <StartEdit>0</StartEdit>
+              <AfterEdit>0</AfterEdit>
+              <SysEditor>2</SysEditor>
+            </Control>
+          </Elements>
+          <Script><![CDATA[event S_EnterNewPIN_OnOpen()
+	//cz// Aktuální varianta.
+	//en// Actual variation.
+end;
+
+//cz// Uložení zvolené varianty.
+//en// Storage chosen variation.
+event Button1_OnButtonDown()
+	if (PinEnter1.Value == EEprom.UserPin) then
+		if (PinEnter2.Value == PinEnter3.Value) then
+			EEprom.UserPin = PinEnter2.Value;
+			//Změna PINu OK
+			S_NewPINstatus.Memory1.Value=0;
+			S_NewPINstatus.Show();
+		else
+			//Špatný nový PIN
+			S_NewPINstatus.Memory1.Value=2;
+			S_NewPINstatus.Show();
+		endif;
+	else
+		//Špatný starý PIN
+		S_NewPINstatus.Memory1.Value=1;
+		S_NewPINstatus.Show();
+	endif;
+end;
+
+//cz// Návrat beze změny.
+//en// Cancel changes.
+event Button2_OnButtonDown()
+	S_UserMenu.Show();
+end;]]></Script>
+          <BackgroundImage />
+        </Screen>
+        <Screen Name="S_Main_User" Class="Amit.Lcw.Shared.LcwScreen">
+          <DisplayType>4</DisplayType>
+          <Refresh>1000</Refresh>
+          <Comment>Nastavení parametrů</Comment>
+          <BackColor>#CBD7E7</BackColor>
+          <ForeColor>#1F375D</ForeColor>
+          <Zoom>3</Zoom>
+          <GridSize>0,0</GridSize>
+          <DrawGrid>True</DrawGrid>
+          <OnOpen>
+          </OnOpen>
+          <OnClose>
+          </OnClose>
+          <OnRefresh>
+          </OnRefresh>
+          <Elements>
+            <Control Name="Button1" Class="Amit.Lcw.Lib.General.Button">
+              <Loc>0,0</Loc>
+              <Size>64,16</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>0</TabIndex>
+              <ImageAlignment>32</ImageAlignment>
+              <BorderStyle>2</BorderStyle>
+              <AutoSize>False</AutoSize>
+              <ImageData Compress="True">
+              </ImageData>
+              <ImageDataDown Compress="True">
+              </ImageDataDown>
+              <ImageDataDisable Compress="True">
+              </ImageDataDisable>
+              <OnDown>
+              </OnDown>
+              <OnPress>
+              </OnPress>
+              <OnUp>
+              </OnUp>
+              <Text Lang="cs-CZ" Text="Nast. TPV" />
+            </Control>
+            <Control Name="NumericUpDn1" Class="Amit.Lcw.Lib.General.NumericUpDn">
+              <Loc>25,27</Loc>
+              <Size>38,15</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>64</Alignment>
+              <Dock>0</Dock>
+              <Border>True</Border>
+              <TabIndex>0</TabIndex>
+              <Format>##.#</Format>
+              <CustomFormat>
+              </CustomFormat>
+              <Variable>EEprom.Setpoint1[0,0]</Variable>
+              <Value>22</Value>
+              <SysEditor>3</SysEditor>
+              <ActivationKey>(none)</ActivationKey>
+              <StartEdit>0</StartEdit>
+              <AfterEdit>0</AfterEdit>
+              <Minimum>10</Minimum>
+              <Maximum>35</Maximum>
+              <Wrap>False</Wrap>
+              <OnEditComplete>
+              </OnEditComplete>
+              <OnEditCanceled>
+              </OnEditCanceled>
+              <OnEditBegin>
+              </OnEditBegin>
+              <MajorIncrement>1</MajorIncrement>
+              <MinorIncrement>0.1</MinorIncrement>
+              <UnitText>
+              </UnitText>
+            </Control>
+            <Control Name="Label1" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,16</Loc>
+              <Size>64,12</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>1</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Meze 3DM:" />
+            </Control>
+            <Control Name="Label3" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>4,88</Loc>
+              <Size>22,12</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>AF Aw 9 Regular</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>1</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="ZAV" />
+            </Control>
+            <Control Name="NumericUpDn2" Class="Amit.Lcw.Lib.General.NumericUpDn">
+              <Loc>0,100</Loc>
+              <Size>32,15</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>64</Alignment>
+              <Dock>0</Dock>
+              <Border>True</Border>
+              <TabIndex>1</TabIndex>
+              <Format>###</Format>
+              <CustomFormat>
+              </CustomFormat>
+              <Variable>EEprom.AutoVent1[0,0]</Variable>
+              <Value>30</Value>
+              <SysEditor>3</SysEditor>
+              <ActivationKey>(none)</ActivationKey>
+              <StartEdit>0</StartEdit>
+              <AfterEdit>0</AfterEdit>
+              <Minimum>0</Minimum>
+              <Maximum>999</Maximum>
+              <Wrap>False</Wrap>
+              <OnEditComplete>OnEditComplete</OnEditComplete>
+              <OnEditCanceled>
+              </OnEditCanceled>
+              <OnEditBegin>
+              </OnEditBegin>
+              <MajorIncrement>10</MajorIncrement>
+              <MinorIncrement>1</MinorIncrement>
+              <UnitText>
+              </UnitText>
+            </Control>
+            <Control Name="Label5" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,74</Loc>
+              <Size>66,14</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>AF Al 9 Regular</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>1</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Provětrávání:" />
+            </Control>
+            <Control Name="NumericUpDn3" Class="Amit.Lcw.Lib.General.NumericUpDn">
+              <Loc>32,100</Loc>
+              <Size>32,15</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>64</Alignment>
+              <Dock>0</Dock>
+              <Border>True</Border>
+              <TabIndex>2</TabIndex>
+              <Format>###</Format>
+              <CustomFormat>
+              </CustomFormat>
+              <Variable>EEprom.AutoVent1[1,0]</Variable>
+              <Value>10</Value>
+              <SysEditor>3</SysEditor>
+              <ActivationKey>(none)</ActivationKey>
+              <StartEdit>0</StartEdit>
+              <AfterEdit>0</AfterEdit>
+              <Minimum>0</Minimum>
+              <Maximum>999</Maximum>
+              <Wrap>False</Wrap>
+              <OnEditComplete>
+              </OnEditComplete>
+              <OnEditCanceled>
+              </OnEditCanceled>
+              <OnEditBegin>
+              </OnEditBegin>
+              <MajorIncrement>10</MajorIncrement>
+              <MinorIncrement>1</MinorIncrement>
+              <UnitText>
+              </UnitText>
+            </Control>
+            <Control Name="ButtonScreen1" Class="Amit.Lcw.Lib.General.ButtonScreen">
+              <Loc>0,116</Loc>
+              <Size>64,16</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>3</TabIndex>
+              <ImageAlignment>32</ImageAlignment>
+              <BorderStyle>2</BorderStyle>
+              <AutoSize>False</AutoSize>
+              <ImageData Compress="True">
+              </ImageData>
+              <ImageDataDown Compress="True">
+              </ImageDataDown>
+              <ImageDataDisable Compress="True">
+              </ImageDataDisable>
+              <OnDown>
+              </OnDown>
+              <OnPress>
+              </OnPress>
+              <OnUp>
+              </OnUp>
+              <GoToScreen>S_ScreenSaver</GoToScreen>
+              <Text Lang="cs-CZ" Text="Zpět" />
+            </Control>
+            <Control Name="Label2" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,28</Loc>
+              <Size>23,12</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>AF Aw 9 Regular</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>1</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Dolní:" />
+            </Control>
+            <Control Name="Label4" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,60</Loc>
+              <Size>24,12</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>AF Aw 9 Regular</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>1</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Hyst:" />
+            </Control>
+            <Control Name="NumericUpDn4" Class="Amit.Lcw.Lib.General.NumericUpDn">
+              <Loc>31,59</Loc>
+              <Size>32,15</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>64</Alignment>
+              <Dock>0</Dock>
+              <Border>True</Border>
+              <TabIndex>3</TabIndex>
+              <Format>#.#</Format>
+              <CustomFormat>
+              </CustomFormat>
+              <Variable>EEprom.Setpoint1[2,0]</Variable>
+              <Value>1</Value>
+              <SysEditor>3</SysEditor>
+              <ActivationKey>(none)</ActivationKey>
+              <StartEdit>0</StartEdit>
+              <AfterEdit>0</AfterEdit>
+              <Minimum>0</Minimum>
+              <Maximum>9.9</Maximum>
+              <Wrap>False</Wrap>
+              <OnEditComplete>
+              </OnEditComplete>
+              <OnEditCanceled>
+              </OnEditCanceled>
+              <OnEditBegin>
+              </OnEditBegin>
+              <MajorIncrement>1</MajorIncrement>
+              <MinorIncrement>0.1</MinorIncrement>
+              <UnitText>
+              </UnitText>
+            </Control>
+            <Control Name="Label6" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>36,88</Loc>
+              <Size>21,12</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>AF Aw 9 Regular</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>1</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="OTV" />
+            </Control>
+            <Control Name="NumericUpDn5" Class="Amit.Lcw.Lib.General.NumericUpDn">
+              <Loc>25,43</Loc>
+              <Size>38,15</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>64</Alignment>
+              <Dock>0</Dock>
+              <Border>True</Border>
+              <TabIndex>4</TabIndex>
+              <Format>##.#</Format>
+              <CustomFormat>
+              </CustomFormat>
+              <Variable>EEprom.Setpoint1[1,0]</Variable>
+              <Value>22</Value>
+              <SysEditor>3</SysEditor>
+              <ActivationKey>(none)</ActivationKey>
+              <StartEdit>0</StartEdit>
+              <AfterEdit>0</AfterEdit>
+              <Minimum>10</Minimum>
+              <Maximum>35</Maximum>
+              <Wrap>False</Wrap>
+              <OnEditComplete>
+              </OnEditComplete>
+              <OnEditCanceled>
+              </OnEditCanceled>
+              <OnEditBegin>
+              </OnEditBegin>
+              <MajorIncrement>1</MajorIncrement>
+              <MinorIncrement>0.1</MinorIncrement>
+              <UnitText>
+              </UnitText>
+            </Control>
+            <Control Name="Label7" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,44</Loc>
+              <Size>26,12</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>AF Aw 9 Regular</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>1</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Horní:" />
+            </Control>
+          </Elements>
+          <Script><![CDATA[event S_Main_User_OnOpen()
+	Ram.CounterScr = 0;
+	//cz// Aktivace spořiče displeje.
+	//en// Activation of screensaver.
+	Global.ScreenSaver1.Enabled = true;
+end;
+
+//cz// Zobrazení systémového menu.
+//en// SystemMenu is showed.
+event Button1_OnButtonUp()
+	S_Main_User2.Show();
+end;
+
+event NumericUpDn2_OnEditComplete()
+	TimerOn1.Delay = EEprom.AutoVent1[0,0] * 60000;
+end;
+
+event NumericUpDn3_OnEditComplete()
+	TimerPulse1.PulseLenght = EEprom.AutoVent1[1,0] * 60000;
+end;
+
+event Button1_OnButtonDown()
+end;]]></Script>
+          <BackgroundImage />
+        </Screen>
+        <Screen Name="S_Main_User2" Class="Amit.Lcw.Shared.LcwScreen">
+          <DisplayType>4</DisplayType>
+          <Refresh>1000</Refresh>
+          <Comment>Nastavení parametrů</Comment>
+          <BackColor>#CBD7E7</BackColor>
+          <ForeColor>#1F375D</ForeColor>
+          <Zoom>3</Zoom>
+          <GridSize>0,0</GridSize>
+          <DrawGrid>True</DrawGrid>
+          <OnOpen>
+          </OnOpen>
+          <OnClose>
+          </OnClose>
+          <OnRefresh>
+          </OnRefresh>
+          <Elements>
+            <Control Name="Button1" Class="Amit.Lcw.Lib.General.Button">
+              <Loc>0,0</Loc>
+              <Size>64,16</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>0</TabIndex>
+              <ImageAlignment>32</ImageAlignment>
+              <BorderStyle>2</BorderStyle>
+              <AutoSize>False</AutoSize>
+              <ImageData Compress="True">
+              </ImageData>
+              <ImageDataDown Compress="True">
+              </ImageDataDown>
+              <ImageDataDisable Compress="True">
+              </ImageDataDisable>
+              <OnDown>
+              </OnDown>
+              <OnPress>
+              </OnPress>
+              <OnUp>
+              </OnUp>
+              <Text Lang="cs-CZ" Text="Servis" />
+            </Control>
+            <Control Name="NumericUpDn1" Class="Amit.Lcw.Lib.General.NumericUpDn">
+              <Loc>25,27</Loc>
+              <Size>38,15</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>64</Alignment>
+              <Dock>0</Dock>
+              <Border>True</Border>
+              <TabIndex>0</TabIndex>
+              <Format>##.#</Format>
+              <CustomFormat>
+              </CustomFormat>
+              <Variable>EEprom.Setpoint2[0,0]</Variable>
+              <Value>22</Value>
+              <SysEditor>3</SysEditor>
+              <ActivationKey>(none)</ActivationKey>
+              <StartEdit>0</StartEdit>
+              <AfterEdit>0</AfterEdit>
+              <Minimum>10</Minimum>
+              <Maximum>35</Maximum>
+              <Wrap>False</Wrap>
+              <OnEditComplete>
+              </OnEditComplete>
+              <OnEditCanceled>
+              </OnEditCanceled>
+              <OnEditBegin>
+              </OnEditBegin>
+              <MajorIncrement>1</MajorIncrement>
+              <MinorIncrement>0.1</MinorIncrement>
+              <UnitText>
+              </UnitText>
+            </Control>
+            <Control Name="Label1" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,16</Loc>
+              <Size>64,12</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>1</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Meze TPV:" />
+            </Control>
+            <Control Name="Label3" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>4,88</Loc>
+              <Size>22,12</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>AF Aw 9 Regular</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>1</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="ZAV" />
+            </Control>
+            <Control Name="NumericUpDn2" Class="Amit.Lcw.Lib.General.NumericUpDn">
+              <Loc>0,100</Loc>
+              <Size>32,15</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>64</Alignment>
+              <Dock>0</Dock>
+              <Border>True</Border>
+              <TabIndex>1</TabIndex>
+              <Format>###</Format>
+              <CustomFormat>
+              </CustomFormat>
+              <Variable>EEprom.AutoVent2[0,0]</Variable>
+              <Value>30</Value>
+              <SysEditor>3</SysEditor>
+              <ActivationKey>(none)</ActivationKey>
+              <StartEdit>0</StartEdit>
+              <AfterEdit>0</AfterEdit>
+              <Minimum>0</Minimum>
+              <Maximum>999</Maximum>
+              <Wrap>False</Wrap>
+              <OnEditComplete>OnEditComplete</OnEditComplete>
+              <OnEditCanceled>
+              </OnEditCanceled>
+              <OnEditBegin>
+              </OnEditBegin>
+              <MajorIncrement>10</MajorIncrement>
+              <MinorIncrement>1</MinorIncrement>
+              <UnitText>
+              </UnitText>
+            </Control>
+            <Control Name="Label5" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,74</Loc>
+              <Size>66,14</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>AF Al 9 Regular</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>1</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Provětrávání:" />
+            </Control>
+            <Control Name="NumericUpDn3" Class="Amit.Lcw.Lib.General.NumericUpDn">
+              <Loc>32,100</Loc>
+              <Size>32,15</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>64</Alignment>
+              <Dock>0</Dock>
+              <Border>True</Border>
+              <TabIndex>2</TabIndex>
+              <Format>###</Format>
+              <CustomFormat>
+              </CustomFormat>
+              <Variable>EEprom.AutoVent2[1,0]</Variable>
+              <Value>10</Value>
+              <SysEditor>3</SysEditor>
+              <ActivationKey>(none)</ActivationKey>
+              <StartEdit>0</StartEdit>
+              <AfterEdit>0</AfterEdit>
+              <Minimum>0</Minimum>
+              <Maximum>999</Maximum>
+              <Wrap>False</Wrap>
+              <OnEditComplete>
+              </OnEditComplete>
+              <OnEditCanceled>
+              </OnEditCanceled>
+              <OnEditBegin>
+              </OnEditBegin>
+              <MajorIncrement>10</MajorIncrement>
+              <MinorIncrement>1</MinorIncrement>
+              <UnitText>
+              </UnitText>
+            </Control>
+            <Control Name="ButtonScreen1" Class="Amit.Lcw.Lib.General.ButtonScreen">
+              <Loc>0,116</Loc>
+              <Size>64,16</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>3</TabIndex>
+              <ImageAlignment>32</ImageAlignment>
+              <BorderStyle>2</BorderStyle>
+              <AutoSize>False</AutoSize>
+              <ImageData Compress="True">
+              </ImageData>
+              <ImageDataDown Compress="True">
+              </ImageDataDown>
+              <ImageDataDisable Compress="True">
+              </ImageDataDisable>
+              <OnDown>
+              </OnDown>
+              <OnPress>
+              </OnPress>
+              <OnUp>
+              </OnUp>
+              <GoToScreen>S_Main_User</GoToScreen>
+              <Text Lang="cs-CZ" Text="Zpět" />
+            </Control>
+            <Control Name="Label2" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,28</Loc>
+              <Size>23,12</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>AF Aw 9 Regular</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>1</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Dolní:" />
+            </Control>
+            <Control Name="Label4" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,60</Loc>
+              <Size>24,12</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>AF Aw 9 Regular</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>1</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Hyst:" />
+            </Control>
+            <Control Name="NumericUpDn4" Class="Amit.Lcw.Lib.General.NumericUpDn">
+              <Loc>31,59</Loc>
+              <Size>32,15</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>64</Alignment>
+              <Dock>0</Dock>
+              <Border>True</Border>
+              <TabIndex>3</TabIndex>
+              <Format>#.#</Format>
+              <CustomFormat>
+              </CustomFormat>
+              <Variable>EEprom.Setpoint2[2,0]</Variable>
+              <Value>1</Value>
+              <SysEditor>3</SysEditor>
+              <ActivationKey>(none)</ActivationKey>
+              <StartEdit>0</StartEdit>
+              <AfterEdit>0</AfterEdit>
+              <Minimum>0</Minimum>
+              <Maximum>9.9</Maximum>
+              <Wrap>False</Wrap>
+              <OnEditComplete>
+              </OnEditComplete>
+              <OnEditCanceled>
+              </OnEditCanceled>
+              <OnEditBegin>
+              </OnEditBegin>
+              <MajorIncrement>1</MajorIncrement>
+              <MinorIncrement>0.1</MinorIncrement>
+              <UnitText>
+              </UnitText>
+            </Control>
+            <Control Name="Label6" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>36,88</Loc>
+              <Size>21,12</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>AF Aw 9 Regular</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>1</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="OTV" />
+            </Control>
+            <Control Name="NumericUpDn5" Class="Amit.Lcw.Lib.General.NumericUpDn">
+              <Loc>25,43</Loc>
+              <Size>38,15</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>64</Alignment>
+              <Dock>0</Dock>
+              <Border>True</Border>
+              <TabIndex>4</TabIndex>
+              <Format>##.#</Format>
+              <CustomFormat>
+              </CustomFormat>
+              <Variable>EEprom.Setpoint2[1,0]</Variable>
+              <Value>22</Value>
+              <SysEditor>3</SysEditor>
+              <ActivationKey>(none)</ActivationKey>
+              <StartEdit>0</StartEdit>
+              <AfterEdit>0</AfterEdit>
+              <Minimum>10</Minimum>
+              <Maximum>35</Maximum>
+              <Wrap>False</Wrap>
+              <OnEditComplete>
+              </OnEditComplete>
+              <OnEditCanceled>
+              </OnEditCanceled>
+              <OnEditBegin>
+              </OnEditBegin>
+              <MajorIncrement>1</MajorIncrement>
+              <MinorIncrement>0.1</MinorIncrement>
+              <UnitText>
+              </UnitText>
+            </Control>
+            <Control Name="Label7" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,44</Loc>
+              <Size>26,12</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>AF Aw 9 Regular</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>1</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Horní:" />
+            </Control>
+          </Elements>
+          <Script><![CDATA[event S_Main_User2_OnOpen()
+	Ram.CounterScr = 0;
+	//cz// Aktivace spořiče displeje.
+	//en// Activation of screensaver.
+	Global.ScreenSaver1.Enabled = true;
+end;
+
+//cz// Zobrazení systémového menu.
+//en// SystemMenu is showed.
+event Button1_OnButtonPress()
+	Ram.CounterScr = Ram.CounterScr + 1;
+	if Ram.CounterScr > 50 then	
+		Ram.CounterScr = 0;
+		S_SystMenu.Show();
+	endif;
+end;
+
+//cz// Zobrazení uživatelského menu.
+//en// UserMenu is showed.	
+event Button1_OnButtonUp()
+	Ram.CounterScr = 0;
+	S_UserMenu.Show();
+end;
+
+event NumericUpDn2_OnEditComplete()
+	TimerOn2.Delay = EEprom.AutoVent2[0,0] * 60000;
+end;
+
+event NumericUpDn3_OnEditComplete()
+	TimerPulse2.PulseLenght = EEprom.AutoVent2[1,0] * 60000;
+end;
+
+event Button1_OnButtonDown()
+end;]]></Script>
+          <BackgroundImage />
+        </Screen>
+        <Screen Name="S_NewPinStatus" Class="Amit.Lcw.Shared.LcwScreen">
+          <DisplayType>4</DisplayType>
+          <Refresh>1000</Refresh>
+          <Comment>Potvrzení</Comment>
+          <BackColor>#CBD7E7</BackColor>
+          <ForeColor>#1F375D</ForeColor>
+          <Zoom>3</Zoom>
+          <GridSize>0,0</GridSize>
+          <DrawGrid>True</DrawGrid>
+          <OnOpen>
+          </OnOpen>
+          <OnClose>
+          </OnClose>
+          <OnRefresh>
+          </OnRefresh>
+          <Elements>
+            <Control Name="Label2" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,11</Loc>
+              <Size>0,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>3</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="jazyka" />
+            </Control>
+            <Control Name="Button1" Class="Amit.Lcw.Lib.General.Button">
+              <Loc>16,92</Loc>
+              <Size>30,25</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>10</TabIndex>
+              <ImageAlignment>32</ImageAlignment>
+              <BorderStyle>1</BorderStyle>
+              <AutoSize>False</AutoSize>
+              <ImageData Compress="True">
+              </ImageData>
+              <ImageDataDown Compress="True">
+              </ImageDataDown>
+              <ImageDataDisable Compress="True">
+              </ImageDataDisable>
+              <OnDown>
+              </OnDown>
+              <OnPress>
+              </OnPress>
+              <OnUp>
+              </OnUp>
+              <Text Lang="cs-CZ" Text="OK" />
+            </Control>
+            <Control Name="MultilineLabel2" Class="Amit.Lcw.Lib.General.MultilineLabel">
+              <Loc>0,40</Loc>
+              <Size>64,20</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>2</TabIndex>
+              <ShowScrollBar>False</ShowScrollBar>
+              <Linespacing>1</Linespacing>
+              <Variable>
+              </Variable>
+              <Filename>
+              </Filename>
+              <Text Lang="cs-CZ" Text="Chyba&#xD;&#xA;starý PIN" />
+            </Control>
+            <Control Name="MultilineLabel1" Class="Amit.Lcw.Lib.General.MultilineLabel">
+              <Loc>0,40</Loc>
+              <Size>64,20</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>1</TabIndex>
+              <ShowScrollBar>False</ShowScrollBar>
+              <Linespacing>1</Linespacing>
+              <Variable>
+              </Variable>
+              <Filename>
+              </Filename>
+              <Text Lang="cs-CZ" Text="Změna&#xD;&#xA;PIN OK" />
+            </Control>
+            <Control Name="MultilineLabel3" Class="Amit.Lcw.Lib.General.MultilineLabel">
+              <Loc>0,40</Loc>
+              <Size>64,20</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>0</TabIndex>
+              <ShowScrollBar>False</ShowScrollBar>
+              <Linespacing>1</Linespacing>
+              <Variable>
+              </Variable>
+              <Filename>
+              </Filename>
+              <Text Lang="cs-CZ" Text="Neshoda&#xD;&#xA;nový PIN" />
+            </Control>
+            <Control Name="Memory1" Class="Amit.Lcw.Lib.General.Memory">
+              <Enabled>True</Enabled>
+              <Permission>3,3,3</Permission>
+              <MemoryLocation>0</MemoryLocation>
+            </Control>
+          </Elements>
+          <Script><![CDATA[event S_NewPINstatus_OnOpen()
+	MultilineLabel1.Visible = Memory1.Value == 0;
+	MultilineLabel2.Visible = Memory1.Value == 1;
+	MultilineLabel3.Visible = Memory1.Value == 2;
+end;
+
+event Button1_OnButtonDown()
+	S_UserMenu.Show();
+end;]]></Script>
+          <BackgroundImage />
+        </Screen>
+        <Screen Name="S_Pin" Class="Amit.Lcw.Shared.LcwScreen">
+          <DisplayType>4</DisplayType>
+          <Refresh>1000</Refresh>
+          <Comment>Autorizace</Comment>
+          <BackColor>#CBD7E7</BackColor>
+          <ForeColor>#1F375D</ForeColor>
+          <Zoom>3</Zoom>
+          <GridSize>0,0</GridSize>
+          <DrawGrid>True</DrawGrid>
+          <OnOpen>
+          </OnOpen>
+          <OnClose>
+          </OnClose>
+          <OnRefresh>
+          </OnRefresh>
+          <Elements>
+            <Control Name="PinEnter1" Class="Amit.Lcw.Lib.General.PinEnter">
+              <Loc>12,16</Loc>
+              <Size>36,17</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>ADT 9 Numeric</Font>
+              <Alignment>64</Alignment>
+              <Dock>0</Dock>
+              <Border>True</Border>
+              <TabIndex>0</TabIndex>
+              <OnEditComplete>OnEditComplete</OnEditComplete>
+              <OnEditCanceled>OnEditCanceled</OnEditCanceled>
+              <OnEditBegin>OnEditBegin</OnEditBegin>
+              <StartEdit>1</StartEdit>
+              <AfterEdit>0</AfterEdit>
+              <SysEditor>2</SysEditor>
+            </Control>
+            <Control Name="Label1" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,4</Loc>
+              <Size>60,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>1</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>1</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Zadej PIN:" />
+            </Control>
+          </Elements>
+          <Script><![CDATA[event S_Pin_OnOpen()
+	Global.Timer1.Enabled = true;
+	S_Pin.FocusFirstControl();
+end;
+
+event PinEnter1_OnEditComplete()
+	Global.Timer1.Enabled = false;
+	if (PinEnter1.Value == EEprom.UserPin) then
+		S_Main_User.Show();
+	else
+		S_ScreenSaver.Show();
+	endif;
+end;
+
+event PinEnter1_OnEditCanceled()
+	Global.Timer1.Enabled = false;
+	S_ScreenSaver.Show();
+end;]]></Script>
+          <BackgroundImage />
+        </Screen>
+        <Screen Name="S_ScreenSaver" Class="Amit.Lcw.Shared.LcwScreen">
+          <DisplayType>4</DisplayType>
+          <Refresh>1000</Refresh>
+          <Comment>HLavní obrazovka</Comment>
+          <BackColor>#CBD7E7</BackColor>
+          <ForeColor>#1F375D</ForeColor>
+          <Zoom>3</Zoom>
+          <GridSize>0,0</GridSize>
+          <DrawGrid>True</DrawGrid>
+          <OnOpen>
+          </OnOpen>
+          <OnClose>
+          </OnClose>
+          <OnRefresh>OnRefresh</OnRefresh>
+          <Elements>
+            <Control Name="ImageMap1" Class="Amit.Lcw.Lib.General.ImageMap">
+              <Loc>0,0</Loc>
+              <Size>64,132</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>Transparent</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>1</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>3</TabIndex>
+              <Regions>
+                <Region Text="Region 0">
+                  <Point>0,0</Point>
+                  <Point>62,0</Point>
+                  <Point>62,129</Point>
+                  <Point>0,129</Point>
+                </Region>
+              </Regions>
+              <ImageData Compress="True">
+              </ImageData>
+              <OnRegionTouch0>
+              </OnRegionTouch0>
+              <OnRegionTouch1>
+              </OnRegionTouch1>
+              <OnRegionTouch2>
+              </OnRegionTouch2>
+              <OnRegionTouch3>
+              </OnRegionTouch3>
+              <OnRegionTouch4>
+              </OnRegionTouch4>
+              <OnRegionTouch5>
+              </OnRegionTouch5>
+              <OnRegionTouch6>
+              </OnRegionTouch6>
+              <OnRegionTouch7>
+              </OnRegionTouch7>
+              <OnRegionTouch8>
+              </OnRegionTouch8>
+              <OnRegionTouch9>
+              </OnRegionTouch9>
+              <OnRegionTouch10>
+              </OnRegionTouch10>
+              <OnRegionTouch11>
+              </OnRegionTouch11>
+              <OnRegionTouch12>
+              </OnRegionTouch12>
+              <OnRegionTouch13>
+              </OnRegionTouch13>
+              <OnRegionTouch14>
+              </OnRegionTouch14>
+              <OnRegionTouch15>
+              </OnRegionTouch15>
+              <OnRegionTouch16>
+              </OnRegionTouch16>
+              <OnRegionTouch17>
+              </OnRegionTouch17>
+              <OnRegionTouch18>
+              </OnRegionTouch18>
+              <OnRegionTouch19>
+              </OnRegionTouch19>
+              <OnRegionTouch20>
+              </OnRegionTouch20>
+              <OnRegionTouch21>
+              </OnRegionTouch21>
+              <OnRegionTouch22>
+              </OnRegionTouch22>
+              <OnRegionTouch23>
+              </OnRegionTouch23>
+              <OnRegionTouch24>
+              </OnRegionTouch24>
+            </Control>
+            <Control Name="NumericView1" Class="Amit.Lcw.Lib.General.NumericView">
+              <Loc>0,20</Loc>
+              <Size>50,25</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>ADT 21 Numeric</Font>
+              <Alignment>64</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>0</TabIndex>
+              <Format>##.#</Format>
+              <CustomFormat>
+              </CustomFormat>
+              <Variable>Ram.TeplPrivod</Variable>
+              <Value>23.5</Value>
+              <SmartFloatFormat>False</SmartFloatFormat>
+              <UnitText>
+              </UnitText>
+            </Control>
+            <Control Name="Label1" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>2,8</Loc>
+              <Size>36,11</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>16</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>1</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Přívod" />
+            </Control>
+            <Control Name="Label2" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>52,21</Loc>
+              <Size>12,11</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>16</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>1</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="°C" />
+            </Control>
+            <Control Name="Label3" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,48</Loc>
+              <Size>42,11</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>16</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>1</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Prostor" />
+            </Control>
+            <Control Name="NumericView3" Class="Amit.Lcw.Lib.General.NumericView">
+              <Loc>0,60</Loc>
+              <Size>50,25</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>ADT 21 Numeric</Font>
+              <Alignment>64</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>0</TabIndex>
+              <Format>##.#</Format>
+              <CustomFormat>
+              </CustomFormat>
+              <Variable>Ram.TeplProstor</Variable>
+              <Value>21.8</Value>
+              <SmartFloatFormat>False</SmartFloatFormat>
+              <UnitText>
+              </UnitText>
+            </Control>
+            <Control Name="Label4" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>52,60</Loc>
+              <Size>12,11</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>16</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>1</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="°C" />
+            </Control>
+            <Control Name="Label5" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>2,93</Loc>
+              <Size>21,12</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>AF Aw 9 Bold</Font>
+              <Alignment>16</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>1</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="3DM" />
+            </Control>
+            <Control Name="BitSwitchView1" Class="Amit.Lcw.Lib.General.BitSwitchView">
+              <Loc>24,92</Loc>
+              <Size>24,14</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>AF Aw 9 Bold</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>2</TabIndex>
+              <Variable>Ram.RDO.0</Variable>
+              <Value>False</Value>
+              <ForeColorTrue>#1F375D</ForeColorTrue>
+              <ForeColorFalse>#1F375D</ForeColorFalse>
+              <BackColorTrue>#CBD7E7</BackColorTrue>
+              <BackColorFalse>#CBD7E7</BackColorFalse>
+              <TextFalse Lang="cs-CZ" Text="ZAV" />
+              <TextTrue Lang="cs-CZ" Text="OTV" />
+              <ImageTrue Compress="True">
+              </ImageTrue>
+              <ImageFalse Compress="True">
+              </ImageFalse>
+            </Control>
+            <Control Name="CaseImage1" Class="Amit.Lcw.Lib.General.CaseImage">
+              <Loc>48,93</Loc>
+              <Size>12,13</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>1</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>5</TabIndex>
+              <Variable>
+              </Variable>
+              <Value>1</Value>
+              <DefaultImageData Compress="True">
+              </DefaultImageData>
+              <Items>
+                <Item>
+                  <Key>0</Key>
+                  <ImageData Compress="True">iAMAAB+LCAAAAAAABAALzDbKdUx3hACXSBCZD2aCBQxAhJOjsyMScHF1AaqvcDRBFnTUHwWjYBSQDQDP
+byxOiAMAAA==
+</ImageData>
+                </Item>
+                <Item>
+                  <Key>1</Key>
+                  <ImageData Compress="True">iAMAAB+LCAAAAAAABAALzDbKdUx3hACXSBCZD2aCBQxAhJOjsyMScHF1AaqvcDRBFnTUxwksQHr08avB
+BGD15UAiAEk/Ep+QfUSZT239YPcR1IpbPVX0o7sfPfyQ3E+U/XjCg9r6sarHrp/4+CNVP5I8WekPu3sI
+2QcAS7M/F4gDAAA=
+</ImageData>
+                </Item>
+                <Item>
+                  <Key>2</Key>
+                  <ImageData Compress="True">iAMAAB+LCAAAAAAABAALzDbKdUx3hACXSBCZD2aCBQxAhJOjsyMScHF1AaqvcDRxRAf65UAiwAKkRh/B
+10cArPLY+YQAIfuIMp/a+sGAOP9hVU8V/ejuRw859PAlZD+e8KC2fqzqsesnPv5I1U9p+iMv/QMAVPAT
+JYgDAAA=
+</ImageData>
+                </Item>
+              </Items>
+            </Control>
+            <Control Name="Label6" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,21</Loc>
+              <Size>52,24</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>ADT 21 Numeric</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>4</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="----" />
+            </Control>
+            <Control Name="Label7" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>2,108</Loc>
+              <Size>21,12</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>AF Aw 9 Bold</Font>
+              <Alignment>16</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>1</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="TPV" />
+            </Control>
+            <Control Name="BitSwitchView2" Class="Amit.Lcw.Lib.General.BitSwitchView">
+              <Loc>24,107</Loc>
+              <Size>24,14</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>AF Aw 9 Bold</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>2</TabIndex>
+              <Variable>Ram.RDO.1</Variable>
+              <Value>False</Value>
+              <ForeColorTrue>#1F375D</ForeColorTrue>
+              <ForeColorFalse>#1F375D</ForeColorFalse>
+              <BackColorTrue>#CBD7E7</BackColorTrue>
+              <BackColorFalse>#CBD7E7</BackColorFalse>
+              <TextFalse Lang="cs-CZ" Text="ZAV" />
+              <TextTrue Lang="cs-CZ" Text="OTV" />
+              <ImageTrue Compress="True">
+              </ImageTrue>
+              <ImageFalse Compress="True">
+              </ImageFalse>
+            </Control>
+            <Control Name="CaseImage2" Class="Amit.Lcw.Lib.General.CaseImage">
+              <Loc>48,108</Loc>
+              <Size>12,13</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>1</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>5</TabIndex>
+              <Variable>
+              </Variable>
+              <Value>1</Value>
+              <DefaultImageData Compress="True">
+              </DefaultImageData>
+              <Items>
+                <Item>
+                  <Key>0</Key>
+                  <ImageData Compress="True">iAMAAB+LCAAAAAAABAALzDbKdUx3hACXSBCZD2aCBQxAhJOjsyMScHF1AaqvcDRBFnTUHwWjYBSQDQDP
+byxOiAMAAA==
+</ImageData>
+                </Item>
+                <Item>
+                  <Key>1</Key>
+                  <ImageData Compress="True">iAMAAB+LCAAAAAAABAALzDbKdUx3hACXSBCZD2aCBQxAhJOjsyMScHF1AaqvcDRBFnTUxwksQHr08avB
+BGD15UAiAEk/Ep+QfUSZT239YPcR1IpbPVX0o7sfPfyQ3E+U/XjCg9r6sarHrp/4+CNVP5I8WekPu3sI
+2QcAS7M/F4gDAAA=
+</ImageData>
+                </Item>
+                <Item>
+                  <Key>2</Key>
+                  <ImageData Compress="True">iAMAAB+LCAAAAAAABAALzDbKdUx3hACXSBCZD2aCBQxAhJOjsyMScHF1AaqvcDRxRAf65UAiwAKkRh/B
+10cArPLY+YQAIfuIMp/a+sGAOP9hVU8V/ejuRw859PAlZD+e8KC2fqzqsesnPv5I1U9p+iMv/QMAVPAT
+JYgDAAA=
+</ImageData>
+                </Item>
+              </Items>
+            </Control>
+          </Elements>
+          <Script><![CDATA[event S_ScreenSaver_OnOpen()
+	Global.ScreenSaver1.Enabled = false;
+	Label6.Visible = Ram.ComError;
+end;
+	
+//cz// "Probuzení" displeje.
+event ImageMap1_OnRegionDown0()
+	Application.Brightness = EEprom.Brightness;
+	if Ram.TwilightTime > 0 then
+		Global.ScreenSaver1.Value = EEprom.ScreenSaverTime;
+		Application.Brightness = EEprom.Brightness;
+		S_pin.Show();
+	endif;
+	Ram.TwilightTime = 5;
+end;
+
+event S_ScreenSaver_OnRefresh()
+	Label6.Visible = Ram.ComError;
+	if (TimerPulse1.Out and not (Ram.Req.0 and Ram.Req.1)) then
+		if (CaseImage1.Value < 2) then
+			CaseImage1.Value = 2;
+		else
+			CaseImage1.Value = 1;
+		endif;
+	else
+		CaseImage1.Value = 0;
+	endif;
+
+	if (TimerPulse2.Out and not (Ram.Req.2 and Ram.Req.3)) then
+		if (CaseImage2.Value < 2) then
+			CaseImage2.Value = 2;
+		else
+			CaseImage2.Value = 1;
+		endif;
+	else
+		CaseImage2.Value = 0;
+	endif;
+
+	if Ram.TwilightTime > 0 then
+  		Ram.TwilightTime = Ram.TwilightTime - 1;
+		if Ram.TwilightTime == 0 then
+	  		Application.Brightness = 0;
+		endif;
+	endif;
+end;]]></Script>
+          <BackgroundImage />
+        </Screen>
+        <Screen Name="S_SensCorr" Class="Amit.Lcw.Shared.LcwScreen">
+          <DisplayType>4</DisplayType>
+          <Refresh>1000</Refresh>
+          <Comment>Korekce čidla</Comment>
+          <BackColor>#CBD7E7</BackColor>
+          <ForeColor>#1F375D</ForeColor>
+          <Zoom>3</Zoom>
+          <GridSize>0,0</GridSize>
+          <DrawGrid>True</DrawGrid>
+          <OnOpen>
+          </OnOpen>
+          <OnClose>
+          </OnClose>
+          <OnRefresh>
+          </OnRefresh>
+          <Elements>
+            <Control Name="Label1" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,2</Loc>
+              <Size>64,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>6</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Korekce" />
+            </Control>
+            <Control Name="Label2" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,11</Loc>
+              <Size>64,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>7</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="čidla" />
+            </Control>
+            <Control Name="Label3" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,20</Loc>
+              <Size>64,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>8</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="prostoru" />
+            </Control>
+            <Control Name="Button1" Class="Amit.Lcw.Lib.General.Button">
+              <Loc>34,104</Loc>
+              <Size>30,25</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>10</TabIndex>
+              <ImageAlignment>32</ImageAlignment>
+              <BorderStyle>1</BorderStyle>
+              <AutoSize>False</AutoSize>
+              <ImageData Compress="True">
+              </ImageData>
+              <ImageDataDown Compress="True">
+              </ImageDataDown>
+              <ImageDataDisable Compress="True">
+              </ImageDataDisable>
+              <OnDown>
+              </OnDown>
+              <OnPress>
+              </OnPress>
+              <OnUp>
+              </OnUp>
+              <Text Lang="cs-CZ" Text="OK" />
+            </Control>
+            <Control Name="Button2" Class="Amit.Lcw.Lib.General.Button">
+              <Loc>0,104</Loc>
+              <Size>30,25</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>9</TabIndex>
+              <ImageAlignment>32</ImageAlignment>
+              <BorderStyle>1</BorderStyle>
+              <AutoSize>False</AutoSize>
+              <ImageData Compress="True">
+              </ImageData>
+              <ImageDataDown Compress="True">
+              </ImageDataDown>
+              <ImageDataDisable Compress="True">
+              </ImageDataDisable>
+              <OnDown>
+              </OnDown>
+              <OnPress>
+              </OnPress>
+              <OnUp>
+              </OnUp>
+              <Text Lang="cs-CZ" Text="Esc" />
+            </Control>
+            <Control Name="Button3" Class="Amit.Lcw.Lib.General.Button">
+              <Loc>34,70</Loc>
+              <Size>30,25</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>8</TabIndex>
+              <ImageAlignment>32</ImageAlignment>
+              <BorderStyle>1</BorderStyle>
+              <AutoSize>False</AutoSize>
+              <ImageData Compress="True">
+              </ImageData>
+              <ImageDataDown Compress="True">
+              </ImageDataDown>
+              <ImageDataDisable Compress="True">
+              </ImageDataDisable>
+              <OnDown>
+              </OnDown>
+              <OnPress>
+              </OnPress>
+              <OnUp>
+              </OnUp>
+              <Text Lang="cs-CZ" Text="+" />
+            </Control>
+            <Control Name="Button4" Class="Amit.Lcw.Lib.General.Button">
+              <Loc>0,70</Loc>
+              <Size>30,25</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>7</TabIndex>
+              <ImageAlignment>32</ImageAlignment>
+              <BorderStyle>1</BorderStyle>
+              <AutoSize>False</AutoSize>
+              <ImageData Compress="True">
+              </ImageData>
+              <ImageDataDown Compress="True">
+              </ImageDataDown>
+              <ImageDataDisable Compress="True">
+              </ImageDataDisable>
+              <OnDown>
+              </OnDown>
+              <OnPress>
+              </OnPress>
+              <OnUp>
+              </OnUp>
+              <Text Lang="cs-CZ" Text="-" />
+            </Control>
+            <Control Name="NumericView1" Class="Amit.Lcw.Lib.General.NumericView">
+              <Loc>18,40</Loc>
+              <Size>32,11</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>64</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>6</TabIndex>
+              <Format>##.#</Format>
+              <CustomFormat>
+              </CustomFormat>
+              <Variable>
+              </Variable>
+              <Value>0</Value>
+              <SmartFloatFormat>False</SmartFloatFormat>
+              <UnitText>
+              </UnitText>
+            </Control>
+          </Elements>
+          <Script><![CDATA[event S_SensCorr_OnOpen()
+	//cz// Aktuální hodnota korekce čidla.
+	//en// Actual value of correction of temperature sensor.
+	NumericView1.Value = EEprom.TempSenzorCorrection;
+end;
+
+//cz// Inkrementace hodnoty.
+//en// Correction inctement.
+event Button3_OnButtonPress()
+	if NumericView1.Value < 10 then
+		NumericView1.Value = NumericView1.Value + 0.1;
+	endif;
+end;
+
+//cz// Dekrementace hodnoty.
+//en// Correction decrement.
+event Button4_OnButtonPress()
+	if NumericView1.Value > -10 then
+		NumericView1.Value = NumericView1.Value - 0.1;
+	endif;
+end;
+
+//cz// Uložení hodnoty.
+//en// Storage value.
+event Button1_OnButtonDown()
+	EEprom.TempSenzorCorrection = NumericView1.Value;
+	S_SystMenu.Show();
+end;
+
+//cz// Návrat beze změny.
+//en// Cancel changes.
+event Button2_OnButtonDown()
+	S_SystMenu.Show();
+end;]]></Script>
+          <BackgroundImage />
+        </Screen>
+        <Screen Name="S_SensCorr2" Class="Amit.Lcw.Shared.LcwScreen">
+          <DisplayType>4</DisplayType>
+          <Refresh>1000</Refresh>
+          <Comment>Korekce čidla</Comment>
+          <BackColor>#CBD7E7</BackColor>
+          <ForeColor>#1F375D</ForeColor>
+          <Zoom>3</Zoom>
+          <GridSize>0,0</GridSize>
+          <DrawGrid>True</DrawGrid>
+          <OnOpen>
+          </OnOpen>
+          <OnClose>
+          </OnClose>
+          <OnRefresh>
+          </OnRefresh>
+          <Elements>
+            <Control Name="Label1" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,2</Loc>
+              <Size>64,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>6</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="Korekce" />
+            </Control>
+            <Control Name="Label2" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,11</Loc>
+              <Size>64,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>7</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="čidla" />
+            </Control>
+            <Control Name="Label3" Class="Amit.Lcw.Lib.General.Label">
+              <Loc>0,20</Loc>
+              <Size>64,7</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>8</TabIndex>
+              <AutoSize>True</AutoSize>
+              <Text Lang="cs-CZ" Text="přívodu" />
+            </Control>
+            <Control Name="Button1" Class="Amit.Lcw.Lib.General.Button">
+              <Loc>34,104</Loc>
+              <Size>30,25</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>10</TabIndex>
+              <ImageAlignment>32</ImageAlignment>
+              <BorderStyle>1</BorderStyle>
+              <AutoSize>False</AutoSize>
+              <ImageData Compress="True">
+              </ImageData>
+              <ImageDataDown Compress="True">
+              </ImageDataDown>
+              <ImageDataDisable Compress="True">
+              </ImageDataDisable>
+              <OnDown>
+              </OnDown>
+              <OnPress>
+              </OnPress>
+              <OnUp>
+              </OnUp>
+              <Text Lang="cs-CZ" Text="OK" />
+            </Control>
+            <Control Name="Button2" Class="Amit.Lcw.Lib.General.Button">
+              <Loc>0,104</Loc>
+              <Size>30,25</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>9</TabIndex>
+              <ImageAlignment>32</ImageAlignment>
+              <BorderStyle>1</BorderStyle>
+              <AutoSize>False</AutoSize>
+              <ImageData Compress="True">
+              </ImageData>
+              <ImageDataDown Compress="True">
+              </ImageDataDown>
+              <ImageDataDisable Compress="True">
+              </ImageDataDisable>
+              <OnDown>
+              </OnDown>
+              <OnPress>
+              </OnPress>
+              <OnUp>
+              </OnUp>
+              <Text Lang="cs-CZ" Text="Esc" />
+            </Control>
+            <Control Name="Button3" Class="Amit.Lcw.Lib.General.Button">
+              <Loc>34,70</Loc>
+              <Size>30,25</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>8</TabIndex>
+              <ImageAlignment>32</ImageAlignment>
+              <BorderStyle>1</BorderStyle>
+              <AutoSize>False</AutoSize>
+              <ImageData Compress="True">
+              </ImageData>
+              <ImageDataDown Compress="True">
+              </ImageDataDown>
+              <ImageDataDisable Compress="True">
+              </ImageDataDisable>
+              <OnDown>
+              </OnDown>
+              <OnPress>
+              </OnPress>
+              <OnUp>
+              </OnUp>
+              <Text Lang="cs-CZ" Text="+" />
+            </Control>
+            <Control Name="Button4" Class="Amit.Lcw.Lib.General.Button">
+              <Loc>0,70</Loc>
+              <Size>30,25</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>7</TabIndex>
+              <ImageAlignment>32</ImageAlignment>
+              <BorderStyle>1</BorderStyle>
+              <AutoSize>False</AutoSize>
+              <ImageData Compress="True">
+              </ImageData>
+              <ImageDataDown Compress="True">
+              </ImageDataDown>
+              <ImageDataDisable Compress="True">
+              </ImageDataDisable>
+              <OnDown>
+              </OnDown>
+              <OnPress>
+              </OnPress>
+              <OnUp>
+              </OnUp>
+              <Text Lang="cs-CZ" Text="-" />
+            </Control>
+            <Control Name="NumericView1" Class="Amit.Lcw.Lib.General.NumericView">
+              <Loc>18,40</Loc>
+              <Size>32,11</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>64</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>6</TabIndex>
+              <Format>##.#</Format>
+              <CustomFormat>
+              </CustomFormat>
+              <Variable>
+              </Variable>
+              <Value>0</Value>
+              <SmartFloatFormat>False</SmartFloatFormat>
+              <UnitText>
+              </UnitText>
+            </Control>
+          </Elements>
+          <Script><![CDATA[event S_SensCorr2_OnOpen()
+	//cz// Aktuální hodnota korekce čidla.
+	//en// Actual value of correction of temperature sensor.
+	NumericView1.Value = EEprom.TempSenzorCorrection;
+end;
+
+//cz// Inkrementace hodnoty.
+//en// Correction inctement.
+event Button3_OnButtonPress()
+	if NumericView1.Value < 10 then
+		NumericView1.Value = NumericView1.Value + 0.1;
+	endif;
+end;
+
+//cz// Dekrementace hodnoty.
+//en// Correction decrement.
+event Button4_OnButtonPress()
+	if NumericView1.Value > -10 then
+		NumericView1.Value = NumericView1.Value - 0.1;
+	endif;
+end;
+
+//cz// Uložení hodnoty.
+//en// Storage value.
+event Button1_OnButtonDown()
+	EEprom.TempSenzorCorrection2 = NumericView1.Value;
+	S_SystMenu.Show();
+end;
+
+//cz// Návrat beze změny.
+//en// Cancel changes.
+event Button2_OnButtonDown()
+	S_SystMenu.Show();
+end;]]></Script>
+          <BackgroundImage />
+        </Screen>
+        <Screen Name="S_Start" Class="Amit.Lcw.Shared.LcwScreen">
+          <DisplayType>4</DisplayType>
+          <Refresh>1000</Refresh>
+          <Comment>Startovní sekvekce</Comment>
+          <BackColor>#CBD7E7</BackColor>
+          <ForeColor>#1F375D</ForeColor>
+          <Zoom>3</Zoom>
+          <GridSize>0,0</GridSize>
+          <DrawGrid>True</DrawGrid>
+          <OnOpen>
+          </OnOpen>
+          <OnClose>
+          </OnClose>
+          <OnRefresh>
+          </OnRefresh>
+          <Elements />
+          <Script><![CDATA[event S_Start_OnOpen()
+end;
+
+event S_Start_OnRefresh()
+	//cz// První spuštění po nahrání aplikace. Inicializace hodnot.
+	//en// First start after upload aplication. Initialization of values.
+	if Application.ColdStart then
+		Application.Brightness = 100;
+		EEprom.Brightness = 100;
+		Application.Contrast = 50;
+		EEprom.ScreenSaverTime = 60;
+		Global.ScreenSaver1.Value = 60;
+		EEprom.UserPIN = 1111;
+		EEprom.Setpoint1[0,0] = 18.0;
+		EEprom.Setpoint1[1,0] = 22.0;
+		EEprom.Setpoint1[2,0] = 1.0;
+		EEprom.Setpoint2[0,0] = 18.0;
+		EEprom.Setpoint2[1,0] = 22.0;
+		EEprom.Setpoint2[2,0] = 1.0;
+		EEprom.AutoVent1[0,0] = 30;
+		EEprom.AutoVent1[1,0] = 10;
+		EEprom.AutoVent2[0,0] = 30;
+		EEprom.AutoVent2[1,0] = 10;
+		TimerOn1.Delay = EEprom.AutoVent1[0,0] * 60000;
+		TimerPulse1.PulseLenght = EEprom.AutoVent1[1,0] * 60000;
+		TimerOn2.Delay = EEprom.AutoVent2[0,0] * 60000;
+		TimerPulse2.PulseLenght = EEprom.AutoVent2[1,0] * 60000;
+		S_Calib.Show();
+	else
+	//cz// Po restartu. Načtení uložených hodnot z paměti.
+	//en// After restart. Load values from memmory.
+		Global.ScreenSaver1.Value = EEprom.ScreenSaverTime;
+		Application.Brightness = EEprom.Brightness;
+		TimerOn1.Delay = EEprom.AutoVent1[0,0] * 60000;
+		TimerPulse1.PulseLenght = EEprom.AutoVent1[1,0] * 60000;
+		TimerOn2.Delay = EEprom.AutoVent2[0,0] * 60000;
+		TimerPulse2.PulseLenght = EEprom.AutoVent2[1,0] * 60000;
+		S_ScreenSaver.Show();
+	endif;   
+end;]]></Script>
+          <BackgroundImage />
+        </Screen>
+        <Screen Name="S_SystMenu" Class="Amit.Lcw.Shared.LcwScreen">
+          <DisplayType>4</DisplayType>
+          <Refresh>1000</Refresh>
+          <Comment>Systémové menu</Comment>
+          <BackColor>#CBD7E7</BackColor>
+          <ForeColor>#1F375D</ForeColor>
+          <Zoom>3</Zoom>
+          <GridSize>0,0</GridSize>
+          <DrawGrid>True</DrawGrid>
+          <OnOpen>
+          </OnOpen>
+          <OnClose>
+          </OnClose>
+          <OnRefresh>
+          </OnRefresh>
+          <Elements>
+            <Control Name="MenuScreen1" Class="Amit.Lcw.Lib.General.MenuScreen">
+              <Loc>-4,0</Loc>
+              <Size>68,132</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>0</TabIndex>
+              <TabIndex>0</TabIndex>
+              <ItemHeight>22</ItemHeight>
+              <HideSelection>False</HideSelection>
+              <CursorWrap>False</CursorWrap>
+              <ShowScrollBar>False</ShowScrollBar>
+              <EscScreen>
+              </EscScreen>
+              <Items>
+                <Item Enabled="True">
+                  <GoToScreen>S_SensCorr</GoToScreen>
+                  <Variable>
+                  </Variable>
+                  <Key>(none)</Key>
+                  <Text Lang="cs-CZ" Text="Čidlo 1" />
+                </Item>
+                <Item Enabled="True">
+                  <GoToScreen>S_SensCorr2</GoToScreen>
+                  <Variable>
+                  </Variable>
+                  <Key>(none)</Key>
+                  <Text Lang="cs-CZ" Text="Čidlo 2" />
+                </Item>
+                <Item Enabled="True">
+                  <GoToScreen>S_Calib</GoToScreen>
+                  <Variable>
+                  </Variable>
+                  <Key>(none)</Key>
+                  <Text Lang="cs-CZ" Text="Kalibrace" />
+                </Item>
+                <Item Enabled="True">
+                  <GoToScreen>S_Wait2Reset</GoToScreen>
+                  <Variable>
+                  </Variable>
+                  <Key>(none)</Key>
+                  <Text Lang="cs-CZ" Text="Návrat" />
+                </Item>
+              </Items>
+            </Control>
+          </Elements>
+          <Script><![CDATA[event S_SystMenu_OnOpen()
+end;]]></Script>
+          <BackgroundImage />
+        </Screen>
+        <Screen Name="S_UserMenu" Class="Amit.Lcw.Shared.LcwScreen">
+          <DisplayType>4</DisplayType>
+          <Refresh>1000</Refresh>
+          <Comment>Uživatelské menu</Comment>
+          <BackColor>#CBD7E7</BackColor>
+          <ForeColor>#1F375D</ForeColor>
+          <Zoom>3</Zoom>
+          <GridSize>0,0</GridSize>
+          <DrawGrid>True</DrawGrid>
+          <OnOpen>
+          </OnOpen>
+          <OnClose>
+          </OnClose>
+          <OnRefresh>
+          </OnRefresh>
+          <Elements>
+            <Control Name="MenuScreen1" Class="Amit.Lcw.Lib.General.MenuScreen">
+              <Loc>0,0</Loc>
+              <Size>64,132</Size>
+              <Visible>True</Visible>
+              <Enable>True</Enable>
+              <Permission>3,3,3</Permission>
+              <BackColor>#CBD7E7</BackColor>
+              <ForeColor>#1F375D</ForeColor>
+              <Font>Tridet 7</Font>
+              <Alignment>32</Alignment>
+              <Dock>0</Dock>
+              <Border>False</Border>
+              <TabIndex>0</TabIndex>
+              <TabIndex>0</TabIndex>
+              <ItemHeight>20</ItemHeight>
+              <HideSelection>False</HideSelection>
+              <CursorWrap>False</CursorWrap>
+              <ShowScrollBar>False</ShowScrollBar>
+              <EscScreen>
+              </EscScreen>
+              <Items>
+                <Item Enabled="True">
+                  <GoToScreen>S_Brightness</GoToScreen>
+                  <Variable>
+                  </Variable>
+                  <Key>(none)</Key>
+                  <Text Lang="cs-CZ" Text="Jas" />
+                </Item>
+                <Item Enabled="True">
+                  <GoToScreen>S_Contrast</GoToScreen>
+                  <Variable>
+                  </Variable>
+                  <Key>(none)</Key>
+                  <Text Lang="cs-CZ" Text="Kontrast" />
+                </Item>
+                <Item Enabled="True">
+                  <GoToScreen>S_EnterNewPIN</GoToScreen>
+                  <Variable>
+                  </Variable>
+                  <Key>(none)</Key>
+                  <Text Lang="cs-CZ" Text="Změna PIN" />
+                </Item>
+                <Item Enabled="True">
+                  <GoToScreen>S_DispSet</GoToScreen>
+                  <Variable>
+                  </Variable>
+                  <Key>(none)</Key>
+                  <Text Lang="cs-CZ" Text="Displej" />
+                </Item>
+                <Item Enabled="True">
+                  <GoToScreen>S_Start</GoToScreen>
+                  <Variable>
+                  </Variable>
+                  <Key>(none)</Key>
+                  <Text Lang="cs-CZ" Text="Návrat" />
+                </Item>
+              </Items>
+            </Control>
+          </Elements>
+          <Script><![CDATA[event S_UserMenu_OnOpen()
+end;]]></Script>
+          <BackgroundImage />
+        </Screen>
+        <Screen Name="S_Wait2Reset" Class="Amit.Lcw.Shared.LcwScreen">
+          <DisplayType>4</DisplayType>
+          <Refresh>1000</Refresh>
+          <Comment>Reset aplikace</Comment>
+          <BackColor>#CBD7E7</BackColor>
+          <ForeColor>#1F375D</ForeColor>
+          <Zoom>3</Zoom>
+          <GridSize>0,0</GridSize>
+          <DrawGrid>True</DrawGrid>
+          <OnOpen>
+          </OnOpen>
+          <OnClose>
+          </OnClose>
+          <OnRefresh>
+          </OnRefresh>
+          <Elements>
+            <Control Name="Timer1" Class="Amit.Lcw.Lib.General.Timer">
+              <Enabled>False</Enabled>
+              <Permission>3,3,3</Permission>
+              <Interval>1000</Interval>
+              <OnTick>
+              </OnTick>
+            </Control>
+          </Elements>
+          <Script><![CDATA[event S_Wait2Reset_OnOpen()
+	//cz// Povolení odpočtu.
+	//en// Timer1 enabled.
+	S_Wait2Reset.Timer1.Enabled = true;
+end;
+event Timer1_OnTick()
+	//cz// Reset aplikace.
+	//en// Aplication reset.
+	Application.Reset();
+end;]]></Script>
+          <BackgroundImage />
+        </Screen>
+      </ScreenList>
+    </Data>
+  </Project>
+</DetStation>

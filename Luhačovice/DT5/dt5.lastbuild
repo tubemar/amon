@@ -1,0 +1,2351 @@
+<?xml version="1.0"?>
+<!-- DetStudio project descriptor -->
+<DetStation scheme="0">
+  <guid>b5882166-44e8-4ce0-9a41-b587fd45dc7e</guid>
+  <!--AMiNi-ES-->
+  <DSversion>1.8.2.23</DSversion>
+  <StationDescriptor>
+    <Version>1.0.41</Version>
+    <Copyright>(c) 2008, AMiT, spol. s r.o.</Copyright>
+    <Comment>Řízení KGJ a spol.</Comment>
+    <Author>Vojta</Author>
+    <TridetLink>
+    </TridetLink>
+    <AdresaStanice>5</AdresaStanice>
+    <VersionAutoIncrement>True</VersionAutoIncrement>
+    <PostBuild>
+    </PostBuild>
+    <Sapp>False</Sapp>
+    <EepromClear>False</EepromClear>
+    <Notes><![CDATA[{\rtf1\ansi\ansicpg1250\deff0\deflang1029{\fonttbl{\f0\fnil\fcharset238 Microsoft Sans Serif;}}
+\viewkind4\uc1\pard\f0\fs20\tab\tab\tab\tab\tab\tab\tab\tab\par
+Ve\'f8ejn\'e1 IP Tanvald kotelna 94.127.130.86\par
+porty 59 -> 192.168.0.99:59\par
+porty 60 -> 192.168.0.190:59\par
+porty 61 -> 192.168.0.191:59\par
+\par
+\par
+}
+]]></Notes>
+  </StationDescriptor>
+  <ExternalStationManager>
+    <Stations />
+  </ExternalStationManager>
+  <Languages Actual="cs-CZ">
+    <Language ci="cs-CZ" />
+  </Languages>
+  <UserGroups>
+    <UserGroup Name="OBSLUHA" />
+    <UserGroup Name="TECHNOLOG" />
+    <UserGroup Name="PROGRAMATOR" />
+  </UserGroups>
+  <Users>
+    <User Name="Neznámý" Group="OBSLUHA" Password="1234" />
+  </Users>
+  <Project Class="Amit.Psp4.UI.Psp4Ide">
+    <Data Class="Amit.Psp4.Shared.Psp4Project">
+      <LastRevised>-8586945040304520091</LastRevised>
+      <CodeBlockList>
+        <CodeBlock Name="libComState" Class="Amit.Psp4.Shared.CodeProcedure">
+          <Comment>Obsluha komunikace</Comment>
+          <Body Class="Amit.Psp4.Shared.CodeBodyPse">
+            <Script><![CDATA[       //REM "Rozskok dle stavu automatu"
+       //Rozskok dle stavu
+       Switch L2_Status, :NONE
+         //Idle: nic
+         Case 1, :NONE
+           //Udalost Send - vysli ramec
+           If L2_Event.1, :NONE
+             //Vyslani ramce
+             ComWrite :01000, OutTlg, 0, OutLen, NONE, NONE
+             //TMO na odpoved
+             TmoStart :01001, 500
+             //Stav pozadavku -> Busy
+             Let ReqStatus = 0x0002
+             //Stav -> Receive
+             Let L2_Status = L2S_RECEIVE
+           EndIf 
+         EndCase 
+         //Receive: ceka na prijem znaku
+         Case 2, :NONE
+           //Udalost Char - prisel znak
+           If L2_Event.2, :NONE
+             ComRead :01000, MB_InBuff, MB_BuffLen, MB_BuffLen, NONE
+             //TMO meziznakovy
+             TmoStart :01001, 500
+             Let InChar = MB_InBuff[0, MB_BuffLen-1]
+             //REM "Rozskok dle prijateho znaku - zahlavi zpravy"
+             //Rozskok dle delky telegramu
+             Switch MB_BuffLen
+               Case 1, :NONE
+                 Let char = if(InChar!=0x0068, 1, 0)
+                 If char.0, :NONE
+                   //Stav pozadavku -> Finish
+                   Let ReqResult = 0x0008
+                 EndIf 
+               EndCase 
+               Case 2, :NONE
+                 Let MsgLen = InChar
+                 Let char = if(InChar>250, 1, 0)
+                 If char.0, :NONE
+                   //Stav pozadavku -> Finish
+                   Let ReqResult = 0x0008
+                 EndIf 
+               EndCase 
+               Case 3, :NONE
+                 Let char = if(InChar!=MsgLen, 1, 0)
+                 If char.0, :NONE
+                   //Stav pozadavku -> Finish
+                   Let ReqResult = 0x0008
+                 EndIf 
+               EndCase 
+               Case 4, :NONE
+                 Let char = if(InChar!=0x0068, 1, 0)
+                 If char.0, :NONE
+                   //Stav pozadavku -> Finish
+                   Let ReqResult = 0x0008
+                 EndIf 
+               EndCase 
+             EndSwitch 
+             //REM "Rozskok dle prijateho znaku - CRC a posledni znak"
+             Let Irqix.0 = MB_BuffLen==MsgLen+5
+             If Irqix.0
+               Let MB_CRC = InChar
+             EndIf 
+             Let Irqix.0 = MB_BuffLen==MsgLen+6
+             If Irqix.0
+               Let char = if(InChar==0x0016, 1, 0)
+               Let CRC = 0
+               Let IndexChar = 4
+               Repeat :NONE
+               Let CRC = CRC+MB_InBuff[0, IndexChar]
+               Let CRC = CRC&0x00FF
+               IncDec IndexChar, 1, 1.000
+               Let Irqix.0 = IndexChar>MsgLen+3
+               Until Irqix.0
+               Let TestCRC = if(CRC&0x00FF==MB_CRC, 1, 0)
+               Let char.0 = char.0 and TestCRC.0
+               If char.0, :NONE
+                 //Stav pozadavku -> Finish
+                 Let ReqResult = 0x0004
+                 //Stav pozadavku -> Finish
+                 Let ReqStatus = 0x0004
+                 TmoStop :01001
+                 Let MB_BuffLen = 0
+                 //Stav -> Idle
+                 Let L2_Status = L2S_IDLE
+               Else :NONE
+                 //Stav pozadavku -> Finish
+                 Let ReqResult = 0x0008
+               EndIf 
+             EndIf 
+           EndIf 
+           //Udalost Tmo - vyprsel timeout
+           If L2_Event.3, :NONE
+             //Zruseni TMO
+             TmoStop :01001
+             Let MB_BuffLen = 0
+             //Vysledek -> Err
+             Let ReqResult = 0x0008
+             //Stav pozadavku -> Finish
+             Let ReqStatus = 0x0004
+             //Stav -> Idle
+             Let L2_Status = L2S_IDLE
+           EndIf 
+         EndCase 
+         //... L2_Status
+       EndSwitch 
+       //Udalost zpracovana
+       Let L2_Event = L2E_NONE
+]]></Script>
+          </Body>
+        </CodeBlock>
+        <CodeBlock Name="libMBusVal" Class="Amit.Psp4.Shared.CodeProcedure">
+          <Comment>Převod z telegramu na hodnoty</Comment>
+          <Body Class="Amit.Psp4.Shared.CodeBodyPse">
+            <Script><![CDATA[	//Index_read  - pozice v telegramu, kde začínáme dekódovat
+	//MsgLen	- délka telegramu
+	//Status 	- stav
+	//WantItem	- typ hodnoty, kterou chceme získat
+	
+	let MB_status = 0
+	let MB_EndData = 0
+       Let index_read = 7
+	let Item_flag = 0
+	for ix,0,14,1
+		let MT_Data[0,ix] = 0
+	endfor
+
+       //ID Num
+       StrParse MB_InBuff, index_read, index_read, "", 20, 4, "", ID_Num, NONE.0, 0.000	//REM "ID Number"
+	
+	let ix = MB_InBuff[0,index_read] | (MB_InBuff[0,index_read+1] << 8)
+
+	let Mnf0 = MB_InBuff[0,index_read]								//výrobce 16 v integeru
+	let Mnf1 = MB_InBuff[0,index_read+1]
+	
+	let MT_Data[0, 9] = MBus_Addr								//adresa měřiče
+	let MT_Data[0,10] = int(ID_Num & 0x0000FFFF)						//Id číslo low 16 bit
+	let MT_Data[0,11] = int((ID_Num >> 16) & 0x0000FFFF)					//Id číslo high 16 bit
+	let MT_Data[0,12] = Mnf0
+	let MT_Data[0,13] = Mnf1									//zkratka výrobce
+	let MT_Data[0,14] = MB_InBuff[0, index_read + 3]						//měřené médium
+	
+	let index_read = 19
+	let ix1 = MsgLen + 4										//zarážka konec telegramu
+	repeat												//hlavní smyčka prohledávání
+		let Item_type = -1
+		Let DIF = MB_InBuff[0, index_read]
+		let ix2 = index_read + 10								//zarážka  max. DIFE
+		repeat											//hledám DIF
+			Let ix.0 = ((MB_InBuff[0, index_read] & 0x0080) == 0) or (index_read >= ix2)	//DIF nebo DIFE, nebo max. 10 DIFE
+			if ix.0
+				break
+			endif
+			let index_read = index_read + 1
+			let ix.0 = false
+		until ix.0
+		let MB_status.4 = (index_read == ix2)						//překročeno max. DIFE
+
+		Let DIF = If((MB_InBuff[0, 14] == 2) and (MB_InBuff[0, index_read] == 0x10),DIF & 0x7F, DIF)	//vyjímka pro elektroměr
+
+		let index_read = index_read + 1
+		
+		Let VIF = (MB_InBuff[0, index_read] & 0x007F)
+		let ix2 = index_read + 10								//zarážka max. VIFE
+		repeat											//hledám VIF
+			Let ix.0 = ((MB_InBuff[0, index_read] & 0x0080) == 0) or (index_read >= ix2)	//VIF nebo VIFE, nebo max. 10 VIFE
+			if ix.0
+				break
+			endif
+			let index_read = index_read + 1
+			let ix.0 = false
+		until ix.0
+		let MB_status.5 = (index_read == ix2)					//překročeno max. VIFE
+		let index_read = index_read + 1
+
+		let Item_type = if((VIF >= 0x0000) and (VIF < 0x0010), 0, Item_type)	//energie
+		let Item_type = if((VIF >= 0x0010) and (VIF < 0x0018), 1, Item_type)	//objem (protečené množství)
+		let Item_type = if((VIF >= 0x0028) and (VIF < 0x0038), 2, Item_type)	//výkon
+		let Item_type = if((VIF >= 0x0038) and (VIF < 0x0050), 3, Item_type)	//objemový průtok
+		let Item_type = if((VIF >= 0x0058) and (VIF < 0x005C), 4, Item_type)	//teplota výstup
+		let Item_type = if((VIF >= 0x005C) and (VIF < 0x0060), 5, Item_type)	//teplota vrat
+		let Item_type = if((VIF >= 0x0060) and (VIF < 0x0064), 6, Item_type)	//teplotní rozdíl
+		let Item_type = if((VIF >= 0x0018) and (VIF < 0x0020), 7, Item_type)	//hmotnost
+		let Item_type = if((VIF >= 0x0020) and (VIF < 0x0024), 8, Item_type)	//provozní hodiny
+		let Item_type = if(((DIF & 0x0080) > 0) or ((DIF & 0x000F)==0x000F), -1, Item_type)
+
+		let ix2 = DIF & 0x000F
+		Switch ix2
+			Case 0								//No data
+				Let Var = 0
+				Let index_read = index_read + 1
+			EndCase
+			Case 1								//Integer 8 - bit
+				Let Var = MB_InBuff[0, index_read] & 0x00FF
+				Let index_read = index_read + 1
+			EndCase
+			Case 2								//Integer 16 - bit
+				StrParse MB_InBuff, index_read, index_read, "", 0, 2, "", Var, NONE.0, 0.000
+			EndCase
+			Case 3								//Integer 24 - bit
+				StrParse MB_InBuff, index_read, index_read, "", 4, 3, "", Var, NONE.0, 0.000
+			EndCase
+			Case 4								//Integer 32 - bit
+				StrParse MB_InBuff, index_read, index_read, "", 2, 4, "", Var, NONE.0, 0.000
+			EndCase
+			Case 5								//Float 32 - bit
+				StrParse MB_InBuff, index_read, index_read, "", 6, 4, "", Val, NONE.0, 0.000
+			EndCase
+			Case 6								//Integer 48 - bit
+				Let index_read = index_read + 2
+				StrParse MB_InBuff, index_read, index_read, "", 2, 4, "", Var, NONE.0, 0.000
+			EndCase
+			Case 7								//Integer 64 - bit
+				Let index_read = index_read + 4
+				StrParse MB_InBuff, index_read, index_read, "", 2, 4, "", Var, NONE.0, 0.000
+			EndCase
+			Case 9								//BCD 2 digits
+				Let Var = ((MB_InBuff[0, index_read] & 0x00F0) >> 4) | (MB_InBuff[0, index_read] & 0x000F)
+				Let index_read = index_read + 1
+			EndCase
+			Case 10							//BCD 4 digits
+				StrParse MB_InBuff, index_read, index_read, "", 20, 2, "", Var, NONE.0, 0.000
+			EndCase
+			Case 11							//BCD 6 digits
+				StrParse MB_InBuff, index_read, index_read, "", 20, 3, "", Var, NONE.0, 0.000
+			EndCase
+			Case 12							//BCD 8 digits
+				StrParse MB_InBuff, index_read, index_read, "", 20, 4, "", Var, NONE.0, 0.000
+			EndCase
+			Case 14							//BCD 12 digits
+				StrParse MB_InBuff, index_read, index_read, "", 20, 6, "", Var, NONE.0, 0.000
+			EndCase
+			Case 15							//uz nema cenu pokracovat
+				let MB_EndData = 1
+			EndCase
+			Let MB_EndData = 0
+			Let Var = 0
+			Let Val = 0
+		EndSwitch
+		Let Exponent = VIF & 0x0007
+		Let Val = if((DIF & 0x000F) != 5, float(Var), Val)
+
+		Let ix.0 = Item_type == 0
+		If ix.0
+			let Exponent = Exponent - 9
+			let Val = Val*pow(10, Exponent)
+			Let Val = if((VIF & 0x0008) == 0, Val*3.6,Val)
+		Endif
+
+		Let ix.0 = (Item_type > 0) and (Item_type < 4)
+		If ix.0
+			let Exponent = Exponent - 6
+			let Val = Val*pow(10, Exponent)
+			Let Val = if((Item_type == 2) and ((MB_InBuff[0, 14] == 6) or (MB_InBuff[0, 14] == 7)),0,Val)	//Vodoměry 0 výkon
+			Let Val = if(((VIF & 0x0008) == 0) and (Item_type == 2) , Val/3.6,Val)
+		Endif
+		
+		Let ix.0 = (Item_type > 3) and (Item_type < 7)
+		If ix.0
+			Let Exponent = Exponent & 0x0003
+			let Exponent = Exponent - 3
+			let Val = Val*pow(10, Exponent)
+		Endif
+		Let ix.0 = Item_type == 7
+		If ix.0
+			let Exponent = Exponent - 6
+			let Val = Val*pow(10, Exponent)
+		Endif
+		Let ix.0 = Item_type == 8
+		If ix.0
+			Let Exponent = Exponent & 0x0003
+			Switch Exponent
+				Case 0
+					let Val = Val/3600.0
+				EndCase
+				Case 1
+					let Val = Val/60.0
+				EndCase
+				Case 2
+					let Val = Val
+				EndCase
+				Case 3
+					let Val = Val*24.0
+				EndCase
+			EndSwitch
+		Endif
+			
+		Let ix.0 = (Item_type >= 0) and (Item_type < 9) and not Item_Flag.(Item_type)
+		if ix.0
+			Let MT_Data[0, Item_type] = Val
+			Let Item_Flag.(Item_type) = true
+		endif
+		let i = i + 1
+		let MB_status.7 = (index_read >= ix1) or (MB_EndData > 0) 				//polozka nenalezena
+	until MB_status.7
+		]]></Script>
+          </Body>
+        </CodeBlock>
+        <CodeBlock Name="libRecChar" Class="Amit.Psp4.Shared.CodeProcedure">
+          <Comment>COM_Preruseni od prijmu</Comment>
+          <Body Class="Amit.Psp4.Shared.CodeBodyPse">
+            <Script><![CDATA[       //Udalost Char - prijem znaku
+       Let L2_Event = L2E_CHAR
+       //Automat L2
+       Call libComState
+]]></Script>
+          </Body>
+        </CodeBlock>
+        <CodeBlock Name="libTimeOut" Class="Amit.Psp4.Shared.CodeProcedure">
+          <Comment>COM_Preruseni od timeoutu</Comment>
+          <Body Class="Amit.Psp4.Shared.CodeBodyPse">
+            <Script><![CDATA[       //Udalost Tmo - vyprsel timeout
+       Let L2_Event = L2E_TMO
+       //Automat L2
+       Call libComState
+]]></Script>
+          </Body>
+        </CodeBlock>
+        <CodeBlock Name="ProcINIT" Class="Amit.Psp4.Shared.CodeProcess">
+          <Comment>Inicializace</Comment>
+          <Body Class="Amit.Psp4.Shared.CodeBodyPse">
+            <Script><![CDATA[
+       //Komunikacni jadro
+:01000 ComInit 0x0002, 0, 2400, 8, 1, 1, :01101, :NONE, :NONE, :NONE, PrijBuf, VyslBuf
+       //Timeout
+:01001 Tmo :01102, 10, 500
+       //Instance podprog. preruseni od prijmu
+:01101 SubInst libRecChar
+       //Instance podprog. preruseni od timeoutu
+:01102 SubInst libTimeOut
+       //Pocatecni stav automatu
+       Let L2_Status = L2S_IDLE
+       //Pocatecni stav pozadavku
+       Let ReqStatus = 1
+
+	//******************************************************
+	//****************** KGJ, adresa 1 *********************
+	//******************************************************
+	//Čtení hodnot
+	RmtDef Data_KGJ[0,0], "3,3597-3608", 2, NONE, 1, 27, NONE.0, ReData_KGJ, NONE
+	RmtDef Data_KGJ[0,20], "3,162-163", 2, NONE, 1, 27, NONE.0, ReData_KGJ, NONE
+	//RmtDef Data_KGJ[0,22], "3,172-173", 2, NONE, 1, 27, NONE.0, ReData_KGJ, NONE
+	
+	RmtDef UsrPw_KGJ[0,0], "16,6362-6363", 0, NONE, 1, 27, NONE.0, ReUsrPw_KGJ, NONE
+	RmtDef OnOff_KGJ[0,0], "16,6358-6360", 0, NONE, 1, 27, NONE.0, ReOnOff_KGJ, NONE]]></Script>
+          </Body>
+          <Period>0</Period>
+          <Offset>0</Offset>
+          <Type>36</Type>
+          <InterruptEdge>1</InterruptEdge>
+        </CodeBlock>
+        <CodeBlock Name="ProcMBus" Class="Amit.Psp4.Shared.CodeProcess">
+          <Comment>COM_Zpracovani kom. pozadavku</Comment>
+          <Body Class="Amit.Psp4.Shared.CodeBodyPse">
+            <Script><![CDATA[	Let @Pom = (MBusAddrPC>0) and !@MT_Start
+	If @Pom
+		Let MBus_Addr = MBusAddrPC
+	EndIf 
+
+	//REM "Cteni M-Bus MT, nastaveni adresy = pozadavek na cteni MT"
+	Let @Pom = (MBus_Addr>0) and !@MT_Start
+	If @Pom
+		Let @MT_Start = true
+	EndIf 
+	
+	If @MT_Start, :NONE
+		//Dle stavu pozadavku
+		Switch ReqStatus, :NONE
+			//Idle - ceka na vlozeni
+			Case 1, :NONE
+				//Nakopiruj dotaz
+				Let mtx_c_do = 4
+				MtxCopy OutTlg, NONE, NONE, MBus_dotaz, mtx_r_od, mtx_c_od, mtx_r_do, mtx_c_do, NONE.0
+				//Zadej adresu M-BUS stanice
+				Let OutTlg[0, pozice_ADR] = MBus_Addr
+				//Spocitej CRC
+				Let OutTlg[0, pozice_CRC] = OutTlg[0, 1]+OutTlg[0, 2]
+				Let OutLen = mtx_c_do+1
+				//Generuj udalost Send
+				Let L2_Event = L2E_SEND
+			EndCase 
+	
+			//Finish - vyridil
+			Case 4, :NONE
+				//Prisla data
+				If ReqResult.2, :NONE
+					Let index_read = 0
+					//Dekoduj data
+					Call libMBusVal
+					//Prirazeni dat z MT do matice
+					Let MB_Data[0, 0] = MT_Data[0, 0]	//MB_Energy
+					//Prirazeni dat z MT do matice
+					Let MB_Data[0, 1] = MT_Data[0, 1]	//MB_Volume
+					//Prirazeni dat z MT do matice
+					Let MB_Data[0, 2] = MT_Data[0, 3]	//MB_Flow
+					//Prirazeni dat z MT do matice
+					Let MB_Data[0, 3] = MT_Data[0, 2]	//MB_Power
+					//Prirazeni dat z MT do matice
+					Let MB_Data[0, 4] = MT_Data[0, 4]	//MB_T1
+					//Prirazeni dat z MT do matice
+					Let MB_Data[0, 5] = MT_Data[0, 5]	//MB_T2
+					//Prirazeni dat z MT do matice
+					Let MB_Data[0, 6] = MT_Data[0, 6]	//MB_T_delta
+					//Prirazeni dat z MT do matice
+					Let MB_Data[0, 7] = MT_Data[0,10]	//ID_Num LO
+					//Prirazeni dat z MT do matice
+					Let MB_Data[0, 8] = MT_Data[0, 8]	//Run_Hour
+					//Prirazeni dat z MT do matice
+					Let MB_Data[0, 9] = MT_Data[0,11]	//ID_Num HI
+					Let @MT_Start = false
+					Let MBusAddrPC = 0
+					Let MBus_Addr = 0
+				EndIf 
+	
+				//Chyba
+				If ReqResult.3, :NONE
+					//Pocitadlo chyb
+					Let CntError = CntError+1
+				EndIf 
+				//Pocitadlo chyb
+				Let @ComError = CntError>3
+				//Chyba
+				If @ComError, :NONE
+					//Prirazeni dat z MT do matice
+					Let MB_Data[0, 0] = 0
+					//Prirazeni dat z MT do matice
+					Let MB_Data[0, 1] = 0
+					//Prirazeni dat z MT do matice
+					Let MB_Data[0, 2] = 0
+					//Prirazeni dat z MT do matice
+					Let MB_Data[0, 3] = 0
+					//Prirazeni dat z MT do matice
+					Let MB_Data[0, 4] = 0
+					//Prirazeni dat z MT do matice
+					Let MB_Data[0, 5] = 0
+					//Prirazeni dat z MT do matice
+					Let MB_Data[0, 6] = 0
+					//Prirazeni dat z MT do matice
+					Let MB_Data[0, 7] = 0
+					//Prirazeni dat z MT do matice
+					Let MB_Data[0, 8] = 0
+					Let MB_Data[0, 9] = 0
+					Let @MT_Start = false
+					Let MBusAddrPC = 0
+					Let MBus_Addr = 0
+					//Pocitadlo chyb
+					Let CntError = 0
+				EndIf 
+				Let ReqStatus = 1
+			EndCase 
+		EndSwitch 
+		//Vyvolani automatu L2
+		Call libComState
+	Else :NONE
+		//Pocitadlo chyb
+		Let CntError = 0
+		Let ReqStatus = 1
+	EndIf 
+]]></Script>
+          </Body>
+          <Period>1000</Period>
+          <Offset>0</Offset>
+          <Type>15</Type>
+          <InterruptEdge>1</InterruptEdge>
+        </CodeBlock>
+        <CodeBlock Name="procModBus1" Class="Amit.Psp4.Shared.CodeProcess">
+          <Comment>Obsluha modbus DMM</Comment>
+          <Body Class="Amit.Psp4.Shared.CodeBodyPse">
+            <Script><![CDATA[
+
+	RmtAct 1, NONE[0,0], Modb_Cnt1, Modb_Aloc1
+	
+	//Vlastní komunikace
+	MODBS_R 1, 9600, 0x0004, 27, 4, 100
+	
+	BinDiff KGJ_eth_com, ix, 0xFFFF, 0xFFFF, 0x00000000
+	
+	If (ix.0 and @EnComEth)				// Změna povelu
+		If KGJ_eth_com.0				// Start
+			//Zápis uživatele a hesla
+			Let UsrPw_KGJ[0,0]=0
+			//START KGJ
+			Let OnOff_KGJ[0,0]=0x01FE; OnOff_KGJ[0,1]=0x0000; OnOff_KGJ[0,2]=0x0001
+		Else						// Zastavení
+			//Zápis uživatele a hesla
+			Let UsrPw_KGJ[0,0]=0
+			//STOP KGJ
+			Let OnOff_KGJ[0,0]=0x02FD; OnOff_KGJ[0,1]=0x0000; OnOff_KGJ[0,2]=0x0001
+		Endif
+	EndIf
+	
+	Let KGJ_eth_stat = Data_KGJ[0,20]]]></Script>
+          </Body>
+          <Period>500</Period>
+          <Offset>0</Offset>
+          <Type>14</Type>
+          <InterruptEdge>0</InterruptEdge>
+        </CodeBlock>
+        <CodeBlock Name="procRTC" Class="Amit.Psp4.Shared.CodeProcess">
+          <Comment>Čas RTC</Comment>
+          <Body Class="Amit.Psp4.Shared.CodeBodyPse">
+            <Script><![CDATA[       // Čas RTC
+       GetTime RTC_time, RTC_slozky, NONE
+       // Změna zimní / letní čas
+       Let UTC_time = if(@tmLetniCas, RTC_time - 10800, RTC_time - 7200)
+       ParseTime UTC_time, NONE, NONE, UTC_slozky
+       Let @tmLeto = ((UTC_slozky[4, 0] > 3) and (UTC_slozky[4, 0] < 10) or (UTC_slozky[4, 0] == 3) and ((UTC_slozky[3, 0] + 7) - UTC_slozky[6, 0] > 31)) or (UTC_slozky[4, 0] == 10) and ((UTC_slozky[3, 0] + 7) - UTC_slozky[6, 0] <= 31)
+       If @tmLetoInit, :NONE
+       	Let @tmZmena = (@tmLeto xor @tmLetniCas) and @tmEnable
+       	If @tmZmena, :NONE
+       		GetTime RTC_time, NONE, NONE
+       		Let RTC_time = if(@tmLeto, RTC_time + 3600, RTC_time - 3600)
+       		SetTime RTC_time
+       	EndIf 
+       EndIf 
+       Let @tmLetniCas = @tmLeto
+       Let @tmLetoInit = true]]></Script>
+          </Body>
+          <Period>1000</Period>
+          <Offset>900</Offset>
+          <Type>12</Type>
+          <InterruptEdge>1</InterruptEdge>
+        </CodeBlock>
+      </CodeBlockList>
+      <CodeFBList />
+      <DBase>
+        <VariableList>
+          <Variable Name="CntError" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5969</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>Pocitadlo chyb v komunikaci</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="CRC" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5170</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>CRC</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="ID_Num" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5179</Wid>
+            <Station>5</Station>
+            <Type>dbtLong</Type>
+            <Comment>ID měřiče</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="index_read" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5954</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>index ve ctecim bufferu</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="IndexChar" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5180</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>index</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="InChar" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5959</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>Prijaty znak</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="MB_BuffLen" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5958</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>Delka prijimaneho telegramu</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="MB_InBuff" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5953</Wid>
+            <Station>5</Station>
+            <Type>dbtIntMtx</Type>
+            <Comment>Prijimany telegram</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <Row>1</Row>
+            <Col>256</Col>
+          </Variable>
+          <Variable Name="koef_Energy" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5978</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>koeficient</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="koef_Flow" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5983</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>koeficient</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="koef_Power" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5982</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>koeficient</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="koef_Volume" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5980</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>koeficient</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="KonTmp1" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5181</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>pomocná</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="KonTmp2" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5182</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>pomocná</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="KonTmp3" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5183</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>pomocná</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="L2_Event" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5956</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>Udalost do automatu L2</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="L2_Status" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5955</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>Stav automatu L2</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <InitialValue>1</InitialValue>
+          </Variable>
+          <Variable Name="L2E_CHAR" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5965</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>Kod udalosti L2 - prisel znak</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <InitialValue>4</InitialValue>
+          </Variable>
+          <Variable Name="L2E_NONE" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5963</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>Kod udalosti L2 - zadna udalost</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <InitialValue>1</InitialValue>
+          </Variable>
+          <Variable Name="L2E_SEND" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5964</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>Kod udalosti L2 - vysli ramec</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <InitialValue>2</InitialValue>
+          </Variable>
+          <Variable Name="L2E_TMO" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5966</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>Kod udalosti L2 - vyprsel timeout</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <InitialValue>8</InitialValue>
+          </Variable>
+          <Variable Name="L2S_IDLE" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5961</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>Kod stavu L2 - nic nedela</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <InitialValue>1</InitialValue>
+          </Variable>
+          <Variable Name="L2S_RECEIVE" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5962</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>Kod stavu L2 - ceka na prijem znaku</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <InitialValue>2</InitialValue>
+          </Variable>
+          <Variable Name="MB_CRC" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5184</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>CRC z framu</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="MB_Data" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5013</Wid>
+            <Station>5</Station>
+            <Type>dbtFloatMtx</Type>
+            <Comment>Matice s daty z MT</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <Row>1</Row>
+            <Col>10</Col>
+          </Variable>
+          <Variable Name="MB_energy" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5984</Wid>
+            <Station>5</Station>
+            <Type>dbtFloat</Type>
+            <Comment>Energy</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="MB_flow" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5985</Wid>
+            <Station>5</Station>
+            <Type>dbtFloat</Type>
+            <Comment>Flow</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="MB_Power" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5186</Wid>
+            <Station>5</Station>
+            <Type>dbtFloat</Type>
+            <Comment>Power</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="MB_T_delta" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5989</Wid>
+            <Station>5</Station>
+            <Type>dbtFloat</Type>
+            <Comment>Teplotni rozdil</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="MB_T1" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5987</Wid>
+            <Station>5</Station>
+            <Type>dbtFloat</Type>
+            <Comment>Teplota vstupni</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="MB_T2" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5988</Wid>
+            <Station>5</Station>
+            <Type>dbtFloat</Type>
+            <Comment>Teplota vystupni</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="MB_UFenergy" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5979</Wid>
+            <Station>5</Station>
+            <Type>dbtLong</Type>
+            <Comment>Energy</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="MB_UFFlow" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5187</Wid>
+            <Station>5</Station>
+            <Type>dbtFloat</Type>
+            <Comment>Flow raw</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="MB_UFPower" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5188</Wid>
+            <Station>5</Station>
+            <Type>dbtFloat</Type>
+            <Comment>Power raw</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="MB_UFvolume" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5981</Wid>
+            <Station>5</Station>
+            <Type>dbtLong</Type>
+            <Comment>Volume</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="MB_volume" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5986</Wid>
+            <Station>5</Station>
+            <Type>dbtFloat</Type>
+            <Comment>Volume</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="MBus_Addr" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5189</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>Adresa stanice M-BUS v telegramu</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="MBus_dotaz" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5970</Wid>
+            <Station>5</Station>
+            <Type>dbtIntMtx</Type>
+            <Comment>dotaz M-Bus</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <Row>1</Row>
+            <Col>5</Col>
+            <InitialValue>16;91;0;0;22;</InitialValue>
+          </Variable>
+          <Variable Name="MBusAddrPC" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5975</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>Adresa stanice M-BUS od PC</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="MsgLen" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5190</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>Delka MBus zpravy</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="mtx_c_do" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5974</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>kratky dotaz - 6, dlouhy dotaz - 11</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <InitialValue>4</InitialValue>
+          </Variable>
+          <Variable Name="mtx_c_od" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5972</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>matice sloupec od</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="mtx_r_do" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5973</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>matice radek do</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="mtx_r_od" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5971</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>matice radek od</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="OutLen" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5957</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>Delka vysilaneho telegramu</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="OutTlg" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5952</Wid>
+            <Station>5</Station>
+            <Type>dbtIntMtx</Type>
+            <Comment>Vysilany telegram</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <Row>1</Row>
+            <Col>256</Col>
+          </Variable>
+          <Variable Name="pozice_ADR" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5976</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>Pozice adresy v M-BUS telegramu</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <InitialValue>2</InitialValue>
+          </Variable>
+          <Variable Name="pozice_CRC" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5977</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>Pozice CRC</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <InitialValue>3</InitialValue>
+          </Variable>
+          <Variable Name="PrijBuf" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5950</Wid>
+            <Station>5</Station>
+            <Type>dbtIntMtx</Type>
+            <Comment>Prijimaci bufer</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <Row>1</Row>
+            <Col>256</Col>
+          </Variable>
+          <Variable Name="ReqResult" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5968</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>Vysledek pozadavku.</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="ReqStatus" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5967</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>Stav pozadavku.</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="Run_Hour" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5191</Wid>
+            <Station>5</Station>
+            <Type>dbtLong</Type>
+            <Comment>Procozní hodiny MT</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="TestCRC" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5196</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>CRC test</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="U_T_delta" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5193</Wid>
+            <Station>5</Station>
+            <Type>dbtLong</Type>
+            <Comment>dT raw</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="U_T1" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5194</Wid>
+            <Station>5</Station>
+            <Type>dbtLong</Type>
+            <Comment>T1 raw</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="U_T2" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5195</Wid>
+            <Station>5</Station>
+            <Type>dbtLong</Type>
+            <Comment>T2 raw</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="VyslBuf" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5951</Wid>
+            <Station>5</Station>
+            <Type>dbtIntMtx</Type>
+            <Comment>Vysilaci bufer</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <Row>1</Row>
+            <Col>256</Col>
+          </Variable>
+          <Variable Name="Req" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5066</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>Pozadavky na chod vetvi</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="RTC_bin" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5913</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>Čas RTC, logické hodnoty</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="RTC_slozky" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5911</Wid>
+            <Station>5</Station>
+            <Type>dbtIntMtx</Type>
+            <Comment>Čas RTC, složkový format</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <Row>8</Row>
+            <Col>1</Col>
+          </Variable>
+          <Variable Name="char" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5960</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>znak</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="UTC_slozky" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5915</Wid>
+            <Station>5</Station>
+            <Type>dbtIntMtx</Type>
+            <Comment>Čas Azory, složkový formát</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <Row>8</Row>
+            <Col>1</Col>
+          </Variable>
+          <Variable Name="UTC_time" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5914</Wid>
+            <Station>5</Station>
+            <Type>dbtLong</Type>
+            <Comment>Čas Azory, format DB-Net</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="RTC_time" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5000</Wid>
+            <Station>5</Station>
+            <Type>dbtLong</Type>
+            <Comment>RTC</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="Irqix" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5148</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>Pomocná pro testy v přerušení</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="DIF" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5165</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>DIF</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="Exponent" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5156</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>Exponent jednotek</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="Item_Flag" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5001</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>Prectene veliciny z MBus telegramu</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="Item_type" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5161</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>Typ hodnoty z MBus telegramu</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="MB_status" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5801</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>Stav vyhledávání hodnoty z MBus telegramu</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="MB_EndData" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5166</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>V telegramu uz jsou jen spec. data vyrobce</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="ix" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5065</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>Pomocna integer</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="ix1" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5162</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>pomocný integer</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="ix2" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5163</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>pomocný integer</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="Mnf0" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5158</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>Identifikace výrobce</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="Mnf1" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5159</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>Identifikace výrobce</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="Mnf2" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5160</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>Identifikace výrobce</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="VIF" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5164</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>VIF</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="MT_Data" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5178</Wid>
+            <Station>5</Station>
+            <Type>dbtFloatMtx</Type>
+            <Comment>Data z jednoho měřiče</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <Row>1</Row>
+            <Col>15</Col>
+          </Variable>
+          <Variable Name="Var" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5168</Wid>
+            <Station>5</Station>
+            <Type>dbtLong</Type>
+            <Comment>Mbus hodnota </Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="Val" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5167</Wid>
+            <Station>5</Station>
+            <Type>dbtFloat</Type>
+            <Comment>MBus hodnota - float</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="i" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5002</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>pocitadlo</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="Modb_Aloc1" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5014</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>Počet bezchybně nadefinovaných vzdál. bodů</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="Modb_Cnt1" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5010</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>Celkový počet definovaných vzdálených bodů</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="Data_KGJ" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5392</Wid>
+            <Station>5</Station>
+            <Type>dbtIntMtx</Type>
+            <Comment>Data z KGJ  jednotky</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <Row>1</Row>
+            <Col>32</Col>
+          </Variable>
+          <Variable Name="Stat_TPX" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5068</Wid>
+            <Station>5</Station>
+            <Type>dbtIntMtx</Type>
+            <Comment>Stavy VZT jednotky TOPVEX</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <Row>1</Row>
+            <Col>32</Col>
+          </Variable>
+          <Variable Name="ReData_KGJ" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5003</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>Výsledek čtení</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="ReUsrPw_KGJ" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5004</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>Výsledek čtení</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="UsrPw_KGJ" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5005</Wid>
+            <Station>5</Station>
+            <Type>dbtIntMtx</Type>
+            <Comment>User ID, password</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <Row>1</Row>
+            <Col>2</Col>
+            <InitialValue>0;30340;</InitialValue>
+          </Variable>
+          <Variable Name="OnOff_KGJ" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5006</Wid>
+            <Station>5</Station>
+            <Type>dbtIntMtx</Type>
+            <Comment>Povely pro vyp a zap KGJ</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+            <Row>1</Row>
+            <Col>3</Col>
+          </Variable>
+          <Variable Name="ReOnOff_KGJ" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5007</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>
+            </Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="KGJ_eth_stat" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5009</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>Pro komunikaci DT1-DT5</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+          <Variable Name="KGJ_eth_com" Class="Amit.Psp4.Shared.Psp4VariableBase">
+            <Wid>5008</Wid>
+            <Station>5</Station>
+            <Type>dbtInt</Type>
+            <Comment>Pro komunikaci DT1-DT5</Comment>
+            <WarmInit>False</WarmInit>
+            <InitialValueFormat>0</InitialValueFormat>
+          </Variable>
+        </VariableList>
+        <AliasList>
+          <Alias Name="@ComError" Class="Amit.Psp4.Shared.Psp4Alias">
+            <Comment>Chyba odečtu</Comment>
+            <VarName>Req</VarName>
+            <Bit>14</Bit>
+          </Alias>
+          <Alias Name="@MT_Start" Class="Amit.Psp4.Shared.Psp4Alias">
+            <Comment>Povel start odečtu MT</Comment>
+            <VarName>Req</VarName>
+            <Bit>13</Bit>
+          </Alias>
+          <Alias Name="@tmEnable" Class="Amit.Psp4.Shared.Psp4Alias">
+            <Comment>Povolení automatické změny času</Comment>
+            <VarName>RTC_bin</VarName>
+            <Bit>4</Bit>
+          </Alias>
+          <Alias Name="@tmLetoInit" Class="Amit.Psp4.Shared.Psp4Alias">
+            <Comment>Bylo provedeno počáteční nastavení času</Comment>
+            <VarName>RTC_bin</VarName>
+            <Bit>3</Bit>
+          </Alias>
+          <Alias Name="@tmZmena" Class="Amit.Psp4.Shared.Psp4Alias">
+            <Comment>Změna období</Comment>
+            <VarName>RTC_bin</VarName>
+            <Bit>2</Bit>
+          </Alias>
+          <Alias Name="@tmLeto" Class="Amit.Psp4.Shared.Psp4Alias">
+            <Comment>Je letní období</Comment>
+            <VarName>RTC_bin</VarName>
+            <Bit>1</Bit>
+          </Alias>
+          <Alias Name="@tmLetniCas" Class="Amit.Psp4.Shared.Psp4Alias">
+            <Comment>Byl proveden přechod na letní čas</Comment>
+            <VarName>RTC_bin</VarName>
+            <Bit>0</Bit>
+          </Alias>
+          <Alias Name="@Pom" Class="Amit.Psp4.Shared.Psp4Alias">
+            <Comment>Pomocný bit</Comment>
+            <VarName>Req</VarName>
+            <Bit>12</Bit>
+          </Alias>
+          <Alias Name="@EnComEth" Class="Amit.Psp4.Shared.Psp4Alias">
+            <Comment>Povolení zadávání povelů na KGJ</Comment>
+            <VarName>Req</VarName>
+            <Bit>0</Bit>
+          </Alias>
+          <Alias Name="@StopKGJ" Class="Amit.Psp4.Shared.Psp4Alias">
+            <Comment>
+            </Comment>
+            <VarName>Req</VarName>
+            <Bit>1</Bit>
+          </Alias>
+        </AliasList>
+      </DBase>
+      <DteData>
+        <EndOfLineCR>False</EndOfLineCR>
+        <EndOfLineLF>False</EndOfLineLF>
+        <Increment>10</Increment>
+        <Formaty>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>0</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="OK" />
+            <Text Lang="cs-CZ" Text="Žádná chyba" />
+            <Comment>OK</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>16</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="nos" />
+            <Text Lang="cs-CZ" Text="Zavedení operačního systému" />
+            <Comment>Zavedení operačního systému</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>17</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="nos" />
+            <Text Lang="cs-CZ" Text="Studeny start síťového zavaděče" />
+            <Comment>Studeny start síťového zavaděče</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>18</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="nos" />
+            <Text Lang="cs-CZ" Text="Teplý start síťového zavaděče (výpadek: %T)" />
+            <Comment>Teplý start síťového zavaděče</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>19</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="nos" />
+            <Text Lang="cs-CZ" Text="Studený start aplikace" />
+            <Comment>Studený start aplikace</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>20</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="nos" />
+            <Text Lang="cs-CZ" Text="Teplý start aplikace (výpadek: %T)" />
+            <Comment>Teplý start aplikace</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>21</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="nos" />
+            <Text Lang="cs-CZ" Text="Chyba procesoru: %0sw" />
+            <Comment>Chyba procesoru</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>22</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="nos" />
+            <Text Lang="cs-CZ" Text="Zápis do zakázané paměti" />
+            <Comment>Zápis do zakázané paměti</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>23</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="nos" />
+            <Text Lang="cs-CZ" Text="Interní chyba řadiče přerušení, adr.: %d" />
+            <Comment>Interní chyba řadiče přerušení</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>24</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="eth" />
+            <Text Lang="cs-CZ" Text="Rozhraní č. %0w (karta %gh typ %sl" />
+            <Comment>Stav rozhraní Ethernet</Comment>
+            <DWTabulka>EthState</DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>25</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="nos" />
+            <Text Lang="cs-CZ" Text="Použití neexistujícího COM-portu %0i" />
+            <Comment>Použití neexistujícího COM-portu</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>32</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="Db" />
+            <Text Lang="cs-CZ" Text="WID %0i neexistuje." />
+            <Comment>Neplatný WID proměnné</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>33</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="Db" />
+            <Text Lang="cs-CZ" Text="Neplatný handle proměnné %0w" />
+            <Comment>Neplatný vnitřní identifikátor proměnné</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>34</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="Db" />
+            <Text Lang="cs-CZ" Text="Neplatný typ %1sw proměnné %0i" />
+            <Comment>Neplatný typ proměnné</Comment>
+            <DWTabulka>Typy</DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>35</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="Db" />
+            <Text Lang="cs-CZ" Text="Neplatný řádek %1w proměnné %0w" />
+            <Comment>Neplatný řádek proměnné</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>36</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="Db" />
+            <Text Lang="cs-CZ" Text="Neplatný sloupec %1w proměnné %0w" />
+            <Comment>Neplatný sloupec proměnné</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>37</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="Db" />
+            <Text Lang="cs-CZ" Text="Neplatný počet řádků %1w proměnné %0w" />
+            <Comment>Neplatný počet řádků proměnné</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>38</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="Db" />
+            <Text Lang="cs-CZ" Text="Neplatný počet sloupců %1w proměnné %0w" />
+            <Comment>Neplatný počet sloupců proměnné</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>39</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="nos" />
+            <Text Lang="cs-CZ" Text="Nedostatek paměti" />
+            <Comment>Nedostatek paměti</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>40</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="aeg" />
+            <Text Lang="cs-CZ" Text="Špatný 1/4h pulz, délka: %t" />
+            <Comment>Špatný 1/4h pulz při měření odběru el.energie</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>32772</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="val" />
+            <Text Lang="cs-CZ" Text="U ventilu %0w - %1w jsou oba dva KS sepnuty" />
+            <Comment>U ventilu jsou oba koncové spínače sepnuté</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>32773</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="val" />
+            <Text Lang="cs-CZ" Text="U ventilu %0w - %1w jsou oba dva KS v pořádku" />
+            <Comment>U ventilu jsou oba koncové spínače v pořádku</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>32774</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="val" />
+            <Text Lang="cs-CZ" Text="Ventil %0w - %1w nedojel na KS OTEVRENO" />
+            <Comment>Ventil nedojel v časovém limitu na koncový spínač OTEVŘENO</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>32775</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="val" />
+            <Text Lang="cs-CZ" Text="Ventil %0w - %1w nedojel na KS ZAVRENO" />
+            <Comment>Ventil nedojel v časovém limitu na koncový spínač OTEVŘENO</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>32776</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="val" />
+            <Text Lang="cs-CZ" Text="Ventil %0w - %1w dojel na KS OTEVRENO" />
+            <Comment>Ventil dojel na koncový spínač OTEVŘENO</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>32777</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="val" />
+            <Text Lang="cs-CZ" Text="Ventil %0w - %1w dojel na KS ZAVRENO" />
+            <Comment>Ventil dojel na koncový spínač ZAVŘENO</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>32800</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="lcd" />
+            <Text Lang="cs-CZ" Text="Nelze vložit čtecí požadavek do buferu %sl" />
+            <Comment>Nelze vložit čtecí požadavek</Comment>
+            <DWTabulka>Bufer</DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>32801</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="lcd" />
+            <Text Lang="cs-CZ" Text="Nelze vložit zápisový požadavek do buferu %sl" />
+            <Comment>Nelze vložit zápisový požadavek</Comment>
+            <DWTabulka>Bufer</DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>32802</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="lcd" />
+            <Text Lang="cs-CZ" Text="Přihlášení uživatele %0w" />
+            <Comment>Přihlášení uživatele</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+          <Format Class="Amit.DetStudio.Shared.DteItem">
+            <Kod>32803</Kod>
+            <System>True</System>
+            <Prefix Lang="cs-CZ" Text="lcd" />
+            <Text Lang="cs-CZ" Text="Odhlašení uživatele %0w" />
+            <Comment>Odhlášení uživatele</Comment>
+            <DWTabulka>
+            </DWTabulka>
+            <FTabulka>
+            </FTabulka>
+          </Format>
+        </Formaty>
+        <Tabulky>
+          <Tabulka Class="Amit.DetStudio.Shared.DteTable">
+            <Nazev>Bufer</Nazev>
+            <Comment>Buffer (Systémová tabulka)</Comment>
+            <Typ>Long</Typ>
+            <Polozky>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>0</Dolni>
+                <Horni>0</Horni>
+                <Text Lang="cs-CZ" Text="NOSu" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>65536</Dolni>
+                <Horni>65536</Horni>
+                <Text Lang="cs-CZ" Text="LCDSHELLu" />
+              </Polozka>
+            </Polozky>
+          </Tabulka>
+          <Tabulka Class="Amit.DetStudio.Shared.DteTable">
+            <Nazev>EthState</Nazev>
+            <Comment>Stav rozhraní Ethernet (sytémová tabulka)</Comment>
+            <Typ>Long</Typ>
+            <Polozky>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>131072</Dolni>
+                <Horni>131072</Horni>
+                <Text Lang="cs-CZ" Text="AD-ETH100) stav 10Mb/s, poloduplex" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>131073</Dolni>
+                <Horni>131073</Horni>
+                <Text Lang="cs-CZ" Text="AD-ETH100) stav 10Mb/s, plnýduplex" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>131076</Dolni>
+                <Horni>131076</Horni>
+                <Text Lang="cs-CZ" Text="AD-ETH100) stav 100Mb/s, poloduplex" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>131077</Dolni>
+                <Horni>131077</Horni>
+                <Text Lang="cs-CZ" Text="AD-ETH100) stav 100Mb/s, plný duplex" />
+              </Polozka>
+            </Polozky>
+          </Tabulka>
+          <Tabulka Class="Amit.DetStudio.Shared.DteTable">
+            <Nazev>Procesor</Nazev>
+            <Comment>Chyby procesoru (sytémová tabulka)</Comment>
+            <Typ>Long</Typ>
+            <Polozky>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>0</Dolni>
+                <Horni>0</Horni>
+                <Text Lang="cs-CZ" Text="Přetečení uživ./CP zásobníku" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>1</Dolni>
+                <Horni>1</Horni>
+                <Text Lang="cs-CZ" Text="Nedefinovaný kód instrukce" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>2</Dolni>
+                <Horni>2</Horni>
+                <Text Lang="cs-CZ" Text="Zakázaná instrukce" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>3</Dolni>
+                <Horni>3</Horni>
+                <Text Lang="cs-CZ" Text="Špatný typ operandu instrukce" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>4</Dolni>
+                <Horni>4</Horni>
+                <Text Lang="cs-CZ" Text="Špatná adresa dat" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>5</Dolni>
+                <Horni>5</Horni>
+                <Text Lang="cs-CZ" Text="Špatný přístup na sběrnici procesoru" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>6</Dolni>
+                <Horni>6</Horni>
+                <Text Lang="cs-CZ" Text="Přetečení zásobníku procesoru" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>7</Dolni>
+                <Horni>7</Horni>
+                <Text Lang="cs-CZ" Text="Podtečení zásobníku procesoru" />
+              </Polozka>
+            </Polozky>
+          </Tabulka>
+          <Tabulka Class="Amit.DetStudio.Shared.DteTable">
+            <Nazev>Typy</Nazev>
+            <Comment>Databázové typy (sytémová tabulka)</Comment>
+            <Typ>Long</Typ>
+            <Polozky>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>0</Dolni>
+                <Horni>0</Horni>
+                <Text Lang="cs-CZ" Text="DBT_INT" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>1</Dolni>
+                <Horni>1</Horni>
+                <Text Lang="cs-CZ" Text="DBT_LONG" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>2</Dolni>
+                <Horni>2</Horni>
+                <Text Lang="cs-CZ" Text="DBT_FLOAT" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>3</Dolni>
+                <Horni>3</Horni>
+                <Text Lang="cs-CZ" Text="DBT_INTMTX" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>4</Dolni>
+                <Horni>4</Horni>
+                <Text Lang="cs-CZ" Text="DBT_LONGMTX" />
+              </Polozka>
+              <Polozka Class="Amit.DetStudio.Shared.DteTable+DteTableItemFloat">
+                <Dolni>5</Dolni>
+                <Horni>5</Horni>
+                <Text Lang="cs-CZ" Text="DBT_FLOATMTX" />
+              </Polozka>
+            </Polozky>
+          </Tabulka>
+        </Tabulky>
+      </DteData>
+      <ArionManager>
+        <Arion>
+          <ArionLine>
+            <Name>Arion0</Name>
+            <Port>0</Port>
+            <Baud>19200</Baud>
+            <ID>0</ID>
+            <InitPeriodAIAO>2000</InitPeriodAIAO>
+            <InitPeriodDIDO>2000</InitPeriodDIDO>
+            <InitGuardTime>5000</InitGuardTime>
+            <TimeBroadcast>False</TimeBroadcast>
+            <ArionModuleList />
+          </ArionLine>
+        </Arion>
+      </ArionManager>
+      <TelemetrManager>
+        <Telemetr />
+      </TelemetrManager>
+      <ModbusManager>
+        <Psp4Modbus />
+      </ModbusManager>
+      <ModbusMasterManager />
+      <HwDescriptor>
+        <IsModular>False</IsModular>
+        <WidMapping>False</WidMapping>
+        <BlockReadNetDbNames>False</BlockReadNetDbNames>
+        <ProtocolMode>0</ProtocolMode>
+        <Ident1>Řízení KGJ a čtení MT</Ident1>
+        <Ident2>Luhačovice - Plovárna</Ident2>
+        <WatchActivate>True</WatchActivate>
+        <Connect>1</Connect>
+        <SourceCodeUpload>False</SourceCodeUpload>
+        <SourceCodePassword>True</SourceCodePassword>
+        <VariableBackup>True</VariableBackup>
+        <SkipMtxDiffDim>False</SkipMtxDiffDim>
+        <PortList>
+          <Port>
+            <Num>0</Num>
+            <Comment>
+            </Comment>
+            <SignalList>
+              <Signal>
+                <Num>0</Num>
+                <Name>DIO0_0</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>1</Num>
+                <Name>DIO0_1</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>2</Num>
+                <Name>DIO0_2</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>3</Num>
+                <Name>DIO0_3</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>4</Num>
+                <Name>DIO0_4</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>5</Num>
+                <Name>DIO0_5</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>6</Num>
+                <Name>DIO0_6</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>7</Num>
+                <Name>DIO0_7</Name>
+                <Comment>NC</Comment>
+              </Signal>
+            </SignalList>
+          </Port>
+          <Port>
+            <Num>1</Num>
+            <Comment>
+            </Comment>
+            <SignalList>
+              <Signal>
+                <Num>0</Num>
+                <Name>DIO_AC1_0</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>1</Num>
+                <Name>DIO_AC1_1</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>2</Num>
+                <Name>DIO_AC1_2</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>3</Num>
+                <Name>DIO_AC1_3</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>4</Num>
+                <Name>DIO_AC1_4</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>5</Num>
+                <Name>DIO_AC1_5</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>6</Num>
+                <Name>DIO_AC1_6</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>7</Num>
+                <Name>DIO_AC1_7</Name>
+                <Comment>NC</Comment>
+              </Signal>
+            </SignalList>
+          </Port>
+          <Port>
+            <Num>2</Num>
+            <Comment>
+            </Comment>
+            <SignalList>
+              <Signal>
+                <Num>0</Num>
+                <Name>DAI02_0</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>1</Num>
+                <Name>DAI02_1</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>2</Num>
+                <Name>DAI02_2</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>3</Num>
+                <Name>DAI02_3</Name>
+                <Comment>NC</Comment>
+              </Signal>
+            </SignalList>
+          </Port>
+          <Port>
+            <Num>3</Num>
+            <Comment>
+            </Comment>
+            <SignalList>
+              <Signal>
+                <Num>0</Num>
+                <Name>DAI0_AC3_0</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>1</Num>
+                <Name>DAI0_AC3_1</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>2</Num>
+                <Name>DAI0_AC3_2</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>3</Num>
+                <Name>DAI0_AC3_3</Name>
+                <Comment>NC</Comment>
+              </Signal>
+            </SignalList>
+          </Port>
+          <Port>
+            <Num>4</Num>
+            <Comment>
+            </Comment>
+            <SignalList>
+              <Signal>
+                <Num>0</Num>
+                <Name>DO0_0</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>1</Num>
+                <Name>DO0_1</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>2</Num>
+                <Name>DO0_2</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>3</Num>
+                <Name>DO0_3</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>4</Num>
+                <Name>DO0_4</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>5</Num>
+                <Name>DO0_5</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>6</Num>
+                <Name>DO0_6</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>7</Num>
+                <Name>DO0_7</Name>
+                <Comment>NC</Comment>
+              </Signal>
+            </SignalList>
+          </Port>
+          <Port>
+            <Num>5</Num>
+            <Comment>
+            </Comment>
+            <SignalList>
+              <Signal>
+                <Num>0</Num>
+                <Name>LED1_0</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>1</Num>
+                <Name>LED1_1</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>2</Num>
+                <Name>LED1_2</Name>
+                <Comment>NC</Comment>
+              </Signal>
+            </SignalList>
+          </Port>
+          <Port>
+            <Num>6</Num>
+            <Comment>
+            </Comment>
+            <SignalList>
+              <Signal>
+                <Num>0</Num>
+                <Name>AI00_0</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>1</Num>
+                <Name>AI00_1</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>2</Num>
+                <Name>AI00_2</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>3</Num>
+                <Name>AI00_3</Name>
+                <Comment>NC</Comment>
+              </Signal>
+            </SignalList>
+          </Port>
+          <Port>
+            <Num>7</Num>
+            <Comment>
+            </Comment>
+            <SignalList>
+              <Signal>
+                <Num>0</Num>
+                <Name>Ni10001_0</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>1</Num>
+                <Name>Ni10001_1</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>2</Num>
+                <Name>Ni10001_2</Name>
+                <Comment>NC</Comment>
+              </Signal>
+              <Signal>
+                <Num>3</Num>
+                <Name>Ni10001_3</Name>
+                <Comment>NC</Comment>
+              </Signal>
+            </SignalList>
+          </Port>
+        </PortList>
+        <NetOptions />
+      </HwDescriptor>
+      <SettingsRS>
+        <GenWatchInfo>0</GenWatchInfo>
+        <IsGenWatchFBParams>False</IsGenWatchFBParams>
+      </SettingsRS>
+    </Data>
+    <DataManager>
+      <Investigator Name="LoadSave" Class="Amit.Psp.PspTools.ToolInvestigatorMain">
+        <Nastaveni>
+          <NoneArrays>False</NoneArrays>
+          <ArrayFilter>False</ArrayFilter>
+          <ArrayCol>10</ArrayCol>
+          <ArrayRow>10</ArrayRow>
+          <NoPanel>False</NoPanel>
+          <LinkPath>
+          </LinkPath>
+          <CompareWID>Name</CompareWID>
+          <CompareSDf>False</CompareSDf>
+          <CompareUni>False</CompareUni>
+          <CompareArray>False</CompareArray>
+          <ViewWID>False</ViewWID>
+          <ViewNull>False</ViewNull>
+          <ViewHex>False</ViewHex>
+          <ViewRefresh>True</ViewRefresh>
+          <ActualStore>False</ActualStore>
+          <ActualProject>False</ActualProject>
+          <ActualWID>False</ActualWID>
+          <SkipMtxDiffDim>False</SkipMtxDiffDim>
+        </Nastaveni>
+        <SortingNum>0</SortingNum>
+        <SortingDesc>False</SortingDesc>
+        <Soubory>
+          <DataItem>
+            <Link>False</Link>
+            <Name>download.backup</Name>
+            <Created>10/02/2017 13:46:25</Created>
+            <CountVar>95</CountVar>
+            <CountBytes>2536</CountBytes>
+            <Comment>
+            </Comment>
+            <File>download.backup.psps</File>
+            <Application>
+            </Application>
+            <ActAllStore>True</ActAllStore>
+            <ActAllProject>False</ActAllProject>
+            <AllVarsOK>True</AllVarsOK>
+            <ReadAllVars>True</ReadAllVars>
+          </DataItem>
+        </Soubory>
+      </Investigator>
+    </DataManager>
+    <ArchiveManager>
+      <Archivist Class="Amit.Psp.PspTools.ToolArchiveMain">
+        <Nastaveni>
+          <RefreshS>60</RefreshS>
+          <InterTimeMs>50</InterTimeMs>
+          <SaveSamples>10</SaveSamples>
+          <RefreshWindows>True</RefreshWindows>
+          <DenikTextyAuto>10</DenikTextyAuto>
+          <ViewDenikCas>True</ViewDenikCas>
+          <ViewDenikHistory>True</ViewDenikHistory>
+          <ViewDenikPomVal>False</ViewDenikPomVal>
+          <ViewArchivCas>True</ViewArchivCas>
+          <ViewArchivHistory>False</ViewArchivHistory>
+          <ViewDenikView>ExplOut</ViewDenikView>
+          <ViewDenikSystem>True</ViewDenikSystem>
+          <ViewArchivView>Normal</ViewArchivView>
+          <ExportPath>
+          </ExportPath>
+          <ExportType>Text</ExportType>
+          <QuickLastRows>300</QuickLastRows>
+        </Nastaveni>
+        <SortingNum>0</SortingNum>
+        <SortingDesc>False</SortingDesc>
+        <RunDisabled>False</RunDisabled>
+        <Archives />
+      </Archivist>
+    </ArchiveManager>
+    <NastaveniKomunikace>
+      <AdresaPC>31</AdresaPC>
+      <AdresaStanice>5</AdresaStanice>
+      <TypKomunikace>cmUDP</TypKomunikace>
+      <COM>
+        <ComComPort>0</ComComPort>
+        <ComSpeed>115200</ComSpeed>
+      </COM>
+      <UDP>
+        <UdpAddr>
+          <Byte0>189</Byte0>
+          <Byte1>139</Byte1>
+          <Byte2>20</Byte2>
+          <Byte3>178</Byte3>
+        </UdpAddr>
+        <UdpPort>9559</UdpPort>
+        <UdpTimeOut>3000</UdpTimeOut>
+        <UdpPass>22</UdpPass>
+        <EthProtocol>UDP</EthProtocol>
+        <UdpMyPort>0</UdpMyPort>
+        <UdpRedirect>False</UdpRedirect>
+        <UdpSubAddr>
+          <Byte0>189</Byte0>
+          <Byte1>139</Byte1>
+          <Byte2>20</Byte2>
+          <Byte3>178</Byte3>
+        </UdpSubAddr>
+        <UdpSubPort>9559</UdpSubPort>
+        <UdpMinDelay>0</UdpMinDelay>
+      </UDP>
+      <Modem>
+        <MdmPass>0</MdmPass>
+        <MdmMyPass>0</MdmMyPass>
+        <MdmComPort>0</MdmComPort>
+        <MdmSpeed>9600</MdmSpeed>
+        <MdmPriority>0</MdmPriority>
+        <MdmSPrior>B</MdmSPrior>
+        <MdmMezPochyb>10</MdmMezPochyb>
+        <MdmInitStr>
+        </MdmInitStr>
+        <MdmCallPrefix>
+        </MdmCallPrefix>
+        <MdmHangStr>
+        </MdmHangStr>
+        <MdmGPS_PIN>
+        </MdmGPS_PIN>
+        <MdmBlockDelay>30</MdmBlockDelay>
+        <MdmTelNum>
+        </MdmTelNum>
+        <MdmNoFail>1</MdmNoFail>
+      </Modem>
+      <Dokopo>
+        <DkpDKP>1</DkpDKP>
+        <DkpSpeed>9600</DkpSpeed>
+      </Dokopo>
+      <Virtual />
+      <Service>
+        <SrvComPort>0</SrvComPort>
+        <SrvTimeOut>1000</SrvTimeOut>
+        <SrvMyPort>59</SrvMyPort>
+        <SrvMyPass>0</SrvMyPass>
+      </Service>
+      <GPRS>
+        <GprsComPort>0</GprsComPort>
+        <GprsDuplFull>False</GprsDuplFull>
+        <GprsModemAddr>
+          <Byte0>0</Byte0>
+          <Byte1>0</Byte1>
+          <Byte2>0</Byte2>
+          <Byte3>0</Byte3>
+        </GprsModemAddr>
+        <GprsModemPort>59</GprsModemPort>
+        <GprsAddr>
+          <Byte0>0</Byte0>
+          <Byte1>0</Byte1>
+          <Byte2>0</Byte2>
+          <Byte3>0</Byte3>
+        </GprsAddr>
+        <GprsPort>59</GprsPort>
+        <GprsMyPass>0</GprsMyPass>
+        <GprsTimeOut>5000</GprsTimeOut>
+      </GPRS>
+    </NastaveniKomunikace>
+  </Project>
+</DetStation>

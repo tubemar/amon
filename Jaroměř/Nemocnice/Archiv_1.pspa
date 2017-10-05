@@ -1,0 +1,505 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DETStudioArchivar>
+  <ArchiveItem>
+    <Denik>True</Denik>
+    <Nazev>Archiv_1</Nazev>
+    <Vzorky>33</Vzorky>
+    <Nacteno>07/21/2017 15:18:43</Nacteno>
+    <LastVzorek>07/21/2017 11:24:44</LastVzorek>
+    <AutomActual>False</AutomActual>
+    <DenikTyp>Měsíc</DenikTyp>
+    <ArchivTyp>Měsíc</ArchivTyp>
+    <DenikUser>False</DenikUser>
+    <DenikWidIndex>0</DenikWidIndex>
+    <DenikWidData>0</DenikWidData>
+    <ArchivWidIndex>0</ArchivWidIndex>
+    <ArchivWidCas>0</ArchivWidCas>
+    <DenikHloubka>100</DenikHloubka>
+    <ArchivHloubka>0</ArchivHloubka>
+    <ACTLastDate>07/21/2017 11:24:44</ACTLastDate>
+    <ACTLastIndex>32</ACTLastIndex>
+    <FormatovaciTexty>
+      <Formaty>
+        <Format>
+          <Kod>0</Kod>
+          <Text>Žádná chyba</Text>
+          <TableFloatIndex>
+          </TableFloatIndex>
+          <TableIntIndex>
+          </TableIntIndex>
+        </Format>
+        <Format>
+          <Kod>16</Kod>
+          <Text>Zavedení operačního systému</Text>
+          <TableFloatIndex>
+          </TableFloatIndex>
+          <TableIntIndex>
+          </TableIntIndex>
+        </Format>
+        <Format>
+          <Kod>17</Kod>
+          <Text>Studeny start síťového zavaděče</Text>
+          <TableFloatIndex>
+          </TableFloatIndex>
+          <TableIntIndex>
+          </TableIntIndex>
+        </Format>
+        <Format>
+          <Kod>18</Kod>
+          <Text>Teplý start síťového zavaděče (výpadek: %T)</Text>
+          <TableFloatIndex>
+          </TableFloatIndex>
+          <TableIntIndex>
+          </TableIntIndex>
+        </Format>
+        <Format>
+          <Kod>19</Kod>
+          <Text>Studený start aplikace</Text>
+          <TableFloatIndex>
+          </TableFloatIndex>
+          <TableIntIndex>
+          </TableIntIndex>
+        </Format>
+        <Format>
+          <Kod>20</Kod>
+          <Text>Teplý start aplikace (výpadek: %T)</Text>
+          <TableFloatIndex>
+          </TableFloatIndex>
+          <TableIntIndex>
+          </TableIntIndex>
+        </Format>
+        <Format>
+          <Kod>21</Kod>
+          <Text>Chyba procesoru: %0sw</Text>
+          <TableFloatIndex>
+          </TableFloatIndex>
+          <TableIntIndex>
+          </TableIntIndex>
+        </Format>
+        <Format>
+          <Kod>22</Kod>
+          <Text>Zápis do zakázané paměti</Text>
+          <TableFloatIndex>
+          </TableFloatIndex>
+          <TableIntIndex>
+          </TableIntIndex>
+        </Format>
+        <Format>
+          <Kod>23</Kod>
+          <Text>Interní chyba řadiče přerušení, adr.: %d</Text>
+          <TableFloatIndex>
+          </TableFloatIndex>
+          <TableIntIndex>
+          </TableIntIndex>
+        </Format>
+        <Format>
+          <Kod>24</Kod>
+          <Text>Rozhraní č. %0w (karta %gh typ %sl</Text>
+          <TableFloatIndex>
+          </TableFloatIndex>
+          <TableIntIndex>EthState</TableIntIndex>
+        </Format>
+        <Format>
+          <Kod>32</Kod>
+          <Text>WID %0i neexistuje.</Text>
+          <TableFloatIndex>
+          </TableFloatIndex>
+          <TableIntIndex>
+          </TableIntIndex>
+        </Format>
+        <Format>
+          <Kod>33</Kod>
+          <Text>Špatný handle proměnné %0w</Text>
+          <TableFloatIndex>
+          </TableFloatIndex>
+          <TableIntIndex>
+          </TableIntIndex>
+        </Format>
+        <Format>
+          <Kod>34</Kod>
+          <Text>Špatný typ %1sw proměnné %0i</Text>
+          <TableFloatIndex>
+          </TableFloatIndex>
+          <TableIntIndex>Typy</TableIntIndex>
+        </Format>
+        <Format>
+          <Kod>35</Kod>
+          <Text>Špatný řádek %1w proměnné %0w.</Text>
+          <TableFloatIndex>
+          </TableFloatIndex>
+          <TableIntIndex>
+          </TableIntIndex>
+        </Format>
+        <Format>
+          <Kod>36</Kod>
+          <Text>Špatný sloupec %1w proměnné %0w</Text>
+          <TableFloatIndex>
+          </TableFloatIndex>
+          <TableIntIndex>
+          </TableIntIndex>
+        </Format>
+        <Format>
+          <Kod>37</Kod>
+          <Text>Špatný počet řádků %1w proměnné %0w</Text>
+          <TableFloatIndex>
+          </TableFloatIndex>
+          <TableIntIndex>
+          </TableIntIndex>
+        </Format>
+        <Format>
+          <Kod>38</Kod>
+          <Text>Špatný počet sloupců %1w proměnné %0w</Text>
+          <TableFloatIndex>
+          </TableFloatIndex>
+          <TableIntIndex>
+          </TableIntIndex>
+        </Format>
+        <Format>
+          <Kod>39</Kod>
+          <Text>Nedostatek paměti</Text>
+          <TableFloatIndex>
+          </TableFloatIndex>
+          <TableIntIndex>
+          </TableIntIndex>
+        </Format>
+        <Format>
+          <Kod>40</Kod>
+          <Text>Špatný 1/4h pulz, délka: %t</Text>
+          <TableFloatIndex>
+          </TableFloatIndex>
+          <TableIntIndex>
+          </TableIntIndex>
+        </Format>
+        <Format>
+          <Kod>4096</Kod>
+          <Text>Alarm nastal: %0sw</Text>
+          <TableFloatIndex>
+          </TableFloatIndex>
+          <TableIntIndex>ErrGlob</TableIntIndex>
+        </Format>
+        <Format>
+          <Kod>4097</Kod>
+          <Text>Alarm skončil: %0sw</Text>
+          <TableFloatIndex>
+          </TableFloatIndex>
+          <TableIntIndex>ErrGlob</TableIntIndex>
+        </Format>
+        <Format>
+          <Kod>4098</Kod>
+          <Text>Alarm kvitován: %0sw</Text>
+          <TableFloatIndex>
+          </TableFloatIndex>
+          <TableIntIndex>ErrGlob</TableIntIndex>
+        </Format>
+        <Format>
+          <Kod>4099</Kod>
+          <Text>Alarm odkvitován: %0sw</Text>
+          <TableFloatIndex>
+          </TableFloatIndex>
+          <TableIntIndex>ErrGlob</TableIntIndex>
+        </Format>
+        <Format>
+          <Kod>32772</Kod>
+          <Text>U ventilu %0w - %1w jsou oba dva KS sepnuty</Text>
+          <TableFloatIndex>
+          </TableFloatIndex>
+          <TableIntIndex>
+          </TableIntIndex>
+        </Format>
+        <Format>
+          <Kod>32773</Kod>
+          <Text>U ventilu %0w - %1w jsou oba dva KS v poradku</Text>
+          <TableFloatIndex>
+          </TableFloatIndex>
+          <TableIntIndex>
+          </TableIntIndex>
+        </Format>
+        <Format>
+          <Kod>32774</Kod>
+          <Text>Ventil %0w - %1w nedojel na KS OTEVRENO</Text>
+          <TableFloatIndex>
+          </TableFloatIndex>
+          <TableIntIndex>
+          </TableIntIndex>
+        </Format>
+        <Format>
+          <Kod>32775</Kod>
+          <Text>Ventil %0w - %1w nedojel na KS ZAVRENO</Text>
+          <TableFloatIndex>
+          </TableFloatIndex>
+          <TableIntIndex>
+          </TableIntIndex>
+        </Format>
+        <Format>
+          <Kod>32776</Kod>
+          <Text>Ventil %0w - %1w dojel na KS OTEVRENO</Text>
+          <TableFloatIndex>
+          </TableFloatIndex>
+          <TableIntIndex>
+          </TableIntIndex>
+        </Format>
+        <Format>
+          <Kod>32777</Kod>
+          <Text>Ventil %0w - %1w dojel na KS ZAVRENO</Text>
+          <TableFloatIndex>
+          </TableFloatIndex>
+          <TableIntIndex>
+          </TableIntIndex>
+        </Format>
+        <Format>
+          <Kod>32800</Kod>
+          <Text>Nelze vložit čtecí požadavek do buferu %sl</Text>
+          <TableFloatIndex>
+          </TableFloatIndex>
+          <TableIntIndex>Bufer</TableIntIndex>
+        </Format>
+        <Format>
+          <Kod>32801</Kod>
+          <Text>Nelze vložit zápisový požadavek do buferu %sl</Text>
+          <TableFloatIndex>
+          </TableFloatIndex>
+          <TableIntIndex>Bufer</TableIntIndex>
+        </Format>
+        <Format>
+          <Kod>32802</Kod>
+          <Text>Přihlášení uživatele %0w</Text>
+          <TableFloatIndex>
+          </TableFloatIndex>
+          <TableIntIndex>
+          </TableIntIndex>
+        </Format>
+        <Format>
+          <Kod>32803</Kod>
+          <Text>Odhlašení uživatele %0w</Text>
+          <TableFloatIndex>
+          </TableFloatIndex>
+          <TableIntIndex>
+          </TableIntIndex>
+        </Format>
+      </Formaty>
+      <IntTabulky>
+        <Tabulka>
+          <Nazev>Bufer</Nazev>
+          <Polozky>
+            <Polozka>
+              <Od>0</Od>
+              <Do>0</Do>
+              <Text>NOSu</Text>
+            </Polozka>
+            <Polozka>
+              <Od>65536</Od>
+              <Do>65536</Do>
+              <Text>LCDSHELLu</Text>
+            </Polozka>
+          </Polozky>
+        </Tabulka>
+        <Tabulka>
+          <Nazev>ErrGlob</Nazev>
+          <Polozky>
+            <Polozka>
+              <Od>2000</Od>
+              <Do>2000</Do>
+              <Text>STOP tlačítko</Text>
+            </Polozka>
+            <Polozka>
+              <Od>2001</Od>
+              <Do>2001</Do>
+              <Text>Únik plynu</Text>
+            </Polozka>
+            <Polozka>
+              <Od>2002</Od>
+              <Do>2002</Do>
+              <Text>Přehřátí prostoru</Text>
+            </Polozka>
+            <Polozka>
+              <Od>2003</Od>
+              <Do>2003</Do>
+              <Text>Zaplavení prostoru</Text>
+            </Polozka>
+            <Polozka>
+              <Od>2004</Od>
+              <Do>2004</Do>
+              <Text>Přehřátí kotlů</Text>
+            </Polozka>
+            <Polozka>
+              <Od>2005</Od>
+              <Do>2005</Do>
+              <Text>Přehřátí TUV</Text>
+            </Polozka>
+            <Polozka>
+              <Od>2006</Od>
+              <Do>2006</Do>
+              <Text>Nízký tlak TV</Text>
+            </Polozka>
+            <Polozka>
+              <Od>2007</Od>
+              <Do>2007</Do>
+              <Text>Vysoký tlak TV</Text>
+            </Polozka>
+            <Polozka>
+              <Od>2008</Od>
+              <Do>2008</Do>
+              <Text>Níz. hl. v nádrži</Text>
+            </Polozka>
+            <Polozka>
+              <Od>2009</Od>
+              <Do>2009</Do>
+              <Text>Vys. hl. v nádrži</Text>
+            </Polozka>
+            <Polozka>
+              <Od>2010</Od>
+              <Do>2010</Do>
+              <Text>Porucha doplňování</Text>
+            </Polozka>
+            <Polozka>
+              <Od>2011</Od>
+              <Do>2011</Do>
+              <Text>Nízký tlak SV</Text>
+            </Polozka>
+            <Polozka>
+              <Od>2012</Od>
+              <Do>2012</Do>
+              <Text>Porucha kotle č.1</Text>
+            </Polozka>
+            <Polozka>
+              <Od>2013</Od>
+              <Do>2013</Do>
+              <Text>Porucha kotle č.2</Text>
+            </Polozka>
+            <Polozka>
+              <Od>2014</Od>
+              <Do>2014</Do>
+              <Text>Porucha kotle č.3</Text>
+            </Polozka>
+          </Polozky>
+        </Tabulka>
+        <Tabulka>
+          <Nazev>EthState</Nazev>
+          <Polozky>
+            <Polozka>
+              <Od>131072</Od>
+              <Do>131072</Do>
+              <Text>AD-ETH100) stav 10Mb/s, poloduplex</Text>
+            </Polozka>
+            <Polozka>
+              <Od>131073</Od>
+              <Do>131073</Do>
+              <Text>AD-ETH100) stav 10Mb/s, plnýduplex</Text>
+            </Polozka>
+            <Polozka>
+              <Od>131076</Od>
+              <Do>131076</Do>
+              <Text>AD-ETH100) stav 100Mb/s, poloduplex</Text>
+            </Polozka>
+            <Polozka>
+              <Od>131077</Od>
+              <Do>131077</Do>
+              <Text>AD-ETH100) stav 100Mb/s, plný duplex</Text>
+            </Polozka>
+          </Polozky>
+        </Tabulka>
+        <Tabulka>
+          <Nazev>Procesor</Nazev>
+          <Polozky>
+            <Polozka>
+              <Od>0</Od>
+              <Do>0</Do>
+              <Text>Přetečení uživ./CP zásobníku</Text>
+            </Polozka>
+            <Polozka>
+              <Od>1</Od>
+              <Do>1</Do>
+              <Text>Nedefinovaný kód instrukce</Text>
+            </Polozka>
+            <Polozka>
+              <Od>2</Od>
+              <Do>2</Do>
+              <Text>Zakázaná instrukce</Text>
+            </Polozka>
+            <Polozka>
+              <Od>3</Od>
+              <Do>3</Do>
+              <Text>Špatný typ operandu instrukce</Text>
+            </Polozka>
+            <Polozka>
+              <Od>4</Od>
+              <Do>4</Do>
+              <Text>Špatná adresa dat</Text>
+            </Polozka>
+            <Polozka>
+              <Od>5</Od>
+              <Do>5</Do>
+              <Text>Špatný přístup na sběrnici procesoru</Text>
+            </Polozka>
+            <Polozka>
+              <Od>6</Od>
+              <Do>6</Do>
+              <Text>Přetečení zásobníku procesoru</Text>
+            </Polozka>
+            <Polozka>
+              <Od>7</Od>
+              <Do>7</Do>
+              <Text>Podtečení zásobníku procesoru</Text>
+            </Polozka>
+          </Polozky>
+        </Tabulka>
+        <Tabulka>
+          <Nazev>Typy</Nazev>
+          <Polozky>
+            <Polozka>
+              <Od>0</Od>
+              <Do>0</Do>
+              <Text>DBT_INT</Text>
+            </Polozka>
+            <Polozka>
+              <Od>1</Od>
+              <Do>1</Do>
+              <Text>DBT_LONG</Text>
+            </Polozka>
+            <Polozka>
+              <Od>2</Od>
+              <Do>2</Do>
+              <Text>DBT_FLOAT</Text>
+            </Polozka>
+            <Polozka>
+              <Od>3</Od>
+              <Do>3</Do>
+              <Text>DBT_INTMTX</Text>
+            </Polozka>
+            <Polozka>
+              <Od>4</Od>
+              <Do>4</Do>
+              <Text>DBT_LONGMTX</Text>
+            </Polozka>
+            <Polozka>
+              <Od>5</Od>
+              <Do>5</Do>
+              <Text>DBT_FLOATMTX</Text>
+            </Polozka>
+          </Polozky>
+        </Tabulka>
+      </IntTabulky>
+      <FloatTabulky />
+    </FormatovaciTexty>
+    <DataElements />
+    <RowElements />
+  </ArchiveItem>
+  <Data>
+    <Times>AKkk4w/Q1AgAqSTjD9DUCAADh+UP0NQIgN5ddhDQ1AgAFRydENDUCAC6NAcR0NQIAPWMDxHQ1AgA
+9YwPEdDUCIAg4BoR0NQIgCDgGhHQ1AiAIOAaEdDUCAA5oG4U0NQIgM84bxTQ1AiAzzhvFNDUCAD7
+i3oU0NQIAPuLehTQ1AgA+4t6FNDUCIAc2vMZ0NQIAMwEFxrQ1AiAx2o1GtDUCID0mzYa0NQIAPow
+XCrQ1AgAJ2JdKtDUCAAnYl0q0NQIgFK1aCrQ1AiAUrVoKtDUCIBStWgq0NQIgA2kCSvQ1AiAOtUK
+K9DUCIA61Qor0NQIAGYoFivQ1AgAZigWK9DUCABmKBYr0NQI</Times>
+    <Code>EAARABIAEgASABMAABAAEAAQABAAEBQAABAAEAAQABAAEAAQARABEAAQFAAAEAAQABAAEAAQFAAA
+EAAQABAAEAAQ</Code>
+    <Segment>AAACAAIAAgACAAIAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAgAA
+AAAAAAAAAAAA</Segment>
+    <Process>AAAAAAAAAAAAAAAAAQABAAEAAQABAAAAAQABAAEAAQABAAEAAQABAAEAAAABAAEAAQABAAEAAAAB
+AAEAAQABAAEA</Process>
+    <WID>////////////////0AfVB9cH2AfZB///0AfVB9cH2AfZB+AH1QfgB9UH///QB9UH1wfYB9kH///Q
+B9UH1wfYB9kH</WID>
+    <Values>AAAAAAAAAADdEKNG0BGjRhESo0YAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB2GKNGAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPj2jRgAAAAAAAAAAAAAAAAAAAAAAAAAAZD6jRgAA
+AAAAAAAAAAAAAAAAAAAAAAAA</Values>
+  </Data>
+</DETStudioArchivar>

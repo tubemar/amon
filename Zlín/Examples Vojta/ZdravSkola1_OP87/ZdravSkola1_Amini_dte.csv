@@ -1,0 +1,95 @@
+0;;;OK;ádná chyba;OK
+16;;;nos;Zavedení operaèního systému;Zavedení operaèního systému
+17;;;nos;Studeny start síového zavadìèe;Studeny start síového zavadìèe
+18;;;nos;Teplı start síového zavadìèe (vıpadek: %T);Teplı start síového zavadìèe
+19;;;nos;Studenı start aplikace;Studenı start aplikace
+20;;;nos;Teplı start aplikace (vıpadek: %T);Teplı start aplikace
+21;;;nos;Chyba procesoru: %0sw;Chyba procesoru
+22;;;nos;Zápis do zakázané pamìti;Zápis do zakázané pamìti
+23;;;nos;Interní chyba øadièe pøerušení, adr.: %d;Interní chyba øadièe pøerušení
+24;EthState;;eth;Rozhraní è. %0w (karta %gh typ %sl;Stav rozhraní Ethernet
+32;;;Db;WID %0i neexistuje.;Špatnı WID
+33;;;Db;Špatnı handle promìnné %0w;Špatnı handle
+34;Typy;;Db;Špatnı typ %1sw promìnné %0i ;Špatnı typ
+35;;;Db;Špatnı øádek %1w promìnné %0w.;Špatnı øádek
+36;;;Db;Špatnı sloupec %1w promìnné %0w;Špatnı sloupec
+37;;;Db;Špatnı poèet øádkù %1w promìnné %0w;Špatnı poèet øádkù
+38;;;Db;Špatnı poèet sloupcù %1w promìnné %0w;Špatnı poèet sloupcù
+39;;;nos;Nedostatek pamìti;Nedostatek pamìti
+40;;;aeg;Špatnı 1/4h pulz, délka: %t;Špatnı 1/4h pulz
+32772;;;val;U ventilu %0w - %1w jsou oba dva KS sepnuty;
+32773;;;val;U ventilu %0w - %1w jsou oba dva KS v poradku;
+32774;;;val;Ventil %0w - %1w nedojel na KS OTEVRENO;
+32775;;;val;Ventil %0w - %1w nedojel na KS ZAVRENO;
+32776;;;val;Ventil %0w - %1w dojel na KS OTEVRENO;
+32777;;;val;Ventil %0w - %1w dojel na KS ZAVRENO;
+32800;Bufer;;lcd;Nelze vloit ètecí poadavek do buferu %sl;Nelze vloit ètecí poadavek
+32801;Bufer;;lcd;Nelze vloit zápisovı poadavek do buferu %sl;Nelze vloit zápisovı poadavek
+32802;;;lcd;Pøihlášení uivatele %0w;Pøihlášení uivatele
+32803;;;lcd;Odhlašení uivatele %0w;Odhlášení uivatele
+4096;AplErr;;;Alarm nastal %0sw;Alarm nastal
+4097;AplErr;;;Alarm skonèil %0sw;Alarm skoncil
+4098;AplErr;;;Alarm kvitován %0sw;Alarm kvitován
+4099;AplErr;;;Alarm odkvitován %0sw;Alarm odkvitován
+
+DW:Bufer
+0;0;NOSu
+65536;65536;LCDSHELLu
+
+DW:EthState
+131072;131072;AD-ETH100) stav 10Mb/s, poloduplex
+131073;131073;AD-ETH100) stav 10Mb/s, plnıduplex
+131076;131076;AD-ETH100) stav 100Mb/s, poloduplex
+131077;131077;AD-ETH100) stav 100Mb/s, plnı duplex
+
+DW:Procesor
+0;0;Pøeteèení uiv./CP zásobníku
+1;1;Nedefinovanı kód instrukce
+2;2;Zakázaná instrukce
+3;3;Špatnı typ operandu instrukce
+4;4;Špatná adresa dat
+5;5;Špatnı pøístup na sbìrnici procesoru
+6;6;Pøeteèení zásobníku procesoru
+7;7;Podteèení zásobníku procesoru
+
+DW:Typy
+0;0;DBT_INT
+1;1;DBT_LONG
+2;2;DBT_FLOAT
+3;3;DBT_INTMTX
+4;4;DBT_LONGMTX
+5;5;DBT_FLOATMTX
+
+DW:AplErr
+2000;2000;STOP tlaèítko
+2001;2001;Pøehøátí prostoru VS
+2002;2002;Zaplavení prostoru VS
+2003;2003;Pøehøátí PPO1
+2004;2004;Pøehøátí PPO2
+2005;2005;Pøehøátí TUV
+2006;2006;Nízkı tlak ÚT
+2007;2007;Vysokı tlak ÚT
+2008;2008;Nízká hladina v nádri
+2009;2009;Vysoká hladina v nádri
+2010;2010;Dlouhé doplòování
+2011;2011;Èerpadlo ÚT1
+2025;2025;???
+2022;2022;???
+2021;2021;Nízkı tlak SV
+2030;2030;???
+2031;2031;???
+2017;2017;Èerpadlo TUV ohøev
+2018;2018;Èerpadlo TUV nabíjení
+2019;2019;Èerpadlo TUV cirk. 1
+2015;2015;Èerpadlo ÚT5
+2016;2016;Èerpadlo ÚT6
+2012;2012;Èerpadlo ÚT2
+2013;2013;Èerpadlo ÚT3
+2014;2014;Èerpadlo ÚT4
+2020;2020;Èerpadlo TUV cirk. 2
+2023;2023;???
+2024;2024;???
+2026;2026;???
+2028;2028;???
+2027;2027;???
+2029;2029;???

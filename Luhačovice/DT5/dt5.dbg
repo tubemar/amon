@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<!-- DetStudio debug info file -->
+<DetDbg scheme="0">
+  <NetList />
+  <GenTimeString>4.10.2017 9:41:35</GenTimeString>
+  <GenTime>-8586945039904677379</GenTime>
+  <FBInstanceContexts />
+</DetDbg>

@@ -1,0 +1,320 @@
+<!-- DetStudio Desktop File -->
+<Desktop scheme="0">
+  <WindowParam>
+    <DictItem>
+      <Key>#watchwin.WatchWindow2</Key>
+      <Value><![CDATA[<WatchWindowDesktop>
+  <TableParams>&lt;DataGridView-Layout&gt;&lt;Columns&gt;&lt;Column&gt;&lt;Width&gt;182&lt;/Width&gt;&lt;Visible&gt;True&lt;/Visible&gt;&lt;/Column&gt;&lt;Column&gt;&lt;Width&gt;198&lt;/Width&gt;&lt;Visible&gt;True&lt;/Visible&gt;&lt;/Column&gt;&lt;/Columns&gt;&lt;/DataGridView-Layout&gt;</TableParams>
+  <Inspektor />
+</WatchWindowDesktop>]]></Value>
+    </DictItem>
+    <DictItem>
+      <Key>#watchwin.WatchWindow1</Key>
+      <Value><![CDATA[<WatchWindowDesktop>
+  <TableParams>&lt;DataGridView-Layout&gt;&lt;Columns&gt;&lt;Column&gt;&lt;Width&gt;132&lt;/Width&gt;&lt;Visible&gt;True&lt;/Visible&gt;&lt;/Column&gt;&lt;Column&gt;&lt;Width&gt;163&lt;/Width&gt;&lt;Visible&gt;True&lt;/Visible&gt;&lt;/Column&gt;&lt;/Columns&gt;&lt;/DataGridView-Layout&gt;</TableParams>
+  <Inspektor>
+    <Object>
+      <ObjectName>IO</ObjectName>
+      <ObjectId>6</ObjectId>
+      <ObjectType>1037</ObjectType>
+      <ObjectDeclarationName>
+      </ObjectDeclarationName>
+      <Property>
+        <PropertyName>Battery</PropertyName>
+        <PropertyId>0</PropertyId>
+        <PropertyDataType>3</PropertyDataType>
+        <PropertyReadOnly>False</PropertyReadOnly>
+      </Property>
+      <Property>
+        <PropertyName>StationId</PropertyName>
+        <PropertyId>1</PropertyId>
+        <PropertyDataType>13</PropertyDataType>
+        <PropertyReadOnly>False</PropertyReadOnly>
+      </Property>
+      <Property>
+        <PropertyName>COM0_BaudRate</PropertyName>
+        <PropertyId>2</PropertyId>
+        <PropertyDataType>2</PropertyDataType>
+        <PropertyReadOnly>False</PropertyReadOnly>
+      </Property>
+      <Property>
+        <PropertyName>COM0_Address</PropertyName>
+        <PropertyId>3</PropertyId>
+        <PropertyDataType>11</PropertyDataType>
+        <PropertyReadOnly>False</PropertyReadOnly>
+      </Property>
+      <Property>
+        <PropertyName>COM0_Parity</PropertyName>
+        <PropertyId>4</PropertyId>
+        <PropertyDataType>11</PropertyDataType>
+        <PropertyReadOnly>False</PropertyReadOnly>
+      </Property>
+      <Property>
+        <PropertyName>COM1_BaudRate</PropertyName>
+        <PropertyId>5</PropertyId>
+        <PropertyDataType>2</PropertyDataType>
+        <PropertyReadOnly>False</PropertyReadOnly>
+      </Property>
+      <Property>
+        <PropertyName>COM1_Address</PropertyName>
+        <PropertyId>6</PropertyId>
+        <PropertyDataType>11</PropertyDataType>
+        <PropertyReadOnly>False</PropertyReadOnly>
+      </Property>
+      <Property>
+        <PropertyName>COM1_Parity</PropertyName>
+        <PropertyId>7</PropertyId>
+        <PropertyDataType>11</PropertyDataType>
+        <PropertyReadOnly>False</PropertyReadOnly>
+      </Property>
+      <Property>
+        <PropertyName>ProtocolType</PropertyName>
+        <PropertyId>8</PropertyId>
+        <PropertyDataType>11</PropertyDataType>
+        <PropertyReadOnly>False</PropertyReadOnly>
+      </Property>
+      <Property>
+        <PropertyName>LED</PropertyName>
+        <PropertyId>9</PropertyId>
+        <PropertyDataType>8</PropertyDataType>
+        <PropertyReadOnly>False</PropertyReadOnly>
+      </Property>
+    </Object>
+    <Object>
+      <ObjectName>Ram.FrmOKcnt</ObjectName>
+      <ObjectId>13</ObjectId>
+      <ObjectType>19</ObjectType>
+      <ObjectDeclarationName>
+      </ObjectDeclarationName>
+      <Property>
+        <PropertyName>Ram.FrmOKcnt</PropertyName>
+        <PropertyId>0</PropertyId>
+        <PropertyDataType>2</PropertyDataType>
+        <PropertyReadOnly>False</PropertyReadOnly>
+      </Property>
+    </Object>
+  </Inspektor>
+</WatchWindowDesktop>]]></Value>
+    </DictItem>
+    <DictItem>
+      <Key>#watchwin.WatchWindow3</Key>
+      <Value><![CDATA[<WatchWindowDesktop>
+  <TableParams>&lt;DataGridView-Layout&gt;&lt;Columns&gt;&lt;Column&gt;&lt;Width&gt;182&lt;/Width&gt;&lt;Visible&gt;True&lt;/Visible&gt;&lt;/Column&gt;&lt;Column&gt;&lt;Width&gt;150&lt;/Width&gt;&lt;Visible&gt;True&lt;/Visible&gt;&lt;/Column&gt;&lt;/Columns&gt;&lt;/DataGridView-Layout&gt;</TableParams>
+  <Inspektor />
+</WatchWindowDesktop>]]></Value>
+    </DictItem>
+    <DictItem>
+      <Key>#erroutput.errorOutputWindow1</Key>
+      <Value><![CDATA[<ErrorOutputWindowDesktop>
+  <TableParams>&lt;ListView-Layout&gt;&lt;Columns&gt;&lt;Column&gt;&lt;Width&gt;22&lt;/Width&gt;&lt;/Column&gt;&lt;Column&gt;&lt;Width&gt;623&lt;/Width&gt;&lt;/Column&gt;&lt;Column&gt;&lt;Width&gt;119&lt;/Width&gt;&lt;/Column&gt;&lt;Column&gt;&lt;Width&gt;200&lt;/Width&gt;&lt;/Column&gt;&lt;/Columns&gt;&lt;/ListView-Layout&gt;</TableParams>
+</ErrorOutputWindowDesktop>]]></Value>
+    </DictItem>
+    <DictItem>
+      <Key>#watchwin.AutoWatch</Key>
+      <Value><![CDATA[<WatchWindowDesktop>
+  <TableParams>&lt;DataGridView-Layout&gt;&lt;Columns&gt;&lt;Column&gt;&lt;Width&gt;150&lt;/Width&gt;&lt;Visible&gt;True&lt;/Visible&gt;&lt;/Column&gt;&lt;Column&gt;&lt;Width&gt;170&lt;/Width&gt;&lt;Visible&gt;True&lt;/Visible&gt;&lt;/Column&gt;&lt;/Columns&gt;&lt;/DataGridView-Layout&gt;</TableParams>
+  <Inspektor />
+</WatchWindowDesktop>]]></Value>
+    </DictItem>
+    <DictItem>
+      <Key>#findresult.findResultWindow1</Key>
+      <Value><![CDATA[<FindResultWindowDesktop />]]></Value>
+    </DictItem>
+    <DictItem>
+      <Key>#watchwin.WatchWindow4</Key>
+      <Value><![CDATA[<WatchWindowDesktop>
+  <TableParams>&lt;DataGridView-Layout&gt;&lt;Columns&gt;&lt;Column&gt;&lt;Width&gt;182&lt;/Width&gt;&lt;Visible&gt;True&lt;/Visible&gt;&lt;/Column&gt;&lt;Column&gt;&lt;Width&gt;150&lt;/Width&gt;&lt;Visible&gt;True&lt;/Visible&gt;&lt;/Column&gt;&lt;/Columns&gt;&lt;/DataGridView-Layout&gt;</TableParams>
+  <Inspektor />
+</WatchWindowDesktop>]]></Value>
+    </DictItem>
+    <DictItem>
+      <Key>#extprjdialog</Key>
+      <Value><![CDATA[<ListView-Layout><Columns><Column><Width>94</Width></Column><Column><Width>350</Width></Column><Column><Width>200</Width></Column></Columns></ListView-Layout>]]></Value>
+    </DictItem>
+    <DictItem>
+      <Key>#ngsramvariables</Key>
+      <Value><![CDATA[<DataGridView-Layout><SortColumn>0</SortColumn><SortDirection>1</SortDirection><Columns><Column><Width>100</Width><Visible>True</Visible></Column><Column><Width>100</Width><Visible>True</Visible></Column><Column><Width>100</Width><Visible>True</Visible></Column><Column><Width>100</Width><Visible>True</Visible></Column><Column><Width>149</Width><Visible>True</Visible></Column></Columns></DataGridView-Layout>]]></Value>
+    </DictItem>
+    <DictItem>
+      <Key>#ngsmodbusslavevariables</Key>
+      <Value><![CDATA[<DataGridView-Layout><SortColumn>0</SortColumn><SortDirection>1</SortDirection><Columns><Column><Width>100</Width><Visible>True</Visible></Column><Column><Width>70</Width><Visible>True</Visible></Column><Column><Width>60</Width><Visible>True</Visible></Column><Column><Width>200</Width><Visible>True</Visible></Column><Column><Width>656</Width><Visible>True</Visible></Column></Columns></DataGridView-Layout>]]></Value>
+    </DictItem>
+    <DictItem>
+      <Key>#ngsdbnetextern</Key>
+      <Value><![CDATA[<DataGridView-Layout><SortColumn>0</SortColumn><SortDirection>1</SortDirection><Columns><Column><Width>300</Width><Visible>True</Visible></Column><Column><Width>100</Width><Visible>True</Visible></Column><Column><Width>100</Width><Visible>True</Visible></Column><Column><Width>100</Width><Visible>True</Visible></Column><Column><Width>100</Width><Visible>True</Visible></Column><Column><Width>185</Width><Visible>True</Visible></Column></Columns></DataGridView-Layout>]]></Value>
+    </DictItem>
+    <DictItem>
+      <Key>#arcmgr.archiveManagerWindow1</Key>
+      <Value><![CDATA[<ArchiveManagerWindowDesktop>
+  <TableParams>&lt;ListView-Layout&gt;&lt;Columns&gt;&lt;Column&gt;&lt;Width&gt;110&lt;/Width&gt;&lt;/Column&gt;&lt;Column&gt;&lt;Width&gt;75&lt;/Width&gt;&lt;/Column&gt;&lt;Column&gt;&lt;Width&gt;125&lt;/Width&gt;&lt;/Column&gt;&lt;Column&gt;&lt;Width&gt;125&lt;/Width&gt;&lt;/Column&gt;&lt;Column&gt;&lt;Width&gt;75&lt;/Width&gt;&lt;/Column&gt;&lt;/Columns&gt;&lt;/ListView-Layout&gt;</TableParams>
+</ArchiveManagerWindowDesktop>]]></Value>
+    </DictItem>
+    <DictItem>
+      <Key>#datamgr.dataManagerWindow1</Key>
+      <Value><![CDATA[<DataManagerWindowDesktop>
+  <TableParams>&lt;ListView-Layout&gt;&lt;Columns&gt;&lt;Column&gt;&lt;Width&gt;200&lt;/Width&gt;&lt;/Column&gt;&lt;Column&gt;&lt;Width&gt;76&lt;/Width&gt;&lt;/Column&gt;&lt;Column&gt;&lt;Width&gt;75&lt;/Width&gt;&lt;/Column&gt;&lt;Column&gt;&lt;Width&gt;125&lt;/Width&gt;&lt;/Column&gt;&lt;/Columns&gt;&lt;/ListView-Layout&gt;</TableParams>
+</DataManagerWindowDesktop>]]></Value>
+    </DictItem>
+    <DictItem>
+      <Key>#logval</Key>
+      <Value><![CDATA[<DataGridView-Layout><SortColumn>0</SortColumn><SortDirection>1</SortDirection><Columns><Column><Width>100</Width><Visible>True</Visible></Column><Column><Width>100</Width><Visible>True</Visible></Column><Column><Width>328</Width><Visible>True</Visible></Column></Columns></DataGridView-Layout>]]></Value>
+    </DictItem>
+    <DictItem>
+      <Key>#log</Key>
+      <Value><![CDATA[<DataGridView-Layout><SortColumn>0</SortColumn><SortDirection>1</SortDirection><Columns><Column><Width>80</Width><Visible>True</Visible></Column><Column><Width>100</Width><Visible>True</Visible></Column><Column><Width>100</Width><Visible>True</Visible></Column><Column><Width>80</Width><Visible>True</Visible></Column><Column><Width>146</Width><Visible>True</Visible></Column><Column><Width>784</Width><Visible>True</Visible></Column></Columns></DataGridView-Layout>]]></Value>
+    </DictItem>
+  </WindowParam>
+  <OpenWindows>
+    <DictItem>
+      <Key>73919c71-3000-455b-bb67-ed37a00b4701</Key>
+      <Value Class="System.String">#lcwide.#screen.Main</Value>
+    </DictItem>
+    <DictItem>
+      <Key>0d56a5e4-8d1b-402d-a3fc-a010682996e9</Key>
+      <Value Class="System.String">#lcwide.#screen.View1</Value>
+    </DictItem>
+    <DictItem>
+      <Key>8aa5c17e-d1f7-46b4-862a-a9100dcd60f0</Key>
+      <Value Class="System.String">#lcwide.#screen.Logger</Value>
+    </DictItem>
+    <DictItem>
+      <Key>b9a89d7b-1de0-4e1a-a8f5-4dee65d85e1e</Key>
+      <Value Class="System.String">#lcwide.#screen.Feasts</Value>
+    </DictItem>
+    <DictItem>
+      <Key>1a94e634-bcac-4695-9de8-088882990d9d</Key>
+      <Value Class="System.String">#lcwide.#screen.ParamsDopl</Value>
+    </DictItem>
+    <DictItem>
+      <Key>7f90176a-1350-4929-8dbb-572ebdb48054</Key>
+      <Value Class="System.String">#lcwide.#screen.ParamsTV</Value>
+    </DictItem>
+    <DictItem>
+      <Key>29031996-1097-4c47-8c20-f4f7bf54004e</Key>
+      <Value Class="System.String">#ngside.#ngsprocess.Process1</Value>
+    </DictItem>
+    <DictItem>
+      <Key>219ac9cf-5e65-4f42-9d39-c66521017e57</Key>
+      <Value Class="System.String">#ngside.#ngsramvariables</Value>
+    </DictItem>
+    <DictItem>
+      <Key>3ba5d1fb-538a-401a-be18-76fc14a7b459</Key>
+      <Value Class="System.String">#lcwide.#screen.ParamsPPO</Value>
+    </DictItem>
+    <DictItem>
+      <Key>612a845c-bf4e-4dc2-83fb-c632bc81c8be</Key>
+      <Value Class="System.String">#lcwide.#screen.ParamsTVenk</Value>
+    </DictItem>
+    <DictItem>
+      <Key>e8d1ce86-36b8-4a20-b358-340847690701</Key>
+      <Value Class="System.String">#lcwide.#screen.Alarms</Value>
+    </DictItem>
+    <DictItem>
+      <Key>1ee788dd-bb32-4fe0-acf5-9215eb980048</Key>
+      <Value Class="System.String">#lcwide.#screen.ParamsTUV1</Value>
+    </DictItem>
+    <DictItem>
+      <Key>711b2df7-4e01-4559-b78b-fc87c6cfbf6a</Key>
+      <Value Class="System.String">#ngside.#ngsdbnetextern</Value>
+    </DictItem>
+  </OpenWindows>
+  <Location>0,0</Location>
+  <Size>0,0</Size>
+  <WindowState>2</WindowState>
+  <DockLayout><![CDATA[<?xml version="1.0" encoding="utf-16"?>
+<Layout>
+  <Window Guid="c1749065-d2cd-4ec7-8877-ad073a98cdd6" FloatingSize="250, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="207" />
+  <Window Guid="3f50b27c-930b-4a38-ac6e-b5cd1a873909" FloatingSize="250, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="425" />
+  <Window Guid="fe943f20-5a4e-4e4d-9c98-0ef19cefe885" FloatingSize="250, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="279" DockedSize="296" />
+  <Window Guid="0d56a5e4-8d1b-402d-a3fc-a010682996e9" FloatingSize="550, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="200" />
+  <Window Guid="ba71ad41-e1bc-42e1-908b-cad3e2f8a118" FloatingSize="250, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="425" />
+  <Window Guid="3ba5d1fb-538a-401a-be18-76fc14a7b459" FloatingSize="550, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="200" />
+  <Window Guid="1a94e634-bcac-4695-9de8-088882990d9d" FloatingSize="550, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="200" />
+  <Window Guid="24f44e4b-8a71-4e28-a9d8-7e812159b3cd" FloatingSize="660, 400" FloatingLocation="821, 544" Docked="1" PopupSize="0" DockedSize="400" />
+  <Window Guid="7f90176a-1350-4929-8dbb-572ebdb48054" FloatingSize="550, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="200" />
+  <Window Guid="1ee788dd-bb32-4fe0-acf5-9215eb980048" FloatingSize="550, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="200" />
+  <Window Guid="d153c70b-bffc-43bd-a34c-6350cdf0a12c" FloatingSize="250, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="498" />
+  <Window Guid="4cfd07ed-6b1c-4fd9-b43b-d0a5fb7f3825" FloatingSize="250, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="260" />
+  <Window Guid="127229bd-84bd-4f17-af9c-214bc79c6929" FloatingSize="250, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="207" />
+  <Window Guid="219ac9cf-5e65-4f42-9d39-c66521017e57" FloatingSize="550, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="200" />
+  <Window Guid="d8ae5fe2-13bb-4cd1-abd3-bfcf8707c404" FloatingSize="250, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="387" />
+  <Window Guid="612a845c-bf4e-4dc2-83fb-c632bc81c8be" FloatingSize="550, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="200" />
+  <Window Guid="8aa5c17e-d1f7-46b4-862a-a9100dcd60f0" FloatingSize="550, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="200" />
+  <Window Guid="fe1e3f73-12a8-465f-8eb1-57615dd67b99" FloatingSize="250, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="207" />
+  <Window Guid="73919c71-3000-455b-bb67-ed37a00b4701" FloatingSize="550, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="200" />
+  <Window Guid="0172cb3b-e31d-464e-8df0-38961f3addb3" FloatingSize="250, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="207" />
+  <Window Guid="b9a89d7b-1de0-4e1a-a8f5-4dee65d85e1e" FloatingSize="550, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="200" />
+  <Window Guid="29031996-1097-4c47-8c20-f4f7bf54004e" FloatingSize="550, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="200" />
+  <Window Guid="711b2df7-4e01-4559-b78b-fc87c6cfbf6a" FloatingSize="550, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="200" />
+  <Window Guid="e8d1ce86-36b8-4a20-b358-340847690701" FloatingSize="550, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="200" />
+  <Window Guid="a4fccb5d-a196-41c9-b43b-5ad0b716bad6" FloatingSize="250, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="387" />
+  <Window Guid="7d7fcb15-6f45-4f5d-a4bc-7fe581204a71" FloatingSize="250, 400" FloatingLocation="-1, -1" Docked="1" PopupSize="0" DockedSize="499" />
+  <Container Dock="4" ContentSize="296">
+    <SplitLayoutSystem WorkingSize="296, 776" SplitMode="0">
+      <ControlLayoutSystem WorkingSize="296, 776" Collapsed="0" SelectedControl="fe943f20-5a4e-4e4d-9c98-0ef19cefe885">
+        <Controls>
+          <Control Guid="fe943f20-5a4e-4e4d-9c98-0ef19cefe885" />
+        </Controls>
+      </ControlLayoutSystem>
+    </SplitLayoutSystem>
+  </Container>
+  <Container Dock="3" ContentSize="425">
+    <SplitLayoutSystem WorkingSize="425, 776" SplitMode="0">
+      <ControlLayoutSystem WorkingSize="425, 265" Collapsed="0" SelectedControl="3f50b27c-930b-4a38-ac6e-b5cd1a873909">
+        <Controls>
+          <Control Guid="3f50b27c-930b-4a38-ac6e-b5cd1a873909" />
+        </Controls>
+      </ControlLayoutSystem>
+      <ControlLayoutSystem WorkingSize="425, 506" Collapsed="0" SelectedControl="ba71ad41-e1bc-42e1-908b-cad3e2f8a118">
+        <Controls>
+          <Control Guid="ba71ad41-e1bc-42e1-908b-cad3e2f8a118" />
+        </Controls>
+      </ControlLayoutSystem>
+    </SplitLayoutSystem>
+  </Container>
+  <Container Dock="4" ContentSize="260">
+    <SplitLayoutSystem WorkingSize="260, 776" SplitMode="0">
+      <ControlLayoutSystem WorkingSize="260, 776" Collapsed="0" SelectedControl="4cfd07ed-6b1c-4fd9-b43b-d0a5fb7f3825">
+        <Controls>
+          <Control Guid="4cfd07ed-6b1c-4fd9-b43b-d0a5fb7f3825" />
+        </Controls>
+      </ControlLayoutSystem>
+    </SplitLayoutSystem>
+  </Container>
+  <Container Dock="2" ContentSize="207">
+    <SplitLayoutSystem WorkingSize="1920, 207" SplitMode="1">
+      <ControlLayoutSystem WorkingSize="958, 207" Collapsed="0" SelectedControl="127229bd-84bd-4f17-af9c-214bc79c6929">
+        <Controls>
+          <Control Guid="127229bd-84bd-4f17-af9c-214bc79c6929" />
+        </Controls>
+      </ControlLayoutSystem>
+      <ControlLayoutSystem WorkingSize="957, 207" Collapsed="0" SelectedControl="fe1e3f73-12a8-465f-8eb1-57615dd67b99">
+        <Controls>
+          <Control Guid="fe1e3f73-12a8-465f-8eb1-57615dd67b99" />
+        </Controls>
+      </ControlLayoutSystem>
+    </SplitLayoutSystem>
+  </Container>
+  <DocumentContainer Dock="5">
+    <SplitLayoutSystem WorkingSize="925, 774" SplitMode="0">
+      <ControlLayoutSystem WorkingSize="925, 774" Collapsed="0" SelectedControl="711b2df7-4e01-4559-b78b-fc87c6cfbf6a">
+        <Controls>
+          <Control Guid="73919c71-3000-455b-bb67-ed37a00b4701" />
+          <Control Guid="0d56a5e4-8d1b-402d-a3fc-a010682996e9" />
+          <Control Guid="8aa5c17e-d1f7-46b4-862a-a9100dcd60f0" />
+          <Control Guid="b9a89d7b-1de0-4e1a-a8f5-4dee65d85e1e" />
+          <Control Guid="1a94e634-bcac-4695-9de8-088882990d9d" />
+          <Control Guid="7f90176a-1350-4929-8dbb-572ebdb48054" />
+          <Control Guid="29031996-1097-4c47-8c20-f4f7bf54004e" />
+          <Control Guid="219ac9cf-5e65-4f42-9d39-c66521017e57" />
+          <Control Guid="3ba5d1fb-538a-401a-be18-76fc14a7b459" />
+          <Control Guid="711b2df7-4e01-4559-b78b-fc87c6cfbf6a" />
+          <Control Guid="612a845c-bf4e-4dc2-83fb-c632bc81c8be" />
+          <Control Guid="e8d1ce86-36b8-4a20-b358-340847690701" />
+          <Control Guid="1ee788dd-bb32-4fe0-acf5-9215eb980048" />
+        </Controls>
+      </ControlLayoutSystem>
+    </SplitLayoutSystem>
+  </DocumentContainer>
+</Layout>]]></DockLayout>
+</Desktop>
